@@ -19,19 +19,23 @@ in
 
       loader = { 
         efi.efiSysMountPoint = "/boot";
-
+        efi.canTouchEfiVariables = true;
+        
         grub = {
           enable = true;
           devices = [ "nodev" ];
           efiSupport = true;
+          zfsSupport = true;
         };
         timeout = 3;
-      };  
-    };
-
-    zfs = {
-      devNodes = "/dev/disk/by-id";
-      requestEncryptionCredentials = true;
+      };
+      zfs = {
+        devNodes = "/dev/disk/by-id";
+        requestEncryptionCredentials = true;
+      };
+      initrd.postDeviceCommands = lib.mkAfter ''
+        zfs rollback -r rpool/root@blank
+      '';  
     };
   };
 }

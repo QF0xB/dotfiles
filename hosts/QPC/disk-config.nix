@@ -49,7 +49,7 @@
               mountpoint = "legacy";
               encryption = "aes-256-gcm";
               keyformat = "passphrase";
-              keylocation = "file:///tmp/secret.key";
+#              keylocation = "file:///tmp/secret.key";
             };
           };
           persist = {
@@ -59,7 +59,7 @@
               mountpoint = "legacy";
               encryption = "aes-256-gcm";
               keyformat = "passphrase";
-              keylocation = "file:///tmp/secret.key";
+#              keylocation = "file:///tmp/secret.key";
             };
           };
           cache = {
@@ -69,7 +69,7 @@
               mountpoint = "legacy";
               encryption = "aes-256-gcm";
               keyformat = "passphrase";
-              keylocation = "file:///tmp/secret.key";
+#              keylocation = "file:///tmp/secret.key";
             };
           };
           tmp = {
@@ -79,7 +79,7 @@
               mountpoint = "legacy";
               encryption = "aes-256-gcm";
               keyformat = "passphrase";
-              keylocation = "file:///tmp/secret.key";
+#              keylocation = "file:///tmp/secret.key";
             };
           };
         };
