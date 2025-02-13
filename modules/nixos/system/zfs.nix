@@ -13,7 +13,7 @@ in
      encrypted = mkEnableOption "encrypted";
   };
 
-  config = {
+  config = with lib; {
     boot = mkIf cfg.encrypted {
       requestEncryptionCredentials = true;
     };
