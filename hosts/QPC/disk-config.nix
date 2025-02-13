@@ -39,12 +39,12 @@
                       mountpoint = "/";
                       mountOptions = [ "compress=zstd" "noatime" "ssd" "space_cache=v2"];
                     };
-                    "/home" = {
-                      mountpoint = "/home";
+                    "/persist" = {
+                      mountpoint = "/persist";
                       mountOptions = [ "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
                     };
-                    "/nix" = {
-                      mountpoint = "/nix";
+                    "/cache" = {
+                      mountpoint = "/cache";
                       mountOptions = [ "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
                     };
                     "/swap" = {
