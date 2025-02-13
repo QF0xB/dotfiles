@@ -11,7 +11,7 @@
     ./localization.nix
     ./ssh-server.nix
     ./packages.nix
-    ./zfs    
+    ./zfs.nix    
   ];
 
   config.qnix.system = with lib; {
@@ -35,6 +35,6 @@
      tree.install = mkDefault true;
     };
 
-    zfs.enable = true;
+    zfs.encrypted = true;
   };
 }
