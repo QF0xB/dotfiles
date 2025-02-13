@@ -23,7 +23,7 @@ in
       "/" = {
         device = "zroot/root";
         fsType = "zfs";
-        needForBoot = true;
+        neededForBoot = true;
       };
 
       # boot partition
@@ -36,7 +36,7 @@ in
       "/nix" = { 
         device = "zroot/nix"; 
         fsType = "zfs"; 
-        needForBoot = true; 
+        neededForBoot = true; 
       }; 
 
       # /tmp to insure space isn't getting overfilled
@@ -49,7 +49,7 @@ in
       "/persist" = { 
         device = "zroot/persist"; 
         fsType = "zfs"; 
-        needForBoot = true; 
+        neededForBoot = true; 
       };
 
       # cache is persisted, but not snapshot.
