@@ -17,11 +17,20 @@
                 mountOptions = [ "umask=0077" ];
               };
             };
-            zfs = {
+            luks = {
               size = "100%";
               content = {
-                type = "zfs";
-                pool = "zroot";
+                type = "luks";
+                name = "crypted";
+                
+                settings = { 
+                  allowDiscards = true;
+                };
+                
+                content = {
+                  type = "zfs";
+                  pool = "zroot";
+                };
               };
             };
           };
@@ -47,9 +56,6 @@
             postCreateHook = "zfs snapshot zroot/root@blank";
             options = {
               mountpoint = "legacy";
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "prompt";
             };
           };
           persist = {
@@ -57,9 +63,6 @@
             mountpoint = "/persist"; 
             options = { 
               mountpoint = "legacy";
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "prompt";
             };
           };
           cache = {
@@ -67,9 +70,6 @@
             mountpoint = "/cache"; 
             options = { 
               mountpoint = "legacy";
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "prompt";
             };
           };
           tmp = {
@@ -77,9 +77,6 @@
             mountpoint = "/tmp"; 
             options = { 
               mountpoint = "legacy";
-              encryption = "aes-256-gcm";
-              keyformat = "passphrase";
-              keylocation = "prompt";
             };
           };
         };
