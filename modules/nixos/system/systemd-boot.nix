@@ -30,7 +30,14 @@ in
         timeout = 3;
       };
       zfs = {
-        devNodes = "/dev/disk/by-id";
+        devNodes =
+            if isVm then
+              "/dev/disk/by-partuuid"
+            # use by-id for intel mobo when not in a vm
+            #else if config.hardware.cpu.intel.updateMicrocode then
+            #  "/dev/disk/by-id"
+            else
+              "/dev/disk/by-partuuid";
 #        requestEncryptionCredentials = true;
       };
       initrd.postDeviceCommands = lib.mkAfter ''
