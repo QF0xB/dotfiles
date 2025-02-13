@@ -34,7 +34,7 @@ in
         requestEncryptionCredentials = true;
       };
       initrd.postDeviceCommands = lib.mkAfter ''
-        zfs rollback -r rpool/root@blank
+        zfs rollback -r zroot/root@blank
       '';  
     };
   };
