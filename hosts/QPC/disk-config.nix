@@ -34,9 +34,6 @@
         mode = "";
         # Workaround: cannot import 'zroot': I/O error in disko tests
         options = {
-          encryptionn = "aes-256-gcm";
-          keyformat = "passphrase";
-          keylocation = "file:///tmp/secret.key";
           cachefile = "none";
         };
         rootFsOptions = {
@@ -47,8 +44,12 @@
           root = {
             type = "zfs_fs";
             mountpoint = "/";
+            postCreateHook = "zfs snapshot zroot/root@blank";
             options = {
               mountpoint = "legacy";
+              encryption = "aes-256-gcm";
+              keyformat = "passphrase";
+              keylocation = "file:///tmp/secret.key";
             };
           };
           persist = {
@@ -56,6 +57,9 @@
             mountpoint = "/persist"; 
             options = { 
               mountpoint = "legacy";
+              encryption = "aes-256-gcm";
+              keyformat = "passphrase";
+              keylocation = "file:///tmp/secret.key";
             };
           };
           cache = {
@@ -63,13 +67,19 @@
             mountpoint = "/cache"; 
             options = { 
               mountpoint = "legacy";
+              encryption = "aes-256-gcm";
+              keyformat = "passphrase";
+              keylocation = "file:///tmp/secret.key";
             };
           };
           tmp = {
             type = "zfs_fs";
-            mountpoint = "/tmp" 
+            mountpoint = "/tmp"; 
             options = { 
               mountpoint = "legacy";
+              encryption = "aes-256-gcm";
+              keyformat = "passphrase";
+              keylocation = "file:///tmp/secret.key";
             };
           };
         };
