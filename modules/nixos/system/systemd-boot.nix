@@ -2,6 +2,7 @@
   options, 
   lib,
   config,
+  isVm,
   ... 
 }:
 
