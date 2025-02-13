@@ -31,7 +31,7 @@ in
       };
       zfs = {
         devNodes = "/dev/disk/by-id";
-        requestEncryptionCredentials = true;
+#        requestEncryptionCredentials = true;
       };
       initrd.postDeviceCommands = lib.mkAfter ''
         zfs rollback -r zroot/root@blank
