@@ -1,16 +1,15 @@
 {
   disko.devices = {
     disk = {
-      main = {
+      x = {
         type = "disk";
         device = "/dev/vda";
         content = {
           type = "gpt";
           partitions = {
             ESP = {
-              size = "512M";
+              size = "64M";
               type = "EF00";
-              priority = 1;
               content = {
                 type = "filesystem";
                 format = "vfat";
@@ -18,46 +17,63 @@
                 mountOptions = [ "umask=0077" ];
               };
             };
-            luks = {
+            zfs = {
               size = "100%";
-              priority = 2;
               content = {
-                type = "luks";
-                name = "crypted";
-                # disable settings.keyFile if you want to use interactive password entry
-                #passwordFile = "/tmp/secret.key"; # Interactive
-                settings = {
-                  allowDiscards = true;
-                  # keyFile = "/tmp/secret.key";
-                };
-                # additionalKeyFiles = [ "/tmp/additionalSecret.key" ];
-                content = {
-                  type = "btrfs";
-                  extraArgs = [ "-f" ];
-                  subvolumes = {
-                    "/root" = {
-                      mountpoint = "/";
-                      mountOptions = [ "compress=zstd" "noatime" "ssd" "space_cache=v2"];
-                    };
-                    "/persist" = {
-                      mountpoint = "/persist";
-                      mountOptions = [ "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
-                    };
-                    "/cache" = {
-                      mountpoint = "/cache";
-                      mountOptions = [ "compress=zstd" "noatime" "ssd" "space_cache=v2" ];
-                    };
-                    "/swap" = {
-                      mountpoint = "/.swapvol";
-                      swap.swapfile.size = "2G";
-                    };
-                  };
-                };
+                type = "zfs";
+                pool = "zroot";
               };
             };
           };
         };
-      };      
+      };
+    };
+    zpool = {
+      zroot = {
+        type = "zpool";
+        mode = "";
+        # Workaround: cannot import 'zroot': I/O error in disko tests
+        options = {
+          encryptionn = "aes-256-gcm";
+          keyformat = "passphrase";
+          keylocation = "file:///tmp/secret.key";
+          cachefile = "none";
+        };
+        rootFsOptions = {
+          compression = "zstd";
+          "com.sun:auto-snapshot" = "false";
+        };
+        datasets = {
+          root = {
+            type = "zfs_fs";
+            mountpoint = "/";
+            options = {
+              mountpoint = "legacy";
+            };
+          };
+          persist = {
+            type = "zfs_fs";
+            mountpoint = "/persist"; 
+            options = { 
+              mountpoint = "legacy";
+            };
+          };
+          cache = {
+            type = "zfs_fs";
+            mountpoint = "/cache"; 
+            options = { 
+              mountpoint = "legacy";
+            };
+          };
+          tmp = {
+            type = "zfs_fs";
+            mountpoint = "/tmp" 
+            options = { 
+              mountpoint = "legacy";
+            };
+          };
+        };
+      };
     };
   };
 }

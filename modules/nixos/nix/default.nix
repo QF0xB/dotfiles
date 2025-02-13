@@ -12,7 +12,7 @@ in
     [
       ./sops.nix
       ./nh.nix
-      #./impermanence.nix future
+      ./impermanence.nix
     ];
   
   config.qnix.nix = with lib; {

@@ -14,9 +14,24 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    boot.loader = {
-      systemd-boot.enable = true;
-      efi.canTouchEfiVariables = true;
+    boot = {
+      supportedFilesystems.zfs = true;
+
+      loader = { 
+        efi.efiSysMountPoint = "/boot";
+
+        grub = {
+          enable = true;
+          devices = [ "nodev" ];
+          efiSupport = true;
+        };
+        timeout = 3;
+      };  
+    };
+
+    zfs = {
+      devNodes = "/dev/disk/by-id";
+      requestEncryptionCredentials = true;
     };
   };
 }
