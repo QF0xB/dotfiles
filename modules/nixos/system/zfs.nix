@@ -14,7 +14,7 @@ in
   };
 
   config = with lib; {
-    boot = mkIf cfg.encrypted {
+    boot.zfs = mkIf cfg.encrypted {
       requestEncryptionCredentials = true;
     };
 
