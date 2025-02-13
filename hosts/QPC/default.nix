@@ -1,10 +1,6 @@
 {...}:
 
 {
-  imports = [
-    ./disk-config.nix
-  ];
-
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostId = "4cb4019f";  
