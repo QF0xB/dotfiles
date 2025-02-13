@@ -10,7 +10,8 @@
     ./gnupg.nix
     ./localization.nix
     ./ssh-server.nix
-    ./packages.nix    
+    ./packages.nix
+    ./zfs    
   ];
 
   config.qnix.system = with lib; {
@@ -33,5 +34,7 @@
      git.install = mkDefault true;
      tree.install = mkDefault true;
     };
+
+    zfs.enable = true;
   };
 }
