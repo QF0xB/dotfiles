@@ -56,7 +56,7 @@ in
       "/cache" = { 
         device = "zroot/cache"; 
         fsType = "zfs"; 
-        needForBoot = true; 
+        neededForBoot = true; 
       };   
     };
 
