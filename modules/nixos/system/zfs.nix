@@ -73,6 +73,10 @@ in
     # 16GB swap
     swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
 
+    boot.initrd.postDeviceCommands = lib.mkAfter ''
+        zfs rollback -r zroot/root@blank
+      '';
+
     services.sanoid = {
       enable = true;
 

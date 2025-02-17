@@ -41,9 +41,9 @@ in
               "/dev/disk/by-partuuid";
 #        requestEncryptionCredentials = true;
       };
-      initrd.postDeviceCommands = lib.mkAfter ''
-        zfs rollback -r zroot/root@blank
-      '';  
+#      initrd.postDeviceCommands = lib.mkAfter ''
+#        zfs rollback -r zroot/root@blank
+#      '';  
     };
   };
 }
