@@ -73,7 +73,7 @@ in
     # 16GB swap
     swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
 
-    boot.initrd.postDeviceCommands = lib.mkAfter ''
+    boot.initrd.postResumeCommands = lib.mkAfter ''
         zfs rollback -r zroot/root@blank
       '';
 
