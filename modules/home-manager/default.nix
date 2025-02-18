@@ -7,6 +7,7 @@
   imports = [
     ./nix
     ./devel
+    ./system
   ];
 
   config = {
