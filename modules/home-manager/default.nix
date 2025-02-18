@@ -5,7 +5,8 @@
 
 {
   imports = [
-    ./impermanence.nix #only contains options
+    ./nix
+    ./devel
   ];
 
   config = {

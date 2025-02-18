@@ -4,6 +4,8 @@
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
   networking.hostId = "4cb4019f";  
+  networking.hostName = "qpc";
+
 
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/cache".neededForBoot = true;
