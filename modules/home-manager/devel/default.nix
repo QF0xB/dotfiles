@@ -1,5 +1,6 @@
 {
   user,
+  lib,
   ...
 }:
 
@@ -8,9 +9,12 @@
     ./git.nix
   ];
 
-  config = {
+  config = with lib; {
     qnix.home = {
-      devel.git.enable = true;
+      devel.git = {
+        enable = mkDefault true;
+        signing = mkDefault true;
+      };
     };
   };
 }

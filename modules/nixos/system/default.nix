@@ -15,6 +15,7 @@
     ./packages.nix
     ./fonts.nix
     ./security
+    ./gnupg.nix
     ./zfs.nix    
   ];
 
@@ -51,6 +52,11 @@
     security = {
       polkit.enable = mkDefault true;      
       u2f.enable = mkDefault true;
+      yubico.enable = mkDefault true;
+    };
+
+    gnupg = {
+      enable = mkDefault true;
     };
   };
 }

@@ -43,6 +43,10 @@ in with lib;
       users = {
         mutableUsers = false;
 
+        groups = { 
+         
+        };
+
         users = {
           root = {
             initialPassword = "password";

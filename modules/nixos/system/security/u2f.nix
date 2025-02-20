@@ -17,12 +17,32 @@ in with lib;
   };
 
   config = {
-    services.udev.packages = [ pkgs.yubikey-personalization ];
+    services.udev.packages = with pkgs; [ yubikey-personalization pcsclite ];
+    services.udev.extraRules = ''
+      # YubiKey 5 NFC udev rule for CCID interface (gpg --card-info)
+      SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{ID_VENDOR_ID}=="1050", ENV{ID_MODEL_ID}=="0407", ENV{ID_SECURITY_TOKEN}=="1", MODE="0660", GROUP="wheel"
+    '';
+
+    hardware.gpgSmartcards.enable = true;
+
+    qnix.system.shell.packages.gpg-reset-yubikey-id.text = ''
+      echo "reset gpg to make new key available"
+      set -x
+      set -e
+      ${pkgs.psmisc}/bin/killall gpg-agent
+      rm -r ~/.gnupg/private-keys-v1.d/
+      echo "now the new key should work"
+    '';
+
     
     security = {
       pam = {
         u2f = {
           enable = cfg.u2f.enable;
+          settings = {
+            interactive = true;
+            cue = true;
+          };
         };
 
         services = {
@@ -31,6 +51,7 @@ in with lib;
         }; 
       };
     };
+    services.pcscd.enable = false;
 
     # write Yubico file
     hm = { 
