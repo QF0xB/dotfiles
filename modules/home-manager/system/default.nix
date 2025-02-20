@@ -6,6 +6,7 @@
 {
   imports = [
     ./ssh.nix
+    ./shells
   ];
 
   config = {

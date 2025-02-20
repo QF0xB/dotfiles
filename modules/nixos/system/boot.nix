@@ -7,11 +7,11 @@
 }:
 
 let
-  cfg = config.qnix.system.boot.systemd-boot;
+  cfg = config.qnix.system.boot;
 in
 {
   options.qnix = with lib; {
-    system.boot.systemd-boot.enable = mkEnableOption "systemd-boot";
+    system.boot.enable = mkEnableOption "systemd-boot";
   };
 
   config = lib.mkIf cfg.enable {
@@ -35,15 +35,11 @@ in
             if isVm then
               "/dev/disk/by-partuuid"
             # use by-id for intel mobo when not in a vm
-            #else if config.hardware.cpu.intel.updateMicrocode then
-            #  "/dev/disk/by-id"
+            else if config.hardware.cpu.intel.updateMicrocode then
+              "/dev/disk/by-id"
             else
               "/dev/disk/by-partuuid";
-#        requestEncryptionCredentials = true;
       };
-#      initrd.postDeviceCommands = lib.mkAfter ''
-#        zfs rollback -r zroot/root@blank
-#      '';  
     };
   };
 }

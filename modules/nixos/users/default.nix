@@ -6,10 +6,10 @@
 
 {
   imports = [
-    ./lcqbraendli.nix   
+    ./default-user-config.nix   
   ];
 
   config.qnix.users = with lib; {
-    lcqbraendli.enable = mkDefault true;
+    default-user.enable = mkDefault true;
   };
 }
