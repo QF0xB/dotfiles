@@ -11,6 +11,7 @@
     ./fish.nix
     ./aliases.nix
     ./lsd.nix
+    ./starship.nix
   ];
 
   options.qnix.terminal = with lib; {
@@ -39,9 +40,18 @@
       
     ];
 
+    programs.nix-index.enable = true;
+
+    qnix.persist = {
+      home = {
+        cache.directories = [ ".cache/nix-index" ];
+      };
+    };
+
     qnix.home.system.shell = with lib; {
       fish.enable = mkDefault true;
       lsd.enable  = mkDefault true;
+      starship.enable = mkDefault true; 
     };
   };
 }

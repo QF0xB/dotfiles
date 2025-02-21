@@ -21,7 +21,8 @@ in
         (lists.optionals pkgs-cfg.tree.install [ tree ])
         (lists.optionals config.qnix.system.security.u2f.enable [ pam_u2f ])
         (lists.optionals pkgs-cfg.yubico.install [ yubioath-flutter ])
-        [ yubikey-personalization pcsclite ]
+        [ yubikey-personalization ]
+        (lists.optionals pkgs-cfg.helix.install [ helix ])
         # add custom-shell packages
         (lists.optionals cfg.systemPackages.custom-shell.enable (lib.attrValues config.qnix.system.shell.packages))
       ];

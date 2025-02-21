@@ -14,6 +14,7 @@ in
      git.install = mkEnableOption "git install";
      tree.install = mkEnableOption "tree install";
      yubico.install = mkEnableOption "yubikey";
+     helix.install = mkEnableOption "helix";
   };
 
 # MOVED TO ./environment

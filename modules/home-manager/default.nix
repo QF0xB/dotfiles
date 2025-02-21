@@ -8,6 +8,8 @@
     ./nix
     ./devel
     ./system
+    ./programs
+    ./style
   ];
 
   config = {

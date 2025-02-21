@@ -40,6 +40,7 @@
      git.install = mkDefault true;
      tree.install = mkDefault true;
      yubico.install = mkDefault false;
+     helix.install = mkDefault false;
     };
 
     zfs = {
