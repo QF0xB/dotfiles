@@ -3,7 +3,7 @@
 {
   nix.settings.experimental-features = [ "nix-command" "flakes" ];
 
-  networking.hostId = "4cb4019f";  
+  networking.hostId = "4cb4019c";  
   networking.hostName = "qpc";
 
 

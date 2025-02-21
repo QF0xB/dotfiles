@@ -30,7 +30,7 @@ in
               enable = true;
             };
 
-            language = {
+            languages = {
               nix.enable = true;
               python.enable = true; 
             };

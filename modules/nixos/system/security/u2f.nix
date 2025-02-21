@@ -39,6 +39,7 @@ in with lib;
       pam = {
         u2f = {
           enable = cfg.u2f.enable;
+          origin = "pam://yubi";
           settings = {
             interactive = true;
             cue = true;
@@ -55,7 +56,7 @@ in with lib;
 
     # write Yubico file
     hm = { 
-      xdg.configFile."Yubico/u2f_keys".text = "lcqbraendli:J5hP5H75BENH4dYh/1N45EsgtcQqjRAk+UH3u6Kv/fMPJE000JR0ZJWzu7yBoO7U6AuHRKE5BeKuy2wxhJqK5w==,SI7JOMqaHX3K3d9Hn+tPc5myTh9Br9YJqzzFCNAYVeMwS4wkLrptWep+7m4/P//+HDwuAwvScvx6M3zVCezKLQ==,es256,+presence";
+      xdg.configFile."Yubico/u2f_keys".text = "lcqbraendli:NVMp7RLgO9G+J8I+iC2mj0qum9xswAnnYQJU6btNuxcpVrPZFJr96Iwa2qBh2i+MnYc3o701kZLTPlkWd5ztyw==,N2cOgisG3QHs6DDees4w6nrZK2LOKZF6tZQkYGCJ6p52kQ5TG9hreCFBR68UliyOSg4FYinlRK57L0mtVejrbw==,es256,+presence";
     };
   };
 }

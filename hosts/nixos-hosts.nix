@@ -66,6 +66,6 @@ let
     };
 in
 {
-  qpc = mkNixosConfiguration "QPC" {} { };
-  qframe13 = mkNixosConfiguration "QFrame13" { };
+  qpc = mkNixosConfiguration "QPC" {} {};
+  qframe13 = mkNixosConfiguration "QFrame13" {} {};
 }
