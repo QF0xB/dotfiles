@@ -15,6 +15,10 @@ in
       debug-level guru
     '';
 
+    home.activation.fixGpgHome = lib.mkAfter ''
+      chmod 700 ${config.home.homeDirectory}/.gnupg
+    '';
+
     qnix.persist.home = {
         directories = [
           ".gnupg"  
