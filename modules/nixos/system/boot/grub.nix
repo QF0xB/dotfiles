@@ -11,10 +11,10 @@ let
 in
 {
   options.qnix = with lib; {
-    system.boot.enable = mkEnableOption "systemd-boot";
+    system.boot.grub.enable = mkEnableOption "systemd-boot";
   };
 
-  config = lib.mkIf cfg.enable {
+  config = lib.mkIf cfg.grub.enable {
     boot = {
       supportedFilesystems.zfs = true;
 

@@ -6,7 +6,7 @@
 
 {
   imports = [
-    ./boot.nix
+    ./boot
     ./gnupg.nix
     ./shells.nix
     ./environment.nix
@@ -26,7 +26,8 @@
     };
 
     boot = {
-      enable = true;
+      grub.enable = true;
+      systemd-boot.enable = false; 
     };
 
     localization = {
