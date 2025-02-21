@@ -26,8 +26,8 @@
     };
 
     boot = {
-      grub.enable = true;
-      systemd-boot.enable = false; 
+      grub.enable = mkDefault true;
+      systemd-boot.enable = mkDefault false; 
     };
 
     localization = {

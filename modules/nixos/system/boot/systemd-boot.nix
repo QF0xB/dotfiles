@@ -21,7 +21,9 @@ in
 
       loader = { 
         # Enable systemd-boot directly
-        systemd-boot.enable = true;
+        systemd-boot = {
+          enable = true;
+        };
         efi.efiSysMountPoint = "/boot";
         efi.canTouchEfiVariables = true;
         timeout = 3;
