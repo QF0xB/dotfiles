@@ -8,6 +8,12 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master"; # DEV
 
+    # Nix-index for unstable
+    nix-index-database = {
+      url = "github:nix-community/nix-index-database";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
+
     # Hardware Optimisation
     nixos-hardware  = {
       url = "github:NixOS/nixos-hardware";
