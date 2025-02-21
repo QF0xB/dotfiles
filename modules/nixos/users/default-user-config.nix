@@ -68,7 +68,7 @@ in with lib;
               "wheel" 
               "networkmanager"
             ];
-            shell = cfg.shell;
+#            shell = cfg.shell;
             ignoreShellProgramCheck = true;
             initialPassword = "password";
             hashedPasswordFile = "/persist/etc/shadow/${user}";
