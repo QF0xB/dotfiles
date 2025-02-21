@@ -93,7 +93,7 @@ in
               style = "bg:${color.green} ${text}";
             };
             git_status = {
-              format = "[($all_status$ahead_behind) ]($style)";
+              format = "[($all_status$ahead_behind)]($style)";
               style = "bg:${color.green} ${text}";
             };
             nix_shell = {

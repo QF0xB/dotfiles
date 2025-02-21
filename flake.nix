@@ -24,6 +24,11 @@
       url = "github:nix-community/impermanence";
     };
 
+    # NeoVim
+    nvf = {
+      url = "github:notashelf/nvf";
+      inputs.nixpkgs.follows = "nixpkgs";
+    };
     # Disko disk utility
     disko = { 
       url = "github:nix-community/disko";
