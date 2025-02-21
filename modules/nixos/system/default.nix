@@ -56,7 +56,7 @@
       yubico.enable = mkDefault true;
     };
 
-    gnupg = {
+    gpg = {
       enable = mkDefault true;
     };
   };

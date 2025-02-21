@@ -9,6 +9,8 @@
 {
   imports = [
     ./fish.nix
+    ./aliases.nix
+    ./lsd.nix
   ];
 
   options.qnix.terminal = with lib; {
@@ -36,5 +38,10 @@
       jq #another json viewer
       
     ];
+
+    qnix.home.system.shell = with lib; {
+      fish.enable = mkDefault true;
+      lsd.enable  = mkDefault true;
+    };
   };
 }
