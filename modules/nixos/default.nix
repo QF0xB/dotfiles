@@ -5,5 +5,6 @@
     ./system
     ./users
     ./nix
+    ./applications
   ];
 }

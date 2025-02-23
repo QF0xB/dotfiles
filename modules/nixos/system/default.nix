@@ -16,7 +16,7 @@
     ./fonts.nix
     ./security
     ./gnupg.nix
-    ./zfs.nix    
+    ./zfs.nix
   ];
 
   config.qnix.system = with lib; {
@@ -27,7 +27,7 @@
 
     boot = {
       grub.enable = mkDefault true;
-      systemd-boot.enable = mkDefault false; 
+      systemd-boot.enable = mkDefault false;
     };
 
     localization = {
@@ -37,10 +37,11 @@
     };
 
     packages = with lib; {
-     git.install = mkDefault true;
-     tree.install = mkDefault true;
-     yubico.install = mkDefault false;
-     helix.install = mkDefault false;
+      git.install = mkDefault true;
+      tree.install = mkDefault true;
+      yubico.install = mkDefault false;
+      helix.install = mkDefault false;
+      kitty.install = mkDefault true;
     };
 
     zfs = {
@@ -50,9 +51,9 @@
     environment = {
       systemPackages.custom-shell.enable = mkDefault true;
     };
- 
+
     security = {
-      polkit.enable = mkDefault true;      
+      polkit.enable = mkDefault true;
       u2f.enable = mkDefault true;
       yubico.enable = mkDefault true;
     };

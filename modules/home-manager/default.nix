@@ -9,7 +9,7 @@
     ./nix
     ./devel
     ./system
-    ./programs
+    ./applications
     ./style
   ];
 

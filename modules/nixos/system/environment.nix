@@ -16,16 +16,21 @@ in
 
   config = with lib; {
     environment = {
-      systemPackages = with pkgs; concatLists [ 
-        (lists.optionals pkgs-cfg.git.install [ git ])
-        (lists.optionals pkgs-cfg.tree.install [ tree ])
-        (lists.optionals config.qnix.system.security.u2f.enable [ pam_u2f ])
-        (lists.optionals pkgs-cfg.yubico.install [ yubioath-flutter ])
-        [ yubikey-personalization ]
-        (lists.optionals pkgs-cfg.helix.install [ helix ])
-        # add custom-shell packages
-        (lists.optionals cfg.systemPackages.custom-shell.enable (lib.attrValues config.qnix.system.shell.packages))
-      ];
+      systemPackages =
+        with pkgs;
+        concatLists [
+          (lists.optionals pkgs-cfg.git.install [ git ])
+          (lists.optionals pkgs-cfg.tree.install [ tree ])
+          (lists.optionals config.qnix.system.security.u2f.enable [ pam_u2f ])
+          (lists.optionals pkgs-cfg.yubico.install [ yubioath-flutter ])
+          [ yubikey-personalization ]
+          (lists.optionals pkgs-cfg.helix.install [ helix ])
+          (lists.optionals pkgs-cfg.kitty.install [ kitty ])
+          # add custom-shell packages
+          (lists.optionals cfg.systemPackages.custom-shell.enable (
+            lib.attrValues config.qnix.system.shell.packages
+          ))
+        ];
     };
 
     # create symlinks
@@ -33,8 +38,10 @@ in
       let
         normalizeHome = p: if (hasPrefix "/home" p) then p else "${config.home.homeDirectory}/${p}";
       in
-      mapAttrsToList (dest: src: "L+ ${normalizeHome dest} - - - - ${src}") config.qnix.system.shell.symlinks;
-    
+      mapAttrsToList (
+        dest: src: "L+ ${normalizeHome dest} - - - - ${src}"
+      ) config.qnix.system.shell.symlinks;
+
     environment.shellInit = ''
       # GPG 
       export GPG_TTY="$(tty)"
@@ -50,6 +57,6 @@ in
           exec ${pkgs.fish}/bin/fish $LOGIN_OPTION
         fi
       '';
-};
+    };
   };
 }

@@ -1,11 +1,11 @@
 {
-  lib, 
-  config, 
+  lib,
+  config,
   options,
   ...
 }:
 
-let 
+let
   cfg = config.qnix.home.system.shell.starship;
   inherit (lib) mkAfter concatStrings;
 in
@@ -17,12 +17,12 @@ in
   config = {
     programs = {
       starship = {
-            
+
         enable = cfg.enable;
         enableBashIntegration = true;
         enableFishIntegration = true;
         enableTransience = true;
-        
+
         settings =
           let
             color = config.qnix.home.style.colors.${config.qnix.home.style.colors.scheme};
@@ -42,7 +42,6 @@ in
               "[](${color.blue})"
               "$directory"
               "[](${color.blue})"
-              
 
               "[](${color.green})"
               "$git_branch"
@@ -72,10 +71,12 @@ in
               format = concatStrings [
                 "[ $user@ ]($style)"
               ];
+              show_always = true;
             };
             hostname = {
               style = "bg:${color.cyan} ${text}";
               ssh_symbol = "󰣀 ";
+              ssh_only = false;
               format = "[ $ssh_symbol$hostname ]($style)";
             };
             directory = {
@@ -135,7 +136,7 @@ in
       };
 
       # some sort of race condition with kitty and starship
-    #   https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
+      #   https://github.com/kovidgoyal/kitty/issues/4476#issuecomment-1013617251
       kitty.shellIntegration.enableBashIntegration = false;
     };
   };

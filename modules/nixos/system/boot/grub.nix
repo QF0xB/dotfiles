@@ -1,9 +1,9 @@
 {
-  options, 
+  options,
   lib,
   config,
   isVm,
-  ... 
+  ...
 }:
 
 let
@@ -18,10 +18,10 @@ in
     boot = {
       supportedFilesystems.zfs = true;
 
-      loader = { 
+      loader = {
         efi.efiSysMountPoint = "/boot";
         efi.canTouchEfiVariables = true;
-        
+
         grub = {
           enable = true;
           devices = [ "nodev" ];
@@ -32,13 +32,13 @@ in
       };
       zfs = {
         devNodes =
-            if isVm then
-              "/dev/disk/by-partuuid"
-            # use by-id for intel mobo when not in a vm
-            else if config.hardware.cpu.intel.updateMicrocode then
-              "/dev/disk/by-id"
-            else
-              "/dev/disk/by-partuuid";
+          if isVm then
+            "/dev/disk/by-partuuid"
+          # use by-id for intel mobo when not in a vm
+          else if config.hardware.cpu.intel.updateMicrocode then
+            "/dev/disk/by-id"
+          else
+            "/dev/disk/by-partuuid";
       };
     };
   };

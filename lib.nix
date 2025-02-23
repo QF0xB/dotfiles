@@ -22,6 +22,18 @@ lib.extend (
           )
         );
 
+      parseInt =
+        s:
+        let
+          m = builtins.match "^([0-9]+)$" s;
+        in
+        if m == null then
+          builtins.abort ("Not an integer: " + s)
+        else if builtins.length m == 0 then
+          builtins.fromJSON s
+        else
+          builtins.fromJSON (builtins.head m);
+
       # writeShellApplication with support for completions
       writeShellApplicationCompletions =
         {
