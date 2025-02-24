@@ -1,9 +1,8 @@
 {
-  config, 
+  config,
   lib,
   pkgs,
-  user, 
-  dots,
+  user,
   ...
 }:
 
@@ -18,7 +17,7 @@ in
   config = lib.mkIf config.qnix.nix.sops.enable {
     sops = {
       defaultSopsFile = ../../../secrets/default.yaml;
-  
+
       age = {
         generateKey = false;
         keyFile = "/persist${homeDir}/.config/sops/age/keys.txt";

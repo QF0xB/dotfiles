@@ -1,8 +1,6 @@
 {
-  options,
   lib,
   config,
-  user,
   pkgs,
   ...
 }:
@@ -43,7 +41,7 @@ with lib;
         u2f = {
           enable = cfg.u2f.enable;
           settings = {
-            interactive = true;
+            #            interactive = true;
             cue = true;
             origin = "pam://yubi";
           };
