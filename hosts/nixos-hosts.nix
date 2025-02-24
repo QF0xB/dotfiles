@@ -54,18 +54,22 @@ let
           };
         }
         # alias for home-manager
-        (lib.mkAliasOptionModule [ "hm" ] [
-          "home-manager"
-          "users"
-          user
-        ])
-        inputs.impermanence.nixosModules.impermanence #single-use root (/)
-        inputs.sops-nix.nixosModules.sops #secret management
-#TURNED OFF REPLACED BY SCRIPT        inputs.disko.nixosModules.disko #disk management
+        (lib.mkAliasOptionModule
+          [ "hm" ]
+          [
+            "home-manager"
+            "users"
+            user
+          ]
+        )
+        inputs.impermanence.nixosModules.impermanence # single-use root (/)
+        inputs.sops-nix.nixosModules.sops # secret management
+        #TURNED OFF REPLACED BY SCRIPT        inputs.disko.nixosModules.disko #disk management
       ];
     };
 in
 {
-  qpc = mkNixosConfiguration "QPC" {} {};
-  qframe13 = mkNixosConfiguration "QFrame13" {} {};
+  qpc = mkNixosConfiguration "QPC" { } { };
+  qframe13 = mkNixosConfiguration "QFrame13" { } { };
+  vm = mkNixosConfiguration "vm" { } { };
 }

@@ -1,8 +1,6 @@
 {
-  options,
   lib,
   config,
-  pkgs,
   ...
 }:
 
@@ -13,7 +11,7 @@ in
   options.qnix.system.packages = with lib; {
     git.install = mkEnableOption "git install";
     tree.install = mkEnableOption "tree install";
-    yubico.install = mkEnableOption "yubikey";
+    yubico.install = mkEnableOption "yubico software";
     helix.install = mkEnableOption "helix";
     kitty.install = mkEnableOption "kitty";
   };

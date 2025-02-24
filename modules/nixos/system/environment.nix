@@ -22,8 +22,10 @@ in
           (lists.optionals pkgs-cfg.git.install [ git ])
           (lists.optionals pkgs-cfg.tree.install [ tree ])
           (lists.optionals config.qnix.system.security.u2f.enable [ pam_u2f ])
-          (lists.optionals pkgs-cfg.yubico.install [ yubioath-flutter ])
-          [ yubikey-personalization ]
+          (lists.optionals pkgs-cfg.yubico.install [
+            yubikey-personalization
+            yubioath-flutter
+          ])
           (lists.optionals pkgs-cfg.helix.install [ helix ])
           (lists.optionals pkgs-cfg.kitty.install [ kitty ])
           # add custom-shell packages
