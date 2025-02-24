@@ -1,5 +1,5 @@
 {
-  options, 
+  options,
   lib,
   config,
   user,
@@ -7,9 +7,10 @@
   ...
 }:
 
-let 
+let
   cfg = config.qnix.system.security;
-in with lib;
+in
+with lib;
 {
   options.qnix.system.security = {
     u2f.enable = mkEnableOption "u2f auth";
@@ -17,7 +18,10 @@ in with lib;
   };
 
   config = {
-    services.udev.packages = with pkgs; [ yubikey-personalization pcsclite ];
+    services.udev.packages = with pkgs; [
+      yubikey-personalization
+      pcsclite
+    ];
     services.udev.extraRules = ''
       # YubiKey 5 NFC udev rule for CCID interface (gpg --card-info)
       SUBSYSTEM=="usb", ENV{DEVTYPE}=="usb_device", ENV{ID_VENDOR_ID}=="1050", ENV{ID_MODEL_ID}=="0407", ENV{ID_SECURITY_TOKEN}=="1", MODE="0660", GROUP="wheel"
@@ -34,29 +38,29 @@ in with lib;
       echo "now the new key should work"
     '';
 
-    
     security = {
       pam = {
         u2f = {
           enable = cfg.u2f.enable;
-          origin = "pam://yubi";
           settings = {
             interactive = true;
             cue = true;
+            origin = "pam://yubi";
           };
         };
 
         services = {
           login.u2fAuth = cfg.u2f.enable;
           sudo.u2fAuth = cfg.u2f.enable;
-        }; 
+        };
       };
     };
     services.pcscd.enable = false;
 
     # write Yubico file
-    hm = { 
-      xdg.configFile."Yubico/u2f_keys".text = "lcqbraendli:NVMp7RLgO9G+J8I+iC2mj0qum9xswAnnYQJU6btNuxcpVrPZFJr96Iwa2qBh2i+MnYc3o701kZLTPlkWd5ztyw==,N2cOgisG3QHs6DDees4w6nrZK2LOKZF6tZQkYGCJ6p52kQ5TG9hreCFBR68UliyOSg4FYinlRK57L0mtVejrbw==,es256,+presence";
+    hm = {
+      xdg.configFile."Yubico/u2f_keys".text =
+        "lcqbraendli:NVMp7RLgO9G+J8I+iC2mj0qum9xswAnnYQJU6btNuxcpVrPZFJr96Iwa2qBh2i+MnYc3o701kZLTPlkWd5ztyw==,N2cOgisG3QHs6DDees4w6nrZK2LOKZF6tZQkYGCJ6p52kQ5TG9hreCFBR68UliyOSg4FYinlRK57L0mtVejrbw==,es256,+presence";
     };
   };
 }
