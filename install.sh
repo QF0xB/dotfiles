@@ -168,12 +168,12 @@ fi
 sudo mount --mkdir -t zfs zroot/persist /mnt/persist
 
 # Get repo to install from
-read -rp "Enter flake URL (default: github:iynaix/dotfiles): " repo
-repo="${repo:-github:iynaix/dotfiles}"
+read -rp "Enter flake URL (default: github:stormfox2/dotfiles): " repo
+repo="${repo:-github:stormfox2/dotfiles}"
 
 # qol for iynaix os
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
-    hosts=("desktop" "framework" "xps" "vm" "vm-hyprland")
+if [[ $repo == "github:stormfox2/dotfiles" ]]; then
+    hosts=("desktop" "framework" "vm" "vm-hyprland")
 
     echo "Available hosts:"
     for i in "${!hosts[@]}"; do
@@ -194,10 +194,10 @@ else
     read -rp "Which host to install?" host
 fi
 
-read -rp "Enter git rev for flake (default: main): " git_rev
+read -rp "Enter git rev for flake (default: master): " git_rev
 
 echo "Installing NixOS"
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:stormfox2/dotfiles" ]]; then
     # root password is irrelevant if initialPassword is set in the config
     sudo nixos-install --no-root-password --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
 else
@@ -205,7 +205,7 @@ else
 fi
 
 # only relevant for iynaix os
-if [[ $repo == "github:iynaix/dotfiles" ]]; then
+if [[ $repo == "github:stormfox2/dotfiles" ]]; then
     echo "To setup secrets, run \"install-remote-secrets\" on the other host."
 
     IP_ADDR=$(ifconfig | awk '/inet / && !/127.0.0.1/ {print $2; exit}')
