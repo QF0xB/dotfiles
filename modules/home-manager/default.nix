@@ -1,11 +1,11 @@
 {
   user,
-  inputs,
   ...
 }:
 
 {
   imports = [
+    ./default-options.nix
     ./nix
     ./devel
     ./system

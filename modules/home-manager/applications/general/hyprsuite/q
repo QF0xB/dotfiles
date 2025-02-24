@@ -16,13 +16,13 @@ in
 
   options.qnix.applications.general.hyprsuite = with lib; {
     enable = mkOption {
-      default = !(config.qnix.headless);
+      default = cfg.enable;
       description = "Activates the Default Hyprsuite.";
       type = types.bool;
     };
   };
 
-  config.qnix.home.applications.general = lib.mkIf cfg.enable {
+  config.qnix.applications.general = lib.mkIf cfg.enable {
     hyprsuite = with lib; {
       hyprland.enable = mkDefault true;
       hyprlock.enable = mkDefault true;
