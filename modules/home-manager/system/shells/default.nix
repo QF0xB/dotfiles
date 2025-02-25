@@ -27,17 +27,17 @@
       description = "Font size to use in terminal";
     };
 
-    
   };
 
   config = {
     home.packages = with pkgs; [
-      dysk #better disk info
-      ets #timestamps before each line
-      fd #better find
-      fx #json viewer
-      jq #another json viewer
-      
+      (callPackage ../../../../packages/rofi/package.nix { })
+      dysk # better disk info
+      ets # timestamps before each line
+      fd # better find
+      fx # json viewer
+      jq # another json viewer
+
     ];
 
     programs.nix-index.enable = true;
@@ -50,8 +50,8 @@
 
     qnix.home.system.shell = with lib; {
       fish.enable = mkDefault true;
-      lsd.enable  = mkDefault true;
-      starship.enable = mkDefault true; 
+      lsd.enable = mkDefault true;
+      starship.enable = mkDefault true;
     };
   };
 }

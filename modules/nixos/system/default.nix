@@ -1,6 +1,5 @@
 {
   lib,
-  config,
   ...
 }:
 
@@ -16,7 +15,9 @@
     ./fonts.nix
     ./security
     ./gnupg.nix
+    ./stylix.nix
     ./zfs.nix
+    ../../../packages/adi-rofi/default.nix
   ];
 
   config.qnix.system = with lib; {
@@ -39,7 +40,7 @@
     packages = with lib; {
       git.install = mkDefault true;
       tree.install = mkDefault true;
-      yubico.install = mkDefault false;
+      yubico.install = mkDefault true;
       helix.install = mkDefault false;
       kitty.install = mkDefault true;
     };
@@ -59,6 +60,10 @@
     };
 
     gpg = {
+      enable = mkDefault true;
+    };
+
+    stylix = {
       enable = mkDefault true;
     };
   };

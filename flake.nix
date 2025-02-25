@@ -15,7 +15,7 @@
     };
 
     # Hardware Optimisation
-    nixos-hardware  = {
+    nixos-hardware = {
       url = "github:NixOS/nixos-hardware";
     };
 
@@ -30,9 +30,9 @@
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Disko disk utility
-    disko = { 
+    disko = {
       url = "github:nix-community/disko";
-      inputs.nixpkgs.follows = "nixpkgs"; 
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     # Home Manager
@@ -40,39 +40,50 @@
       url = "github:nix-community/home-manager";
       inputs.nixpkgs.follows = "nixpkgs";
     };
-#    home-manager-stable = {
-#      url = "github:nix-community/home-manager/release-24.11";
-#      inputs.nixpkgs.follows = "nixpkgs-stable";
-#    };
+    #    home-manager-stable = {
+    #      url = "github:nix-community/home-manager/release-24.11";
+    #      inputs.nixpkgs.follows = "nixpkgs-stable";
+    #    };
 
     # Hyprland
     hyprland.url = "github:hyprwm/Hyprland";
 
     # Secret manager SOPS
-    sops-nix = { 
+    sops-nix = {
       url = "github:Mic92/sops-nix";
       inputs.nixpkgs.follows = "nixpkgs";
     };
+
+    # Global styling
+    stylix.url = "github:danth/stylix";
   };
 
-
-  outputs = 
-    inputs@{ nixpkgs, nixpkgs-stable, nixpkgs-master, self, ... }:
-    let 
+  outputs =
+    inputs@{
+      nixpkgs,
+      nixpkgs-stable,
+      nixpkgs-master,
+      self,
+      ...
+    }:
+    let
       system = "x86_64-linux";
-      create-overlay = version: final: rev: let 
-        nixpkgsForVersion = builtins.getAttr ("nixpkgs-" + version) inputs; 
-      in {
-        ${version} = import nixpkgsForVersion {
-          inherit system;
-          config.allowUnfree = true;
-          config.nvidia.acceptLicense = true;
+      create-overlay =
+        version: final: rev:
+        let
+          nixpkgsForVersion = builtins.getAttr ("nixpkgs-" + version) inputs;
+        in
+        {
+          ${version} = import nixpkgsForVersion {
+            inherit system;
+            config.allowUnfree = true;
+            config.nvidia.acceptLicense = true;
+          };
         };
-      };
 
       overlay-stable = create-overlay "stable";
       overlay-master = create-overlay "master";
-          
+
       pkgs = import inputs.nixpkgs {
         inherit system;
         config.allowUnfree = true;
@@ -82,7 +93,7 @@
         ];
       };
       pkgs-stable = import inputs.nixpkgs-stable {
-        inherit system; 
+        inherit system;
         config.allowUnfree = true;
       };
       lib = import ./lib.nix {
@@ -110,4 +121,4 @@
     {
       nixosConfigurations = import ./hosts/nixos-hosts.nix commonArgs;
     };
-}      
+}

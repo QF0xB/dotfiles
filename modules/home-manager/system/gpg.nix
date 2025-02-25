@@ -1,8 +1,8 @@
 {
-  options, 
+  options,
   lib,
   config,
-  ... 
+  ...
 }:
 
 let
@@ -11,7 +11,7 @@ in
 {
   config = {
     home.file.".gnupg/scdaemon.conf".text = ''
-      # NOT USING PCSCD ANYMORE disable-ccid
+      disable-ccid
       debug-level guru
     '';
 
@@ -20,10 +20,9 @@ in
     '';
 
     qnix.persist.home = {
-        directories = [
-          ".gnupg"  
-        ];
-      };
+      directories = [
+        ".gnupg"
+      ];
+    };
   };
 }
-

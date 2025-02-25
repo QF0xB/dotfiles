@@ -64,6 +64,7 @@ let
         )
         inputs.impermanence.nixosModules.impermanence # single-use root (/)
         inputs.sops-nix.nixosModules.sops # secret management
+        inputs.stylix.nixosModules.stylix
         #TURNED OFF REPLACED BY SCRIPT        inputs.disko.nixosModules.disko #disk management
       ];
     };

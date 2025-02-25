@@ -38,8 +38,8 @@ in
             gaps_in = "5"; # Inner gaps between windows
             gaps_out = "20"; # Outer gaps (to monitor edge)
             border_size = "2"; # Border thickness
-            "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg"; # Active window border gradient
-            "col.inactive_border" = "rgba(595959aa)"; # Inactive window border color
+            #            "col.active_border" = "rgba(33ccffee) rgba(00ff99ee) 45deg"; # Active window border gradient
+            #"col.inactive_border" = "rgba(595959aa)"; # Inactive window border color
             layout = "dwindle"; # Tiling layout (dwindle)
             resize_on_border = "true"; # Allow resizing by dragging borders
             allow_tearing = "false"; # Tearing disabled (see wiki for details)
@@ -175,7 +175,7 @@ in
               "$mod CTRL, code:47, exec, brave --private-window #;" # Start brave in private mode
 
               # WOFI (ROFI)
-              "CTRL,SUPER_L, exec, wofi" # Program starter
+              "CTRL,ALT, exec, rofi" # Program starter
 
               # Recording
               "$mod, code:29, exec, obs #z" # Start obs

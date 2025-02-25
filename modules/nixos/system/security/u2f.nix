@@ -18,7 +18,6 @@ with lib;
   config = {
     services.udev.packages = with pkgs; [
       yubikey-personalization
-      pcsclite
     ];
     services.udev.extraRules = ''
       # YubiKey 5 NFC udev rule for CCID interface (gpg --card-info)
@@ -53,7 +52,7 @@ with lib;
         };
       };
     };
-    services.pcscd.enable = false;
+    services.pcscd.enable = true;
 
     # write Yubico file
     hm = {
