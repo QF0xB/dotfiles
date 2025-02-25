@@ -12,6 +12,15 @@
     ./general/hyprsuite/hyprsuite.nix
   ];
 
+  options.qnix.applications = with lib; {
+    editor = mkOption {
+      description = "Default Editor";
+      default = pkgs.neovim;
+      type = types.pkgs;
+    };
+
+  };
+
   config = with lib; {
     qnix.home.applications = {
       tui = {

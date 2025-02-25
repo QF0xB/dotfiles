@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.qnix.home.applications.general.hyprsuite.hyprlock;
+  cfg = config.qnix.applications.general.hyprsuite.hyprlock;
 in
 {
-  options.qnix.home.applications.general.hyprsuite.hyprlock = with lib; {
+  options.qnix.applications.general.hyprsuite.hyprlock = with lib; {
     enable = mkEnableOption "hyprlock";
   };
 

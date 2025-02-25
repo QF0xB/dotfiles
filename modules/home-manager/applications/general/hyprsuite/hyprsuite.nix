@@ -5,7 +5,7 @@
 }:
 
 let
-  cfg = config.qnix.applications.general.hyprsuite;
+  cfg = config.qnix.application.general.hyprsuite;
 in
 {
   imports = [
@@ -14,7 +14,7 @@ in
     ./hyprpaper.nix
   ];
 
-  options.qnix.applications.general.hyprsuite = with lib; {
+  options.qnix.application.general.hyprsuite = with lib; {
     enable = mkOption {
       default = !(config.qnix.headless);
       description = "Activates the Default Hyprsuite.";
@@ -22,7 +22,7 @@ in
     };
   };
 
-  config.qnix.home.applications.general = lib.mkIf cfg.enable {
+  config.qnix.applications.general = lib.mkIf cfg.enable {
     hyprsuite = with lib; {
       hyprland.enable = mkDefault true;
       hyprlock.enable = mkDefault true;

@@ -5,10 +5,10 @@
 }:
 
 let
-  cfg = config.qnix.home.applications.general.hyprsuite.hyprpaper;
+  cfg = config.qnix.applications.general.hyprsuite.hyprpaper;
 in
 {
-  options.qnix.home.applications.general.hyprsuite.hyprpaper = with lib; {
+  options.qnix.applications.general.hyprsuite.hyprpaper = with lib; {
     enable = mkEnableOption "hyprpaper";
     wallpaper = mkOption {
       default = "$HOME/.config/hypr/wallpaper/main-wallpaper.png";
