@@ -6,15 +6,11 @@
 }:
 
 let
-  cfg = config.qnix.applications.general.hyprsuite.hyprland;
+  cfg = config.hm.qnix.applications.general.hyprsuite;
   inherit (lib) mkIf;
 in
 {
-  options.qnix.applications.general.hyprsuite.hyprland = with lib; {
-    enable = mkEnableOption "hyprland";
-  };
-
-  config = mkIf cfg.enable {
+  config = mkIf cfg.hyprland.enable {
     programs = {
       hyprland = {
         enable = true;

@@ -13,8 +13,5 @@ in
   ];
 
   config.qnix.applications.general = lib.mkIf cfg.enable {
-    hyprsuite = with lib; {
-      hyprland.enable = mkDefault true;
-    };
   };
 }

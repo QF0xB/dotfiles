@@ -5,7 +5,7 @@
 }:
 
 let
-  cfg = config.qnix.home.applications.general.hyprsuite;
+  cfg = config.qnix.applications.general.hyprsuite;
 in
 {
   imports = [
@@ -13,7 +13,7 @@ in
     ./monitors.nix
   ];
 
-  options.qnix.home.applications.general.hyprsuite.hyprland = with lib; {
+  options.qnix.applications.general.hyprsuite.hyprland = with lib; {
     enable = mkEnableOption "hyprland home module";
   };
 
