@@ -1,6 +1,4 @@
 {
-  config,
-  options,
   pkgs,
   lib,
   ...
@@ -31,13 +29,12 @@
 
   config = {
     home.packages = with pkgs; [
-      (callPackage ../../../../packages/rofi/package.nix { })
       dysk # better disk info
       ets # timestamps before each line
       fd # better find
       fx # json viewer
       jq # another json viewer
-
+      qnix-pkgs.rofi-allthemes
     ];
 
     programs.nix-index.enable = true;

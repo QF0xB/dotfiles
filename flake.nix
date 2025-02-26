@@ -8,6 +8,8 @@
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master"; # DEV
 
+    qnix-pkgs.url = "github:stormfox2/qnix-pkgs";
+
     # Nix-index for unstable
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
@@ -55,7 +57,9 @@
     };
 
     # Global styling
-    stylix.url = "github:danth/stylix";
+    stylix = {
+      url = "github:danth/stylix/87a2873";
+    };
   };
 
   outputs =
@@ -90,6 +94,7 @@
         overlays = [
           overlay-stable
           overlay-master
+          inputs.qnix-pkgs.overlays.default
         ];
       };
       pkgs-stable = import inputs.nixpkgs-stable {

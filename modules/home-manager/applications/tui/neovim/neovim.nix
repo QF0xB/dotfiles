@@ -1,7 +1,5 @@
 {
   config,
-  options,
-  pkgs,
   lib,
   inputs,
   dots,
@@ -9,12 +7,12 @@
 }:
 
 let
-  cfg = config.qnix.home.applications.tui.neovim;
+  cfg = config.qnix.applications.tui.neovim;
 in
 {
   imports = [ inputs.nvf.homeManagerModules.default ];
 
-  options.qnix.home.applications.tui.neovim = with lib; {
+  options.qnix.applications.tui.neovim = with lib; {
     enable = mkEnableOption "neovim";
     default = mkEnableOption "set neovim to default editor";
   };

@@ -14,7 +14,10 @@ in
   };
 
   config = {
-    stylix.enable = cfg.enable;
-    stylix.base16Scheme = "${pkgs.base16-schemes}/share/themes/solarized-dark.yaml";
+    stylix = {
+      enable = cfg.enable;
+      base16Scheme = "${pkgs.base16-schemes}/share/themes/solarized-dark.yaml";
+      image = ./wallpapers/main-wallpaper.png;
+    };
   };
 }

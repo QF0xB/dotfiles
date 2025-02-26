@@ -5,7 +5,7 @@
   ...
 }:
 
-let 
+let
   inherit (lib) getExe mkForce mkEnableOption;
   fishPath = getExe config.programs.fish.package;
   cfg = config.qnix.home.system.shell.fish;
@@ -30,25 +30,25 @@ in
           set sponge_regex_patterns 'password|passwd|^kill'
         '';
       };
-  
-#      kitty = {
-#        settings = {
-#          env = "SHELL=${fishPath}";
-#          shell = mkForce (getExe config.programs.fish.package);
-#        };
-#      };
 
-#      ghostty = {
-#        settings = {
-#          command = mkForce "SHELL=${fishPath} ${fishPath}";
-#        };
-#      };
+      #      kitty = {
+      #        settings = {
+      #          env = "SHELL=${fishPath}";
+      #          shell = mkForce (getExe config.programs.fish.package);
+      #        };
+      #      };
+
+      #      ghostty = {
+      #        settings = {
+      #          command = mkForce "SHELL=${fishPath} ${fishPath}";
+      #        };
+      #      };
     };
 
     home.packages = with pkgs.fishPlugins; [
       sponge
     ];
- 
+
     qnix.persist = {
       home = {
         cache.directories = [ ".local/share/fish" ];

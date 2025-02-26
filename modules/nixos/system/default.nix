@@ -15,9 +15,8 @@
     ./fonts.nix
     ./security
     ./gnupg.nix
-    ./stylix.nix
+    ./styling/stylix.nix
     ./zfs.nix
-    ../../../packages/adi-rofi/default.nix
   ];
 
   config.qnix.system = with lib; {

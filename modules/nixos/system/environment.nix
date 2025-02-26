@@ -33,6 +33,7 @@ in
           (lists.optionals cfg.systemPackages.custom-shell.enable (
             lib.attrValues config.qnix.system.shell.packages
           ))
+          [ nvfetcher ]
         ];
     };
 

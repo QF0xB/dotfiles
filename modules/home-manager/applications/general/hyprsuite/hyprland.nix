@@ -1,11 +1,13 @@
 {
   config,
   lib,
+  isVm,
   ...
 }:
 
 let
   cfg = config.qnix.applications.general.hyprsuite;
+  uexec = program: "exec, uwsm app -- ${program}";
 in
 {
   imports = [
@@ -119,7 +121,7 @@ in
           #
 
           # Set main mod to windows key.
-          "$mod" = "super";
+          "$mod" = if isVm then "super" else "ALT";
 
           bindl = [
             ",switch:Lid Switch,exec,swaylock" # Lock when lid closed.
@@ -168,14 +170,14 @@ in
 
               #Shell
               "$mod, return, exec, kitty" # Start kitty normally
-              "$mod CTRL, return, exec, kitty --class floating" # Start kitty floating
+              #              "$mod CTRL, return, exec, kitty --class floating" # Start kitty floating
 
               #Browser
               "$mod, code:47, exec, brave #;" # Start brave normally
               "$mod CTRL, code:47, exec, brave --private-window #;" # Start brave in private mode
 
               # WOFI (ROFI)
-              "CTRL,ALT, exec, rofi" # Program starter
+              "$mod CTRL, return, ${uexec ''rofi -show drun -run-command "uwsm app -- {cmd}"''} " # Program starter
 
               # Recording
               "$mod, code:29, exec, obs #z" # Start obs

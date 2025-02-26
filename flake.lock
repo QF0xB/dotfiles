@@ -356,11 +356,11 @@
         ]
       },
       "locked": {
-        "lastModified": 1740432748,
-        "narHash": "sha256-BCeFtoJ/+LrZc03viRJWHfzAqqG8gPu/ikZeurv05xs=",
+        "lastModified": 1740494361,
+        "narHash": "sha256-Dd/GhJ9qKmUwuhgt/PAROG8J6YdU2ZjtJI9SQX5sVQI=",
         "owner": "nix-community",
         "repo": "home-manager",
-        "rev": "c12dcc9b61429b2ad437a7d4974399ad8f910319",
+        "rev": "74f0a8546e3f2458c870cf90fc4b38ac1f498b17",
         "type": "github"
       },
       "original": {
@@ -770,11 +770,11 @@
     },
     "nixpkgs-master": {
       "locked": {
-        "lastModified": 1740493111,
-        "narHash": "sha256-C4WfqJQqVdv5LUHOcFiRJpDUAEOEVJSSbh3bwobRb1w=",
+        "lastModified": 1740527904,
+        "narHash": "sha256-KuLsEeowUQf1o8YBRSp3ndhJU9E5/3iVTgiQAnadsEY=",
         "owner": "NixOS",
         "repo": "nixpkgs",
-        "rev": "3dbd57d81b3dfd95d00a3b4fbecae20c8ebdd457",
+        "rev": "a1cb8f43cf95757be9549eafb9aa75374857a3b0",
         "type": "github"
       },
       "original": {
@@ -817,6 +817,22 @@
       }
     },
     "nixpkgs_3": {
+      "locked": {
+        "lastModified": 1740367490,
+        "narHash": "sha256-WGaHVAjcrv+Cun7zPlI41SerRtfknGQap281+AakSAw=",
+        "owner": "NixOS",
+        "repo": "nixpkgs",
+        "rev": "0196c0175e9191c474c26ab5548db27ef5d34b05",
+        "type": "github"
+      },
+      "original": {
+        "owner": "NixOS",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_4": {
       "locked": {
         "lastModified": 1740367490,
         "narHash": "sha256-WGaHVAjcrv+Cun7zPlI41SerRtfknGQap281+AakSAw=",
@@ -920,6 +936,24 @@
         "type": "github"
       }
     },
+    "qnix-pkgs": {
+      "inputs": {
+        "nixpkgs": "nixpkgs_3"
+      },
+      "locked": {
+        "lastModified": 1740523885,
+        "narHash": "sha256-eUWJi2P4agWF44+4c5aZOZIA1+HvTtc2ZucIzXU+6D8=",
+        "owner": "stormfox2",
+        "repo": "qnix-pkgs",
+        "rev": "95ed510de6cc4d8f1c25fde034fd73f0e1044dcf",
+        "type": "github"
+      },
+      "original": {
+        "owner": "stormfox2",
+        "repo": "qnix-pkgs",
+        "type": "github"
+      }
+    },
     "root": {
       "inputs": {
         "disko": "disko",
@@ -932,6 +966,7 @@
         "nixpkgs-master": "nixpkgs-master",
         "nixpkgs-stable": "nixpkgs-stable",
         "nvf": "nvf",
+        "qnix-pkgs": "qnix-pkgs",
         "sops-nix": "sops-nix",
         "stylix": "stylix"
       }
@@ -990,7 +1025,7 @@
         "git-hooks": "git-hooks",
         "gnome-shell": "gnome-shell",
         "home-manager": "home-manager_2",
-        "nixpkgs": "nixpkgs_3",
+        "nixpkgs": "nixpkgs_4",
         "nur": "nur",
         "systems": "systems_4",
         "tinted-foot": "tinted-foot",
@@ -1000,15 +1035,16 @@
         "tinted-zed": "tinted-zed"
       },
       "locked": {
-        "lastModified": 1740484771,
-        "narHash": "sha256-vVuuizPabugzTQtOKHB8NV/RC1PQWH6KxQtRW8Jqkyg=",
+        "lastModified": 1740528332,
+        "narHash": "sha256-g3Rvj+DX1BZ/6q1G0ytegz2//5GCn86Rxncb4e8UypA=",
         "owner": "danth",
         "repo": "stylix",
-        "rev": "c9195530b40e2589a70d3bf4154d2f92de1fafca",
+        "rev": "87a2873b95e45cdc18c124f6807c55e4645cd63f",
         "type": "github"
       },
       "original": {
         "owner": "danth",
+        "ref": "87a2873",
         "repo": "stylix",
         "type": "github"
       }
