@@ -5,7 +5,10 @@
 
 {
   imports = [
+    ./audio.nix
+    ./bluetooth.nix
     ./boot
+    ./nvidia.nix
     ./gnupg.nix
     ./shells.nix
     ./environment.nix

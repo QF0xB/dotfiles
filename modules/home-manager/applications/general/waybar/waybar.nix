@@ -9,7 +9,11 @@ let
   cfg = config.qnix.applications.general.waybar;
 in
 {
-  imports = [ ./assets/config.nix ];
+  imports = [
+    ./assets/config.nix
+    ./assets/style.nix
+  ];
+
   options.qnix.applications.general.waybar = with lib; {
     enable = mkEnableOption "waybar bar" // {
       default = config.qnix.applications.general.hyprsuite.hyprland.enable && !config.qnix.headless;
@@ -26,7 +30,7 @@ in
     };
 
     #xdg.configFile."waybar/config".source = ./assets/config;
-    xdg.configFile."waybar/style.css".source = ./assets/style.css;
+    #    xdg.configFile."waybar/style.css".source = ./assets/style.css;
     xdg.configFile."waybar/waybar-yubikey" = {
       source = ./assets/waybar-yubikey;
       executable = true;

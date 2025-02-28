@@ -163,7 +163,7 @@
 /* Style when cursor is on the button */
 #workspaces button:hover {
 	background: @base02;
-	color: @base0;
+	color: @b;
 	border-radius: 100px;
 }
 

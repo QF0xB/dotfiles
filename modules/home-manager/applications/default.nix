@@ -14,8 +14,11 @@
     ./general/swaync/swaync.nix
     ./general/waybar/waybar.nix
     ./gui/chromium/chromium.nix
+    ./gui/flameshot/flameshot.nix
     ./gui/kitty/kitty.nix
     ./gui/nemo/nemo.nix
+    ./gui/tidal-hifi/tidal-hifi.nix
+    ./gui/webcord/webcord.nix
   ];
 
   options.qnix.applications = with lib; {
@@ -34,7 +37,8 @@
       fx # json viewer
       jq # another json viewer
       wev # keyboard analyzer
-      webcord # Discord
+      nwg-displays
+      bash
     ];
 
     qnix.applications = {

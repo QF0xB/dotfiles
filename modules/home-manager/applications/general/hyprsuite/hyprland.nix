@@ -2,6 +2,7 @@
   config,
   lib,
   isVm,
+  pkgs,
   ...
 }:
 
@@ -23,6 +24,10 @@ in
   };
 
   config = {
+    home.packages = with pkgs; [
+      wl-clipboard
+    ];
+
     wayland.windowManager = {
       hyprland = {
         enable = cfg.hyprland.enable;
@@ -33,7 +38,10 @@ in
         settings = {
           # Monitor
           monitor = ", preferred, auto, 1"; # Default Monitor
-          source = "./monitor.conf";
+          source = [
+            "./monitors.conf"
+            "./workspaces.conf"
+          ];
 
           exec = [
             "hyprctl switchxkblayout all 1"
@@ -191,8 +199,7 @@ in
               "$mod, code:26, ${uexec ''obsidian''} #e" # Notes
 
               # Screenshot
-              "SHIFT, Print, exec, grim -g '$slurp' - | wl-copy && wl-paste > ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png | dunstify -i ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png 'Screenshot of the region taken' -t 1000" # screenshot of a region
-              ", Print, exec, grim - | wl-copy && wl-paste > ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png | dunstify  -i ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png 'Screenshot of whole screen taken' -t 1000" # screenshot of the whole screen
+              ", Print, ${uexec ''rofi -show drun -config ~/.config/rofi/applets/bin/screenshot.sh''}"
 
               # audio/sound control
               ", xf86audioraisevolume, exec, pamixer -i 5 && dunstify -h int:value:'$(pamixer --get-volume)' -i ~/.config/dunst/assets/volume.svg -t 500 -r 2593 'Volume: $(pamixer --get-volume) %'"
@@ -323,6 +330,7 @@ in
                   "title:^(Volume Control)$"
                   "title:^(Picture-in-Picture)$"
                   "title:^(Firefox — Sharing Indicator)$"
+                  "class:flameshot"
                 ];
               in
               map (window: "float, ${window}") floatingWindows

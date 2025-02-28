@@ -8,6 +8,10 @@
 
 let
   homeDir = config.hm.home.homeDirectory;
+  hosts = [
+    "QFrame13"
+    "QPC"
+  ];
 in
 {
   options.qnix = with lib; {
@@ -22,6 +26,15 @@ in
         generateKey = false;
         keyFile = "/persist${homeDir}/.config/sops/age/keys.txt";
       };
+
+      secrets = lib.mkMerge (
+        map (host: {
+          "backup_${host}" = {
+            owner = config.users.users.${user}.name;
+            group = "users";
+          };
+        }) hosts
+      );
     };
 
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];

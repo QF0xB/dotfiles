@@ -5,6 +5,7 @@
 
 {
   imports = [
+    ./backup.nix
     ./ssh.nix
     ./shells
     ./gpg.nix

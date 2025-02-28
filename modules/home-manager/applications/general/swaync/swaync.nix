@@ -18,6 +18,11 @@ in
   config = {
     stylix.targets.swaync.enable = false;
 
+    home.packages = with pkgs; [
+      dunst # for dunstify utility
+      libnotify
+    ];
+
     services.swaync = {
       enable = cfg.enable;
 

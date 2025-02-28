@@ -12,6 +12,7 @@
       position = "top";
 
       modules-left = [
+        "custom/side-spacer"
         #   "custom/logo";
         "custom/arrow-l-clock"
         #		"custom/logo";
@@ -51,6 +52,7 @@
         ++ [
           "custom/notification"
           "custom/arrow-r-stats"
+          "custom/side-spacer"
         ];
 
       # Modules
@@ -59,6 +61,11 @@
         format = "  ";
         tooltip = false;
         on-click = "~/.config/rofi/launchers/type-${config.qnix.applications.general.rofi.launcher.theme.type}/style-${config.qnix.applications.general.rofi.launcher.theme.type}.rasi &";
+      };
+
+      "custom/side-spacer" = {
+        format = " ";
+        tooltip = false;
       };
 
       "custom/notification" = {
@@ -215,15 +222,19 @@
         return-type = "json";
       };
 
-      tray = {
-        icon-size = 20;
-        spacing = 10;
-      };
+      tray =
+        let
+          iconSize = if isLaptop then 20 else 25;
+        in
+        {
+          icon-size = iconSize;
+          spacing = 10;
+        };
 
       "custom/clipboard" = {
         format = "";
         return-type = "json";
-        on-click = "cliphist list | rofi --dmenu | cliphist decode | wl-copy";
+        on-click = "cliphist list | rofi -dmenu | cliphist decode | wl-copy";
         on-click-right = "cliphist list | rofi --dmenu | cliphist delete && pkill -RTMIN+9 waybar";
         on-click-middle = "rm -f ~/.cache/cliphist/db; pkill -RTMIN+9 waybar";
         tooltip = false;
