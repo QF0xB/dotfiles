@@ -16,6 +16,7 @@ with lib;
   };
 
   config = {
+    programs.yubikey-touch-detector.enable = true;
     services.udev.packages = with pkgs; [
       yubikey-personalization
     ];

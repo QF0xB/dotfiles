@@ -28,14 +28,6 @@
   };
 
   config = {
-    home.packages = with pkgs; [
-      dysk # better disk info
-      ets # timestamps before each line
-      fd # better find
-      fx # json viewer
-      jq # another json viewer
-      qnix-pkgs.rofi-allthemes
-    ];
 
     programs.nix-index.enable = true;
 

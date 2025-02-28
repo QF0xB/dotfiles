@@ -7,7 +7,10 @@
 
 let
   cfg = config.qnix.applications.general.hyprsuite;
-  uexec = program: "exec, uwsm app -- ${program}";
+  uexec = program: "exec, uwsm app -- ${program} ";
+  default-app-uexec = app-name: (uexec (lib.getExe default-apps.${app-name}));
+  rofi-cfg = config.qnix.applications.general.rofi;
+  default-apps = config.qnix.applications.default;
 in
 {
   imports = [
@@ -32,7 +35,7 @@ in
           monitor = ", preferred, auto, 1"; # Default Monitor
           source = "./monitor.conf";
 
-          exec-once = [
+          exec = [
             "hyprctl switchxkblayout all 1"
           ];
           # General window settings: gaps, border size, layout, and colors.
@@ -124,7 +127,7 @@ in
           "$mod" = if isVm then "super" else "ALT";
 
           bindl = [
-            ",switch:Lid Switch,exec,swaylock" # Lock when lid closed.
+            ",switch:Lid Switch, ${uexec ''hyprlock''}" # Lock when lid closed.
           ];
           bindm = [
             # Move window with Mouse + MOD
@@ -169,23 +172,23 @@ in
               #
 
               #Shell
-              "$mod, return, exec, kitty" # Start kitty normally
-              #              "$mod CTRL, return, exec, kitty --class floating" # Start kitty floating
+              "$mod, return, ${default-app-uexec ''terminal''}" # Start kitty normally
+              "$mod CTRL, return, ${default-app-uexec ''terminal'' + " --class floating"}" # Start kitty floating
 
               #Browser
-              "$mod, code:47, exec, brave #;" # Start brave normally
-              "$mod CTRL, code:47, exec, brave --private-window #;" # Start brave in private mode
+              "$mod, code:47, ${default-app-uexec ''browser''} #;" # Start brave normally
+              "$mod CTRL, code:47, ${default-app-uexec ''browser'' + ''--private-window''} #;" # Start brave in private mode
 
               # WOFI (ROFI)
-              "$mod CTRL, return, ${uexec ''rofi -show drun -run-command "uwsm app -- {cmd}"''} " # Program starter
+              "$mod, code:25, ${uexec ''rofi -show drun -config ~/.config/rofi/launchers/type-${rofi-cfg.launcher.theme.type}/style-${rofi-cfg.launcher.theme.style}.rasi -run-command "uwsm app -- {cmd}"''} #w" # Program starter
 
               # Recording
-              "$mod, code:29, exec, obs #z" # Start obs
+              "$mod, code:29, ${uexec ''obs''} #y" # Start obs
 
               # General use
-              "$mod, code:40, exec, thunar #d" # Filemanager
-              "$mod, code:57, exec, bitwarden-desktop #m" # Passwordmanager
-              "$mod, code:26, exec, obsidian #e" # Notes
+              "$mod, code:40, ${default-app-uexec ''file-manager''} #d" # Filemanager
+              "$mod, code:57, ${uexec ''bitwarden-desktop''} #m" # Passwordmanager
+              "$mod, code:26, ${uexec ''obsidian''} #e" # Notes
 
               # Screenshot
               "SHIFT, Print, exec, grim -g '$slurp' - | wl-copy && wl-paste > ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png | dunstify -i ~/Pictures/Screenshots/Screenshot-$(date +%F_%T).png 'Screenshot of the region taken' -t 1000" # screenshot of a region
@@ -282,6 +285,65 @@ in
               in
               bindingLines
             );
+
+          #
+          # Windowrules
+          #
+          windowrulev2 =
+            [
+              # Workspaces
+              "workspace 1, class:obsidian"
+              "workspace 1, class:jetbrains-idea"
+              "workspace 1, class:code-oss"
+
+              "workspace 2, class:kitty"
+
+              "workspace 3, class:brave-browser"
+              "workspace 3, class:chromium"
+
+              # 456 for personal use
+
+              "workspace 7, class:WebCord"
+
+              "workspace 8, class:Bitwarden"
+
+              "workspace 9, class:thunar"
+              "workspace 9, class:nemo"
+
+              "workspace 10, class:thunderbird"
+            ]
+            ++ (
+              let
+                floatingWindows = [
+                  "class:floating"
+                  "title:Open File"
+                  "title:branchdialog"
+                  "title:^(Media viewer)$"
+                  "title:^(Transmission)$"
+                  "title:^(Volume Control)$"
+                  "title:^(Picture-in-Picture)$"
+                  "title:^(Firefox — Sharing Indicator)$"
+                ];
+              in
+              map (window: "float, ${window}") floatingWindows
+            );
+          windowrule = (
+            let
+              floatingWindows = [
+                "file_progress"
+                "confirm"
+                "dialog"
+                "download"
+                "notification"
+                "error"
+                "splash"
+                "confirmreset"
+                "pavucontrol-qt"
+                "*.exe"
+              ];
+            in
+            map (window: "float, ${window}") floatingWindows
+          );
         };
       };
     };

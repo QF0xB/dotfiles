@@ -58,7 +58,7 @@
 
     # Global styling
     stylix = {
-      url = "github:danth/stylix/87a2873";
+      url = "github:danth/stylix";
     };
   };
 

@@ -21,7 +21,7 @@ let
       specialArgs = specialArgs // {
         inherit host user;
         isNixOS = true;
-        isLaptop = host == "qframe13";
+        isLaptop = false; # host == "qframe13";
         isVm = lib.strings.hasPrefix "vm" host;
         dots = "/persist/home/${user}/projects/dotfiles";
       };
@@ -39,7 +39,7 @@ let
             extraSpecialArgs = specialArgs // {
               inherit host user;
               isNixOS = true;
-              isLaptop = host == "QFrame13";
+              isLaptop = false; # host == "QFrame13";
               isVm = lib.strings.hasPrefix "vm" host;
               dots = "/persist/home/${user}/projects/dotfiles";
             };
@@ -65,6 +65,7 @@ let
         inputs.impermanence.nixosModules.impermanence # single-use root (/)
         inputs.sops-nix.nixosModules.sops # secret management
         inputs.stylix.nixosModules.stylix
+        inputs.qnix-pkgs.nixosModules.default
         #TURNED OFF REPLACED BY SCRIPT        inputs.disko.nixosModules.disko #disk management
       ];
     };

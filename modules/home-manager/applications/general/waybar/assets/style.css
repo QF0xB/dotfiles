@@ -1,0 +1,354 @@
+/* Keyframes */
+
+@keyframes blink-critical {
+	to {
+		/*color: @white;*/
+		background-color: @critical;
+	}
+}
+
+
+/* Styles */
+
+/* Colors (gruvbox) */
+/*@define-color black	#282828;
+@define-color red	#cc241d;
+@define-color green	#98971a;
+@define-color yellow	#d79921;
+@define-color blue	#458588;
+@define-color purple	#b16286;
+@define-color aqua	#689d6a;
+@define-color gray	#a89984;
+@define-color brgray	#928374;
+@define-color brred	#fb4934;
+@define-color brgreen	#b8bb26;
+@define-color bryellow	#fabd2f;
+@define-color brblue	#83a598;
+@define-color brpurple	#d3869b;
+@define-color braqua	#8ec07c;
+@define-color white	#ebdbb2;
+@define-color bg2	#504945;*/
+
+/* Colors Solarized */
+@define-color base03 #002b36;
+@define-color base02 #073642;
+@define-color base01 #586e75;
+@define-color base00 #657b83;
+@define-color base0 #839496;
+@define-color base1 #93a1a1;
+@define-color base2 #eee8d5;
+@define-color base3 #fdf6e3;
+@define-color yellow #b58900;
+@define-color orange #cb4b16;
+@define-color red #dc322f;
+@define-color magenta #d33682;
+@define-color violet #6c71c4;
+@define-color blue #268bd2;
+@define-color cyan #2aa198;
+@define-color green #859900;
+
+
+@define-color warning 	@yellow;
+@define-color critical	@red;
+@define-color system-settings	@violet;
+@define-color clock	@cyan;
+@define-color stats	@cyan;
+@define-color layout	@blue;
+@define-color interact @blue;
+
+/* Reset all styles */
+* {
+	border: none;
+	border-radius: 0;
+	min-height: 0;
+	margin: 0;
+	padding: 0;
+	box-shadow: none;
+	text-shadow: none;
+	icon-shadow: none;
+}
+
+/* The whole bar */
+#waybar {
+	background: transparent;/*rgba(40, 40, 40, 0.8784313725); #282828e0 */
+	color: @white;
+	font-family: JetBrains Mono, Siji,JetBrains Mono Nerd Font;
+	font-size: 15pt;
+	/*font-weight: bold;*/
+}
+
+/* Each module */
+#battery,
+#clock,
+#cpu,
+#language,
+#memory,
+#mode,
+#network,
+#pulseaudio,
+#temperature,
+#tray,
+#backlight,
+#idle_inhibitor,
+#disk,
+#user,
+#custom-yubikey,
+#custom-pacman,
+#custom-clipboard,
+#workspaces,
+#custom-notification,
+#mpris {
+	padding-left: 5pt;
+	padding-right: 5pt;
+	margin-top: 10px;
+}
+
+/* Each critical module */
+#mode,
+#memory.critical,
+#cpu.critical,
+#temperature.critical,
+#battery.critical.discharging {
+	animation-timing-function: linear;
+	animation-iteration-count: infinite;
+	animation-direction: alternate;
+	animation-name: blink-critical;
+	animation-duration: 1s;
+}
+
+/* Each warning */
+#network.disconnected,
+#memory.warning,
+#cpu.warning,
+#battery.warning.discharging {
+	color: @warning;
+}
+
+/* And now modules themselves in their respective order */
+
+#workspaces {
+	background: @base03;
+}
+/* Workspaces stuff */
+#workspaces button {
+	/*font-weight: bold;*/
+	padding-left: 2pt;
+	padding-right: 2pt;
+	color: @base0;
+	border-radius: 100px;
+	/* background: @unfocused;*/
+}
+
+/* Inactive (on unfocused output) */
+#workspaces button.visible {
+	color: @base03;
+	background: @orange;
+	border-radius: 100px;
+}
+
+/* Active (on focused output) */
+#workspaces button.focused {
+	color: @base03;
+	background: @orange;
+	border-radius: 100px;
+}
+
+/* Contains an urgent window */
+#workspaces button.urgent {
+	color: @base03;
+	background: @red;
+	border-radius: 100px;
+}
+
+/* Style when cursor is on the button */
+#workspaces button:hover {
+	background: @base02;
+	color: @base0;
+	border-radius: 100px;
+}
+
+#window {
+	margin-right: 35pt;
+	margin-left: 35pt;
+}
+
+#pulseaudio {
+	background: @system-settings;
+	color: @base03;
+}
+
+#network {
+	background: @system-settings;
+	color: @base03;
+}
+
+#backlight {
+        background: @system-settings;
+        color: @base03;
+}
+
+#memory {
+	background: @stats;
+	color: @base03;
+}
+
+#cpu {
+	background: @stats;
+	color: @base03;
+}
+
+#temperature {
+	background: @stats;
+	color: @base03;
+}
+
+#language {
+	background: @interact;
+	color: @base03;
+}
+
+#battery {
+	background: @stats;
+	color: @base03;
+}
+
+#custom-notification {
+        background: @stats;
+        color: @base03;
+}
+
+#custom-yubikey,
+#tray {
+	background: @base03;
+}
+
+#clock {
+	background: @stats;
+	color: @base03;
+}
+
+#clock {
+	background: @clock;
+	color: @base03;
+}
+
+#custom-pacman {
+	background: @interact;
+	color: @base03;
+}
+
+#custom-clipboard {
+	background: @interact;
+	color: @base03;
+}
+
+
+
+#custom-arrow-l-clock {
+        font-size: 15pt;
+        color: @clock;
+        background: @transparent;
+	padding-left: 10px;
+	margin-top: 10px;
+}
+
+#custom-arrow-r-clock {
+	font-size: 15pt;
+	color: @clock;
+	background: @transparent;
+	padding-right: 5px;
+        margin-top: 10px;
+}
+
+#custom-arrow-l-work {
+        font-size: 15pt;
+        color: @base03;
+        background: @transparent;
+        margin-top: 10px;
+}
+
+#custom-arrow-r-work {
+        font-size: 15pt;
+        color: @base03;
+        background: @transparent;
+        padding-right: 5px;
+        margin-top: 10px;
+}
+
+#custom-arrow-l-tray {
+        font-size: 15pt;
+        color: @base03;
+        background: @transparent;
+        margin-top: 10px;
+}
+
+#custom-arrow-r-tray {
+        font-size: 15pt;
+        color: @base03;
+        background: @transparent;
+        padding-right: 5px;
+        margin-top: 10px;
+}
+
+#custom-arrow-l-interact {
+        font-size: 15pt;
+        color: @interact;
+        background: @transparent;
+        margin-top: 10px;
+}
+
+#custom-sep-interact {
+	color: @base03;
+	background: @interact;
+        margin-top: 10px;
+}
+
+#custom-arrow-r-interact {
+        font-size: 15pt;
+        color: @interact;
+        background: @transparent;
+        padding-right: 5px;
+        margin-top: 10px;
+}
+
+#custom-arrow-l-system {
+        font-size: 15pt;
+        color: @system-settings;
+        background: @transparent;
+        margin-top: 10px;
+}
+
+#custom-sep-system {
+        color: @base03;
+        background: @system-settings;
+        margin-top: 10px;
+}
+
+#custom-arrow-r-system {
+        font-size: 15pt;
+        color: @system-settings;
+        background: @transparent;
+        padding-right: 5px;
+        margin-top: 10px;
+}
+
+#custom-arrow-l-stats {
+        font-size: 15pt;
+        color: @stats;
+        background: @transparent;
+        margin-top: 10px;
+}
+
+#custom-sep-stats {
+        color: @base03;
+        background: @stats;
+        margin-top: 10px;
+}
+
+#custom-arrow-r-stats {
+        font-size: 15pt;
+        color: @stats;
+        background: @transparent;
+        padding-right: 10px;
+        margin-top: 10px;
+}

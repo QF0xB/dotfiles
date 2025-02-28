@@ -14,6 +14,9 @@ in
     yubico.install = mkEnableOption "yubico software";
     helix.install = mkEnableOption "helix";
     kitty.install = mkEnableOption "kitty";
+    nemo.install = mkEnableOption "nemo" // {
+      default = true;
+    };
   };
 
   # MOVED TO ./environment

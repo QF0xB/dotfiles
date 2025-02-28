@@ -1,8 +1,8 @@
 {
-  options, 
+  options,
   lib,
   config,
-  ... 
+  ...
 }:
 
 let
@@ -11,9 +11,10 @@ in
 {
   config = {
     qnix.persist.home = {
-        directories = [
-          ".ssh"
-        ];
-      };
+      directories = [
+        ".ssh"
+        ".pki"
+      ];
+    };
   };
 }

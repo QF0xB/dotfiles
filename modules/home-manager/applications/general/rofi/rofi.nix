@@ -35,7 +35,12 @@ in
     programs.rofi = {
       enable = cfg.enable;
       package = pkgs.rofi-wayland;
-      theme = "${pkgs.qnix-pkgs.rofi-allthemes}/share/rofi/themes/launchers/type-${cfg.launcher.theme.type}/style-${cfg.launcher.theme.style}.rasi";
+      #theme = "~/.config/rofi/launchers/type-${cfg.launcher.theme.type}/style-${cfg.launcher.theme.style}.rasi";
+    };
+
+    programs.qnix.rofi-allthemes = {
+      enable = true;
+      colorScheme = "solarized"; # Choose your preferred color scheme
     };
 
     stylix.targets.rofi.enable = !cfg.launcher.theme.enable;
