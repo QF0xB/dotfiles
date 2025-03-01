@@ -5,6 +5,6 @@
 
 {
   imports = [
-    ./impermanence.nix #only contains options
+    ./impermanence.nix # only contains options
   ];
 }

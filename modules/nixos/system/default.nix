@@ -6,6 +6,7 @@
 {
   imports = [
     ./audio.nix
+    ./backup.nix
     ./bluetooth.nix
     ./boot
     ./nvidia.nix

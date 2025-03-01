@@ -1,7 +1,11 @@
 {
+  host,
+  config,
+  lib,
   ...
 }:
 
 {
-
+  config = {
+  };
 }

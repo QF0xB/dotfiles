@@ -3,22 +3,22 @@
   lib,
   pkgs,
   user,
+  host,
   ...
 }:
 
 let
   homeDir = config.hm.home.homeDirectory;
-  hosts = [
-    "QFrame13"
-    "QPC"
-  ];
+  cfg = config.qnix.nix.sops;
 in
 {
-  options.qnix = with lib; {
-    nix.sops.enable = mkEnableOption "sops";
+  options.qnix.nix.sops = with lib; {
+    enable = mkEnableOption "sops-nix secret management" // {
+      default = true;
+    };
   };
 
-  config = lib.mkIf config.qnix.nix.sops.enable {
+  config = lib.mkIf cfg.enable {
     sops = {
       defaultSopsFile = ../../../secrets/default.yaml;
 
@@ -27,14 +27,13 @@ in
         keyFile = "/persist${homeDir}/.config/sops/age/keys.txt";
       };
 
-      secrets = lib.mkMerge (
-        map (host: {
-          "backup_${host}" = {
-            owner = config.users.users.${user}.name;
-            group = "users";
-          };
-        }) hosts
-      );
+      secrets = {
+        "backup_${host}" = {
+          path = "${homeDir}/.ssh/backup_${host}";
+          owner = config.users.users.${user}.name;
+          group = "users";
+        };
+      };
     };
 
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
