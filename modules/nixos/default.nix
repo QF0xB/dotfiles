@@ -2,9 +2,9 @@
 
 {
   imports = [
+    ./nix
     ./system
     ./users
-    ./nix
     ./applications
   ];
 }

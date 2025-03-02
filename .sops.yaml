@@ -4,8 +4,14 @@
 # for a more complex example.
 keys:
   - &admin_qbraendli age1wxzqt7l9v4w7sm5lpe9qj8v9cw3e0w35zg6c6tdmns264l0urs4q8m2x3w
+  - &backup-prune age1u66smsx2ungnn5gjzsf8z87gwvewkcnxmr7au2mads3m8c6ca48qachjgz
 creation_rules:
-  - path_regex: secrets/[^/]+\.(yaml|json|env|ini)$
+  - path_regex: secrets/backup-prune-vm.yaml$
+    key_groups:
+    - age:
+      - *backup-prune
+  - path_regex: secrets/default.(yaml|json|env|ini)$
     key_groups:
     - age:
       - *admin_qbraendli
+  

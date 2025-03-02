@@ -10,12 +10,25 @@
 let
   homeDir = config.hm.home.homeDirectory;
   cfg = config.qnix.nix.sops;
+  inherit (lib) mkIf;
+  hostKey = "backup_${cfg.host}_key";
+  hostPassphrase = "backup_${cfg.host}_passphrase";
+  hostKeyPrune = "backup_${cfg.host}_key_prune";
 in
 {
   options.qnix.nix.sops = with lib; {
     enable = mkEnableOption "sops-nix secret management" // {
       default = true;
     };
+
+    host = mkOption {
+      type = types.str;
+      description = "Which hosts secrets to unpack.";
+      default = host;
+    };
+
+    backup-prune-keys.enable = mkEnableOption "decryption of backup-prune keys. DO NOT USE ON BACKUP DESKTOPS!";
+
   };
 
   config = lib.mkIf cfg.enable {
@@ -27,13 +40,34 @@ in
         keyFile = "/persist${homeDir}/.config/sops/age/keys.txt";
       };
 
-      secrets = {
-        "backup_${host}" = {
-          path = "${homeDir}/.ssh/backup_${host}";
-          owner = config.users.users.${user}.name;
-          group = "users";
-        };
-      };
+      secrets =
+        {
+          ${hostKey} = {
+            path = "${homeDir}/.ssh/${hostKey}";
+            owner = config.users.users.${user}.name;
+            group = "users";
+            mode = "0400";
+          };
+          ${hostPassphrase} = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+          };
+        }
+        // (
+          if cfg.backup-prune-keys.enable then
+            {
+              ${hostKeyPrune} = {
+                path = "${homeDir}/.ssh/backup_${cfg.host}";
+                owner = config.users.users.${user}.name;
+                group = "users";
+                mode = "0400";
+                sopsFile = ../../../secrets/backup-prune-vm.yaml;
+              };
+            }
+          else
+            { }
+        );
     };
 
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];

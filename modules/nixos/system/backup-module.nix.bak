@@ -1,0 +1,211 @@
+{
+  config,
+  lib,
+  pkgs,
+  ...
+}:
+
+with lib;
+
+let
+  cfg = config.services.myBorgBackup;
+
+  # Helper function to create a backup job
+  mkBorgJob = name: repoUrl: {
+    paths = [ cfg.mountPoint ] ++ cfg.additionalPaths;
+    exclude = cfg.exclude;
+    repo = repoUrl;
+
+    encryption = {
+      mode = "repokey-blake2";
+      passCommand = "cat ${cfg.passphraseFile}";
+    };
+
+    environment = {
+      BORG_RSH = "ssh -i ${cfg.privateKeyPath} -o StrictHostKeyChecking=accept-new";
+    };
+
+    compression = "auto,lzma";
+    startAt = cfg.startAt;
+
+    prune.keep = cfg.pruneRetention;
+
+    preHook = ''
+      # Ensure the private key has correct permissions
+      chmod 600 ${cfg.privateKeyPath}
+
+      # Only create snapshot and mount for the first job that runs
+      if [ ! -d "${cfg.mountPoint}" ]; then
+        # Create a ZFS snapshot of the persist dataset
+        zfs snapshot zroot/persist@${cfg.snapshotName} || true
+        
+        # Create mount point if it doesn't exist
+        mkdir -p ${cfg.mountPoint}
+        
+        # Mount the snapshot
+        zfs clone zroot/persist@${cfg.snapshotName} zroot/persist-backup-clone || true
+        mount -t zfs zroot/persist-backup-clone ${cfg.mountPoint} || true
+      fi
+    '';
+
+    postCreate = ''
+      echo "${name} backup completed successfully at $(date)"
+    '';
+
+    postHook = ''
+      # Only clean up after the last job
+      if [ "${name}" = "us" ]; then
+        # Unmount and clean up
+        umount ${cfg.mountPoint} || true
+        zfs destroy zroot/persist-backup-clone || true
+        zfs destroy zroot/persist@${cfg.snapshotName} || true
+        rmdir ${cfg.mountPoint} || true
+      fi
+    '';
+  };
+
+in
+{
+  options.services.myBorgBackup = {
+    enable = mkEnableOption "BorgBase backup service";
+
+    hostname = mkOption {
+      type = types.enum [
+        "QFrame13"
+        "QPC"
+      ];
+      description = "The hostname of this machine (QFrame13 or QPC)";
+      example = "QFrame13";
+    };
+
+    repositories = {
+      QFrame13 = {
+        eu = mkOption {
+          type = types.str;
+          description = "The EU BorgBase repository URL for QFrame13";
+          example = "uXXXX@uXXXX.eu.repo.borgbase.com:qframe13";
+          default = "";
+        };
+
+        us = mkOption {
+          type = types.str;
+          description = "The US BorgBase repository URL for QFrame13";
+          example = "uXXXX@uXXXX.us.repo.borgbase.com:qframe13";
+          default = "";
+        };
+      };
+
+      QPC = {
+        eu = mkOption {
+          type = types.str;
+          description = "The EU BorgBase repository URL for QPC";
+          example = "uXXXX@uXXXX.eu.repo.borgbase.com:qpc";
+          default = "";
+        };
+
+        us = mkOption {
+          type = types.str;
+          description = "The US BorgBase repository URL for QPC";
+          example = "uXXXX@uXXXX.us.repo.borgbase.com:qpc";
+          default = "";
+        };
+      };
+    };
+
+    additionalPaths = mkOption {
+      type = types.listOf types.str;
+      description = "Additional paths to back up beyond the ZFS dataset";
+      default = [ ];
+      example = [
+        "/etc"
+        "/var/www"
+      ];
+    };
+
+    exclude = mkOption {
+      type = types.listOf types.str;
+      description = "Paths to exclude from backup";
+      default = [ ];
+      example = [
+        "*.tmp"
+        "/persist/home/*/.cache"
+      ];
+    };
+
+    privateKeyPath = mkOption {
+      type = types.str;
+      description = "Path to the SSH private key from apps-nix";
+      example = "/run/keys/borgbackup_ssh_key";
+    };
+
+    passphraseFile = mkOption {
+      type = types.str;
+      description = "Path to file containing the repository passphrase";
+      example = "/run/keys/borgbackup_passphrase";
+    };
+
+    startAt = mkOption {
+      type = types.str;
+      description = "When to run the backup (systemd calendar format)";
+      default = "daily";
+      example = "hourly";
+    };
+
+    pruneRetention = mkOption {
+      type = types.attrs;
+      description = "Retention policy for pruning old backups";
+      default = {
+        daily = 7;
+        weekly = 4;
+        monthly = 6;
+      };
+      example = {
+        hourly = 24;
+        daily = 7;
+        weekly = 4;
+        monthly = 6;
+        yearly = 2;
+      };
+    };
+
+    snapshotName = mkOption {
+      type = types.str;
+      description = "Name of the ZFS snapshot to create";
+      default = "borgbackup";
+      example = "borgbackup";
+    };
+
+    mountPoint = mkOption {
+      type = types.str;
+      description = "Temporary mount point for the ZFS snapshot";
+      default = "/tmp/zfs-backup-snapshot";
+      example = "/tmp/zfs-backup-snapshot";
+    };
+  };
+
+  config = mkIf cfg.enable {
+    services.borgbackup.jobs =
+      mkIf (cfg.hostname == "QFrame13") {
+        # EU Repository for QFrame13
+        eu = mkBorgJob "eu" cfg.repositories.QFrame13.eu;
+
+        # US Repository for QFrame13
+        us = mkBorgJob "us" cfg.repositories.QFrame13.us;
+      }
+      // mkIf (cfg.hostname == "QPC") {
+        # EU Repository for QPC
+        eu = mkBorgJob "eu" cfg.repositories.QPC.eu;
+
+        # US Repository for QPC
+        us = mkBorgJob "us" cfg.repositories.QPC.us;
+      };
+
+    # Ensure borgbackup package is installed
+    services.borgbackup.package = pkgs.borgbackup;
+
+    # Create tmpfiles for ensuring directories exist with correct permissions
+    systemd.tmpfiles.rules = [
+      "d /var/lib/borgbackup 0700 root root - -"
+    ];
+  };
+}
