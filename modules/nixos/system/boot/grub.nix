@@ -32,18 +32,9 @@ in
         };
         timeout = 3;
       };
-      initrd.luks.devices.cryptroot.device = "/dev/disk/by-label/QNixRoot";
-      zfs = {
-      	forceImportAll = true;
-	forceImportRoot = false;
-        devNodes =
-          if isVm then
-            "/dev/disk/by-partuuid"
-          # use by-id for intel mobo when not in a vm
-          else if config.hardware.cpu.intel.updateMicrocode then
-            "/dev/disk/by-partuuid" #"/dev/disk/by-id"
-          else
-            "/dev/disk/by-partuuid";
+      initrd.luks.devices.cryptroot = { 
+      	device = "/dev/disk/by-label/QNixRoot"; 
+	preLVM = true;
       };
     };
   };
