@@ -43,9 +43,8 @@ in
       secrets =
         {
           ${hostKey} = {
-            path = "${homeDir}/.ssh/${hostKey}";
-            owner = config.users.users.${user}.name;
-            group = "users";
+            owner = "root";
+            group = "root";
             mode = "0400";
           };
           ${hostPassphrase} = {

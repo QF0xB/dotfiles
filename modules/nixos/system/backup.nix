@@ -14,20 +14,8 @@
       hostname = host;
 
       repositories."${host}" = {
-        eu = {
-          label = "eu";
-          path = "ssh://isn6p3y0@isn6p3y0.repo.borgbase.com/./repo";
-        };
-        na = {
-          label = "na";
-          path = "ssh://cn0b5a18@cn0b5a18.repo.borgbase.com/./repo";
-        };
-        as = {
-
-        };
-        au = {
-
-        };
+        eu = "ssh://zv823m7n@zv823m7n.repo.borgbase.com/./repo";
+        na = "ssh://zh0702n6@zh0702n6.repo.borgbase.com/./repo";
       };
 
       zfs = {

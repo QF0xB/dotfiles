@@ -13,88 +13,148 @@ let
     mkOption
     types
     mkEnableOption
+    flip
+    mapAttrs'
+    nameValuePair
+    mkForce
     ;
 
   # Define a function to create repository options
   mkRepositoryOptions = {
     eu = mkOption {
-      type = types.submodule {
-        options = {
-          label = mkOption {
-            type = types.str;
-            description = "Label for the EU repository";
-            default = "eu";
-          };
-          path = mkOption {
-            type = types.str;
-            description = "Path to the EU repository";
-            example = "ssh://uXXXX@uXXXX.eu.repo.borgbase.com/./repo";
-            default = "none";
-          };
-        };
-      };
-      description = "EU repository configuration";
+      type = types.str;
+      description = "An EU repository of borg. Keep empty to ignore.";
+      example = "uXXXX@uXXXX.eu.repo.borgbase.com/";
+      default = "none";
     };
     na = mkOption {
-      type = types.submodule {
-        options = {
-          label = mkOption {
-            type = types.str;
-            description = "Label for the NA repository";
-            default = "na";
-          };
-          path = mkOption {
-            type = types.str;
-            description = "Path to the NA repository";
-            example = "ssh://uXXXX@uXXXX.us.repo.borgbase.com/./repo";
-            default = "none";
-          };
-        };
-      };
-      description = "NA repository configuration";
+      type = types.str;
+      description = "An NA repository of borg. Keep empty to ignore.";
+      example = "uXXXX@uXXXX.us.repo.borgbase.com/";
+      default = "none";
     };
     as = mkOption {
-      type = types.submodule {
-        options = {
-          label = mkOption {
-            type = types.str;
-            description = "Label for the AS repository";
-            default = "as";
-          };
-          path = mkOption {
-            type = types.str;
-            description = "Path to the AS repository";
-            example = "ssh://uXXXX@uXXXX.as.repo.borgbase.com/./repo";
-            default = "none";
-          };
-        };
-      };
-      description = "AS repository configuration";
+      type = types.str;
+      description = "An Asian repository of borg. Keep empty to ignore.";
+      example = "uXXXX@uXXXX.as.repo.borgbase.com/";
+      default = "none";
     };
     au = mkOption {
-      type = types.submodule {
-        options = {
-          label = mkOption {
-            type = types.str;
-            description = "Label for the AU repository";
-            default = "au";
-          };
-          path = mkOption {
-            type = types.str;
-            description = "Path to the AU repository";
-            example = "ssh://uXXXX@uXXXX.au.repo.borgbase.com/./repo";
-            default = "none";
-          };
-        };
-      };
-      description = "AU repository configuration";
+      type = types.str;
+      description = "An Australian repository of borg. Keep empty to ignore.";
+      example = "uXXXX@uXXXX.au.repo.borgbase.com/";
+      default = "none";
     };
   };
-  formatRepositories = repos: lib.filter (repo: repo.path != "none") (lib.attrValues repos);
+
+  # Function to create a backup job for a specific repository
+  mkBackupJob =
+    repoLocation: repoUrl:
+    mkIf (repoUrl != "none" && !cfg.prune.enable) {
+      paths = [ "/tmp/zfs-backups" ]; # Directory where ZFS snapshot files are stored
+      exclude = [ "*.tmp" ];
+      repo = repoUrl;
+      encryption = {
+        mode = "repokey-blake2";
+        passCommand = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
+      };
+      extraInitArgs = [ "--append-only" ];
+      environment = {
+        BORG_RSH = "ssh -o StrictHostKeyChecking=accept-new -i ${
+          config.sops.secrets."backup_${cfg.hostname}_key".path
+        }";
+        BORG_APPEND_ONLY = "1";
+        BORG_FILES_CACHE_TTL = "30";
+      };
+      compression = "auto,lzma";
+      startAt = "daily";
+
+      # Create ZFS snapshot file before backup
+      preHook = ''
+        # Debug filesystem status
+        # Create backup directory if it doesn't exist
+        mkdir -p /tmp/zfs-backups
+
+        echo "Filesystem status:"
+        df -h /tmp/zfs-backups
+
+        # Create backup directory if it doesn't exist
+        mkdir -p /tmp/zfs-backups
+
+        # Check if directory is writable
+        touch /tmp/zfs-backups/test_write
+        if [ $? -ne 0 ]; then
+          echo "ERROR: Cannot write to /tmp/zfs-backups"
+          exit 1
+        fi
+        rm /tmp/zfs-backups/test_write
+
+        # Create backup directory if it doesn't exist
+        mkdir -p /tmp/zfs-backups
+
+        # Create a snapshot with timestamp
+        SNAPSHOT_NAME="${cfg.zfs.snapshotName}-${repoLocation}-$(date +%Y%m%d-%H%M%S)"
+        BACKUP_FILE="/tmp/zfs-backups/${cfg.hostname}-$SNAPSHOT_NAME.zfs"
+
+        # Create snapshots of datasets
+        ${lib.concatMapStringsSep "\n" (dataset: ''
+          echo "Creating snapshot ${dataset}@$SNAPSHOT_NAME"
+          ${pkgs.zfs}/bin/zfs snapshot ${dataset}@$SNAPSHOT_NAME
+        '') cfg.zfs.datasets}
+
+        # Send the snapshots to a file
+        ${lib.concatMapStringsSep "\n" (dataset: ''
+          echo "Sending ${dataset}@$SNAPSHOT_NAME to file"
+          ${pkgs.zfs}/bin/zfs send --raw -R ${dataset}@$SNAPSHOT_NAME > $BACKUP_FILE
+        '') cfg.zfs.datasets}
+      '';
+
+      # Clean up old backup files (but not ZFS snapshots)
+      postHook = ''
+        find /tmp/zfs-backups -name "${cfg.hostname}-${cfg.zfs.snapshotName}-*.zfs" | sort | head -n -1 | xargs -r rm
+      '';
+    };
+
+  # Function to create a prune job for a specific repository
+  mkPruneJob =
+    repoLocation: repoUrl:
+    mkIf (repoUrl != "none" && cfg.prune.enable) {
+      paths = [ ]; # No actual backup, just pruning
+      repo = repoUrl;
+      encryption = {
+        mode = "repokey-blake2";
+        passCommand = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
+      };
+      environment = {
+        BORG_RSH = "ssh -o StrictHostKeyChecking=accept-new -i ${
+          config.sops.secrets."backup_${cfg.hostname}_key".path
+        }";
+      };
+      startAt = "weekly";
+
+      # Skip the actual backup
+      extraCreateArgs = "--dry-run";
+
+      # Prune configuration
+      prune = {
+        keep = {
+          hourly = cfg.prune.keep.hourly;
+          daily = cfg.prune.keep.daily;
+          weekly = cfg.prune.keep.weekly;
+          monthly = cfg.prune.keep.monthly;
+          yearly = cfg.prune.keep.yearly;
+        };
+      };
+
+      # Run compact after pruning to free up space
+      postPruneHook = ''
+        ${pkgs.borgbackup}/bin/borg compact "$REPO_URL"
+      '';
+    };
 in
 {
-  options.qnix.system.backup = {
-    enable = mkEnableOption "Borgmatic backup service" // {
+  options.qnix.system.backup = with lib; {
+    enable = mkEnableOption "Borg backup service" // {
       default = true;
     };
 
@@ -168,110 +228,65 @@ in
       snapshotName = mkOption {
         type = types.str;
         description = "Prefix for ZFS snapshots created for backup";
-        default = "backup";
+        default = "backup-${cfg.hostname}";
       };
     };
   };
 
   config = mkIf cfg.enable {
-    # Create borgmatic configuration
-    services.borgmatic = {
-      enable = true;
+    # Create backup jobs for all non-empty repositories
+    services.borgbackup.jobs = lib.mkMerge [
+      # Backup jobs (only on non-pruning machines)
+      (mkIf (!cfg.prune.enable) {
+        system-backup-eu = mkBackupJob "eu" cfg.repositories.${cfg.hostname}.eu;
+        system-backup-na = mkBackupJob "na" cfg.repositories.${cfg.hostname}.na;
+        system-backup-as = mkBackupJob "as" cfg.repositories.${cfg.hostname}.as;
+        system-backup-au = mkBackupJob "au" cfg.repositories.${cfg.hostname}.au;
+      })
 
-      # Single configuration for all repositories
-      configurations = {
-        "system-backup-${cfg.hostname}" = {
-          repositories = formatRepositories cfg.repositories.${cfg.hostname};
-          source_directories = [ "/tmp/zfs-backups" ];
-          exclude_patterns = [ "*.tmp" ];
-          encryption_passcommand = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
-          ssh_command = "ssh -o StrictHostKeyChecking=accept-new -i ${
-            config.sops.secrets."backup_${cfg.hostname}_key".path
-          }";
-          compression = "auto,lzma";
+      # Prune jobs (only on pruning machines)
+      (mkIf cfg.prune.enable {
+        prune-eu = mkPruneJob "eu" cfg.repositories.${cfg.hostname}.eu;
+        prune-na = mkPruneJob "na" cfg.repositories.${cfg.hostname}.na;
+        prune-as = mkPruneJob "as" cfg.repositories.${cfg.hostname}.as;
+        prune-au = mkPruneJob "au" cfg.repositories.${cfg.hostname}.au;
+      })
+    ];
 
-          # Append-only mode for non-prune machines
-          append_only = !cfg.prune.enable;
-
-          # Prune settings (only used when prune.enable is true)
-          keep_hourly = cfg.prune.keep.hourly;
-          keep_daily = cfg.prune.keep.daily;
-          keep_weekly = cfg.prune.keep.weekly;
-          keep_monthly = cfg.prune.keep.monthly;
-          keep_yearly = cfg.prune.keep.yearly;
-
-          # Additional options
-          files_cache_ttl = 30;
-
-          # Before backup hook to create ZFS snapshots
-          before_backup = mkIf (!cfg.prune.enable) ''
-            # Debug filesystem status
-            # Create backup directory if it doesn't exist
-            mkdir -p /tmp/zfs-backups
-
-            echo "Filesystem status:"
-            df -h /tmp/zfs-backups
-
-            # Check if directory is writable
-            touch /tmp/zfs-backups/test_write
-            if [ $? -ne 0 ]; then
-              echo "ERROR: Cannot write to /tmp/zfs-backups"
-              exit 1
-            fi
-            rm /tmp/zfs-backups/test_write
-
-            # Create a snapshot with timestamp
-            SNAPSHOT_NAME="${cfg.zfs.snapshotName}-$(date +%Y%m%d-%H%M%S)"
-            BACKUP_FILE="/tmp/zfs-backups/${cfg.hostname}-$SNAPSHOT_NAME.zfs"
-
-            # Create snapshots of datasets
-            ${lib.concatMapStringsSep "\n" (dataset: ''
-              echo "Creating snapshot ${dataset}@$SNAPSHOT_NAME"
-              ${pkgs.zfs}/bin/zfs snapshot ${dataset}@$SNAPSHOT_NAME
-            '') cfg.zfs.datasets}
-
-            # Send the snapshots to a file
-            ${lib.concatMapStringsSep "\n" (dataset: ''
-              echo "Sending ${dataset}@$SNAPSHOT_NAME to file"
-              ${pkgs.zfs}/bin/zfs send --raw -R ${dataset}@$SNAPSHOT_NAME > $BACKUP_FILE
-            '') cfg.zfs.datasets}
-          '';
-
-          # After backup hook to clean up old backup files
-          after_backup = mkIf (!cfg.prune.enable) ''
-            find /tmp/zfs-backups -name "${cfg.hostname}-${cfg.zfs.snapshotName}-*.zfs" | sort | head -n -1 | xargs -r rm
-          '';
-
-          # After prune hook to compact the repository
-          after_prune = mkIf cfg.prune.enable ''
-            borg compact "$REPOSITORY"
-          '';
-        };
-      };
-
-      # Schedule backups
-      settings = {
-        location = {
-          # For backup machines, run daily
-          # For prune machines, run weekly
-          schedule = if cfg.prune.enable then "weekly" else "daily";
-        };
-
-        # Skip creating backups on prune machines
-        borgmatic.create = mkIf cfg.prune.enable false;
-        # Only run prune on prune machines
-        borgmatic.prune = cfg.prune.enable;
-        # Run check periodically
-        borgmatic.check = true;
-        # Initialize repositories
-        borgmatic.init = true;
-      };
-    };
+    systemd.timers = flip mapAttrs' config.services.borgbackup.jobs (
+      name: value:
+      nameValuePair "borgbackup-job-${name}" {
+        unitConfig.OnFailure = "notify-problems@%i.service";
+        timerConfig.Persistent = mkForce true;
+      }
+    );
 
     # Create directory for ZFS backup files
     system.activationScripts.createZfsBackupDir = ''
       mkdir -p /var/lib/zfs-backups
-      mkdir -p /tmp/zfs-backups
     '';
+
+    # Add this to your module
+    systemd.services.init-borg-repos = {
+      description = "Initialize Borg Repositories";
+      wantedBy = [ "multi-user.target" ];
+      after = [ "network.target" ];
+
+      # Run only once when the service is first enabled
+      serviceConfig = {
+        Type = "oneshot";
+        RemainAfterExit = true;
+      };
+
+      # Environment setup for Borg
+      environment = {
+        BORG_PASSPHRASE_COMMAND = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
+        BORG_RSH = "ssh -o StrictHostKeyChecking=accept-new -i ${
+          config.sops.secrets."backup_${cfg.hostname}_key".path
+        }";
+        BORG_APPEND_ONLY = mkIf (!cfg.prune.enable) "1";
+      };
+
+    };
   };
 }
