@@ -27,11 +27,15 @@ in
           devices = [ "nodev" ];
           efiSupport = true;
           zfsSupport = true;
+
+	  enableCryptodisk = true;
         };
         timeout = 3;
       };
       initrd.luks.devices.cryptroot.device = "/dev/disk/by-label/QNixRoot";
       zfs = {
+      	forceImportAll = true;
+	forceImportRoot = false;
         devNodes =
           if isVm then
             "/dev/disk/by-partuuid"
