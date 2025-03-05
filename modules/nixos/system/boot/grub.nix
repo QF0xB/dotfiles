@@ -11,7 +11,7 @@ let
 in
 {
   options.qnix = with lib; {
-    system.boot.grub.enable = mkEnableOption "systemd-boot";
+    system.boot.grub.enable = mkEnableOption "grub";
   };
 
   config = lib.mkIf cfg.grub.enable {
@@ -30,6 +30,7 @@ in
         };
         timeout = 3;
       };
+      initrd.luks.devices.cryptroot.device = "/dev/disk/by-label/QNixRoot";
       zfs = {
         devNodes =
           if isVm then

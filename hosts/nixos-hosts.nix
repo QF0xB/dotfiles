@@ -21,7 +21,7 @@ let
       specialArgs = specialArgs // {
         inherit host user;
         isNixOS = true;
-        isLaptop = false; # host == "qframe13";
+        isLaptop = host == "QFrame13";
         isVm = lib.strings.hasPrefix "vm" host;
         dots = "/persist/home/${user}/projects/dotfiles";
       };
@@ -39,7 +39,7 @@ let
             extraSpecialArgs = specialArgs // {
               inherit host user;
               isNixOS = true;
-              isLaptop = false; # host == "QFrame13";
+              isLaptop = host == "QFrame13";
               isVm = lib.strings.hasPrefix "vm" host;
               dots = "/persist/home/${user}/projects/dotfiles";
             };
@@ -72,7 +72,7 @@ let
     };
 in
 {
-  qpc = mkNixosConfiguration "QPC" { } { };
-  qframe13 = mkNixosConfiguration "QFrame13" { } { };
+  QPC = mkNixosConfiguration "QPC" { } { };
+  QFrame13 = mkNixosConfiguration "QFrame13" { } { };
   vm = mkNixosConfiguration "vm" { } { };
 }

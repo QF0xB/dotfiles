@@ -110,9 +110,15 @@ sudo mkfs.fat -F 32 "$BOOTDISK" -n NIXBOOT
 # setup encryption
 use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config.)")
 if [[ $use_encryption == "y" ]]; then
-    encryption_options=(-O encryption=aes-256-gcm -O keyformat=passphrase -O keylocation=prompt)
-else
-    encryption_options=()
+  password_1 = $(yesno "Enter the encryption password:")
+  password_2 = $(yesno "Enter the encryption password again:")
+  if [[ password_1 != password_2 ]]; then
+    echo "Passwords did not match!"
+    exit 0 
+  else
+    echo password_1 | cryptsetup -q luksFormat $ZFSDISK --label QNixRoot
+    echo password_1 | cryptsetup luksOpen $ZFSDISK main-decrypt 
+  fi
 fi
 
 echo "Creating base zpool"
@@ -125,8 +131,7 @@ sudo zpool create -f \
     -O xattr=sa \
     -O normalization=formD \
     -O mountpoint=none \
-    "${encryption_options[@]}" \
-    zroot "$ZFSDISK"
+    zroot "/dev/mapper/main-decrypt"
 
 echo "Creating /"
 sudo zfs create -o mountpoint=legacy zroot/root
@@ -173,7 +178,7 @@ repo="${repo:-github:stormfox2/dotfiles}"
 
 # qol for iynaix os
 if [[ $repo == "github:stormfox2/dotfiles" ]]; then
-    hosts=("desktop" "framework" "vm" "vm-hyprland")
+    hosts=("QPC" "QFrame13" "backup-QPC" "backup-QFrame13")
 
     echo "Available hosts:"
     for i in "${!hosts[@]}"; do

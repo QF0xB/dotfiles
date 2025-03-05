@@ -7,7 +7,7 @@
   ];
 
   networking.hostId = "4cb4019c";
-  networking.hostName = "qpc";
+  networking.hostName = "QPC";
 
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/cache".neededForBoot = true;
