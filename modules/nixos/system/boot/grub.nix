@@ -37,7 +37,7 @@ in
             "/dev/disk/by-partuuid"
           # use by-id for intel mobo when not in a vm
           else if config.hardware.cpu.intel.updateMicrocode then
-            "/dev/disk/by-id"
+            "/dev/disk/by-partuuid" #"/dev/disk/by-id"
           else
             "/dev/disk/by-partuuid";
       };

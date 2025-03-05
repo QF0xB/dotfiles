@@ -22,7 +22,7 @@ let
         inherit host user;
         isNixOS = true;
         isLaptop = host == "QFrame13";
-        isVm = lib.strings.hasPrefix "vm" host;
+        isVm = lib.strings.hasPrefix "vm" host || lib.strings.hasPrefix "backup" host;
         dots = "/persist/home/${user}/projects/dotfiles";
       };
 

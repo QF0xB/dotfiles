@@ -120,8 +120,8 @@ if [[ $use_encryption == "y" ]]; then
     echo "Passwords did not match!"
     exit 0 
   else
-    echo password_1 | sudo cryptsetup -q luksFormat $ZFSDISK --label QNixRoot
-    echo password_1 | sudo cryptsetup luksOpen $ZFSDISK main-decrypt 
+    echo "$password_1" | sudo cryptsetup -q luksFormat $ZFSDISK --label QNixRoot
+    echo "$password_1" | sudo cryptsetup luksOpen $ZFSDISK main-decrypt 
   fi
 fi
 
