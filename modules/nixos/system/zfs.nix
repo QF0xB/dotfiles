@@ -14,9 +14,9 @@ in
   };
 
   config = with lib; {
-    boot.zfs = mkIf cfg.encrypted {
-      requestEncryptionCredentials = true;
-    };
+#    boot.zfs = mkIf cfg.encrypted {
+#      requestEncryptionCredentials = true;
+#};
 
     fileSystems = {
       # Root: will get reset.
