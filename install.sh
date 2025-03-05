@@ -17,6 +17,8 @@ function yesno() {
     done
 }
 
+
+
 cat << Introduction
 The *entire* disk will be formatted with a 1GB boot partition
 (labelled NIXBOOT), 16GB of swap, and the rest allocated to ZFS.
@@ -110,8 +112,10 @@ sudo mkfs.fat -F 32 "$BOOTDISK" -n NIXBOOT
 # setup encryption
 use_encryption=$(yesno "Use encryption? (Encryption must also be enabled within host config.)")
 if [[ $use_encryption == "y" ]]; then
-  password_1 = $(yesno "Enter the encryption password:")
-  password_2 = $(yesno "Enter the encryption password again:")
+  echo "Enter the encryption password: " 
+  read -s password_1
+  echo "Enter the encryption password again: " 
+  read -s password_2
   if [[ password_1 != password_2 ]]; then
     echo "Passwords did not match!"
     exit 0 
