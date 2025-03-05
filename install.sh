@@ -116,12 +116,12 @@ if [[ $use_encryption == "y" ]]; then
   read -s password_1
   echo "Enter the encryption password again: " 
   read -s password_2
-  if [[ password_1 != password_2 ]]; then
+  if [ "$password_1" != "$password_2" ]; then
     echo "Passwords did not match!"
     exit 0 
   else
-    echo password_1 | cryptsetup -q luksFormat $ZFSDISK --label QNixRoot
-    echo password_1 | cryptsetup luksOpen $ZFSDISK main-decrypt 
+    echo password_1 | sudo cryptsetup -q luksFormat $ZFSDISK --label QNixRoot
+    echo password_1 | sudo cryptsetup luksOpen $ZFSDISK main-decrypt 
   fi
 fi
 
@@ -208,9 +208,9 @@ read -rp "Enter git rev for flake (default: master): " git_rev
 echo "Installing NixOS"
 if [[ $repo == "github:stormfox2/dotfiles" ]]; then
     # root password is irrelevant if initialPassword is set in the config
-    sudo nixos-install --no-root-password --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
+    sudo nixos-install --no-root-password --flake "$repo/${git_rev:-master}#$host" --option tarball-ttl 0
 else
-    sudo nixos-install --flake "$repo/${git_rev:-main}#$host" --option tarball-ttl 0
+    sudo nixos-install --flake "$repo/${git_rev:-master}#$host" --option tarball-ttl 0
 fi
 
 # only relevant for iynaix os
