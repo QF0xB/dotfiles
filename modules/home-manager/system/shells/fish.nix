@@ -13,7 +13,9 @@ in
 {
 
   options.qnix.home.system.shell.fish = {
-    enable = mkEnableOption "fish";
+    enable = mkEnableOption "fish" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf cfg.enable {

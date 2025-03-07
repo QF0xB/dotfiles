@@ -18,5 +18,8 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [ tidal-hifi ];
 
+    qnix.persist.home = {
+      directories = [ "tidal-hifi" ];
+    };
   };
 }

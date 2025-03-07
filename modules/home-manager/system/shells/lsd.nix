@@ -1,16 +1,18 @@
 {
   config,
   options,
-  lib, 
+  lib,
   ...
 }:
 
-let 
+let
   cfg = config.qnix.home.system.shell.lsd;
 in
 {
   options.qnix.home.system.shell.lsd = with lib; {
-    enable = mkEnableOption "lsd - better ls command";
+    enable = mkEnableOption "lsd - better ls command" // {
+      default = true;
+    };
   };
 
   config = {

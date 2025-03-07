@@ -1,13 +1,9 @@
 {
-  options,
   lib,
   config,
   ...
 }:
 
-let
-  cfg = config.qnix;
-in
 {
   config = {
     home.file.".gnupg/scdaemon.conf".text = ''

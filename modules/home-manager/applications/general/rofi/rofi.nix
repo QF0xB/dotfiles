@@ -10,7 +10,9 @@ let
 in
 {
   options.qnix.applications.general.rofi = with lib; {
-    enable = mkEnableOption "rofi";
+    enable = mkEnableOption "rofi" // {
+      default = !config.qnix.headless;
+    };
 
     launcher.theme = {
       enable = mkOption {

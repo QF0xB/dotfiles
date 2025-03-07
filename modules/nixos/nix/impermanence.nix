@@ -2,6 +2,7 @@
   config,
   lib,
   user,
+  pkgs,
   ...
 }:
 let
@@ -79,22 +80,20 @@ in
     # shut sudo up
     security.sudo.extraConfig = "Defaults lecture=never";
 
-    custom.shell.packages = {
+    qnix.system.shell.packages = {
       # show all files stored on tmpfs, useful for finding files to persist
       show-root-files = {
         runtimeInputs = [ pkgs.fd ];
-        text =
-          ''
-            sudo fd --one-file-system --base-directory / --type f --hidden \
-              --exclude "/etc/{ssh,passwd,shadow}" \
-              --exclude "*.timer" \
-              --exclude "/var/lib/NetworkManager" \
-              --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust}" \
-              --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
-          '';
+        text = ''
+          sudo fd --one-file-system --base-directory / --type f --hidden \
+            --exclude "/etc/{ssh,passwd,shadow}" \
+            --exclude "*.timer" \
+            --exclude "/var/lib/NetworkManager" \
+            --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust}" \
+            --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
+        '';
       };
     };
-
 
     # setup persistence
     environment.persistence = {

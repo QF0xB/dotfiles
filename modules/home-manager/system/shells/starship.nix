@@ -11,7 +11,9 @@ let
 in
 {
   options.qnix.home.system.shell.starship = with lib; {
-    enable = mkEnableOption "starship shell";
+    enable = mkEnableOption "starship shell" // {
+      default = true;
+    };
   };
 
   config = {

@@ -12,7 +12,7 @@ in
 {
   options.qnix.applications.gui.nemo = with lib; {
     enable = mkEnableOption "nemo file-manager" // {
-      default = true;
+      default = !config.qnix.headless;
     };
   };
 

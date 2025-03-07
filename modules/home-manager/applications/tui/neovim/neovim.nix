@@ -13,8 +13,12 @@ in
   imports = [ inputs.nvf.homeManagerModules.default ];
 
   options.qnix.applications.tui.neovim = with lib; {
-    enable = mkEnableOption "neovim";
-    default = mkEnableOption "set neovim to default editor";
+    enable = mkEnableOption "neovim" // {
+      default = true;
+    };
+    default = mkEnableOption "set neovim to default editor" // {
+      default = true;
+    };
   };
 
   config = {

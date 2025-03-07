@@ -9,6 +9,7 @@
     ./default-applications.nix
     ./tui/helix/helix.nix
     ./tui/neovim/neovim.nix
+    ./tui/nix-index/nix-index.nix
     ./general/hyprsuite/hyprsuite.nix
     ./general/rofi/rofi.nix
     ./general/swaync/swaync.nix
@@ -42,17 +43,6 @@
     ];
 
     qnix.applications = {
-      tui = {
-
-        neovim = {
-          enable = mkDefault true;
-          default = mkDefault true;
-        };
-      };
-
-      general = {
-        rofi.enable = mkDefault true;
-      };
     };
   };
 }

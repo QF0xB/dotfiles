@@ -1,6 +1,5 @@
-{ 
+{
   dots,
-  config,
   ...
 }:
 
@@ -17,14 +16,14 @@
         mount = "mount --mkdir";
         open = "xdg-open";
 
-        # Git 
-        ga = "git add";
+        # Git
+        ga = "git add .";
         gc = "git commit";
-        gp = "git push";        
+        gp = "git push";
 
         # NIX
         nhs = "nh os switch ${dots}";
-        
+
         # cd aliases
         ".." = "cd ..";
         "..." = "cd ../..";

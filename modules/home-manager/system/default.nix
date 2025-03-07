@@ -1,5 +1,4 @@
 {
-  user,
   ...
 }:
 
@@ -11,8 +10,4 @@
     ./styling/stylix.nix
     ./xdg-folders.nix
   ];
-
-  config = {
-
-  };
 }

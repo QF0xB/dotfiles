@@ -10,10 +10,11 @@
 let
   homeDir = config.hm.home.homeDirectory;
   cfg = config.qnix.nix.sops;
+  backup-cfg = config.qnix.system.backup;
   inherit (lib) mkIf;
   hostKey = "backup_${cfg.host}_key";
-  hostPassphrase = "backup_${cfg.host}_passphrase";
-  hostKeyPrune = "backup_${cfg.host}_key_prune";
+  hostPassphrase = "backup_${backup-cfg.hostname}_passphrase";
+  hostKeyPrune = "backup_${backup-cfg.hostname}_key_prune";
 in
 {
   options.qnix.nix.sops = with lib; {
@@ -28,7 +29,6 @@ in
     };
 
     backup-prune-keys.enable = mkEnableOption "decryption of backup-prune keys. DO NOT USE ON BACKUP DESKTOPS!";
-
   };
 
   config = lib.mkIf cfg.enable {
@@ -41,17 +41,21 @@ in
       };
 
       secrets =
+        let
+          secretSettings = {
+            owner = "root";
+            group = "root";
+            mode = "0400";
+          };
+        in
         {
-          ${hostKey} = {
-            owner = "root";
-            group = "root";
-            mode = "0400";
-          };
-          ${hostPassphrase} = {
-            owner = "root";
-            group = "root";
-            mode = "0400";
-          };
+          ${hostKey} = secretSettings;
+          ${hostPassphrase} = secretSettings;
+          "backup_${backup-cfg.hostname}_eu" = secretSettings;
+          "backup_${backup-cfg.hostname}_us" = secretSettings;
+          "backup_${backup-cfg.hostname}_as" = secretSettings;
+          "backup_${backup-cfg.hostname}_au" = secretSettings;
+
         }
         // (
           if cfg.backup-prune-keys.enable then
@@ -67,8 +71,22 @@ in
           else
             { }
         );
-    };
 
+      templates = {
+        templates."backup_${backup-cfg.hostname}_eu".content = ''
+          "${config.sops.placeholder."backup_${backup-cfg.hostname}_eu"}"
+        '';
+        templates."backup_${backup-cfg.hostname}_us".content = ''
+          "${config.sops.placeholder."backup_${backup-cfg.hostname}_us"}"
+        '';
+        templates."backup_${backup-cfg.hostname}_au".content = ''
+          "${config.sops.placeholder."backup_${backup-cfg.hostname}_au"}"
+        '';
+        templates."backup_${backup-cfg.hostname}_as".content = ''
+          "${config.sops.placeholder."backup_${backup-cfg.hostname}_as"}"
+        '';
+      };
+    };
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
 
     qnix.system.shell.packages = {

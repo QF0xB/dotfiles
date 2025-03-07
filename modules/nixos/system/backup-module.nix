@@ -2,6 +2,7 @@
   config,
   lib,
   pkgs,
+  host,
   ...
 }:
 
@@ -27,9 +28,9 @@ let
       example = "uXXXX@uXXXX.eu.repo.borgbase.com/";
       default = "none";
     };
-    na = mkOption {
+    us = mkOption {
       type = types.str;
-      description = "An NA repository of borg. Keep empty to ignore.";
+      description = "An US repository of borg. Keep empty to ignore.";
       example = "uXXXX@uXXXX.us.repo.borgbase.com/";
       default = "none";
     };
@@ -159,12 +160,9 @@ in
     };
 
     hostname = mkOption {
-      type = types.enum [
-        "QFrame13"
-        "QPC"
-      ];
-      description = "The hostname of this machine (QFrame13 or QPC)";
-      example = "QFrame13";
+      type = types.str;
+      default = host;
+      description = "The hostname of this machine";
     };
 
     repositories = {
@@ -239,7 +237,7 @@ in
       # Backup jobs (only on non-pruning machines)
       (mkIf (!cfg.prune.enable) {
         system-backup-eu = mkBackupJob "eu" cfg.repositories.${cfg.hostname}.eu;
-        system-backup-na = mkBackupJob "na" cfg.repositories.${cfg.hostname}.na;
+        system-backup-na = mkBackupJob "us" cfg.repositories.${cfg.hostname}.us;
         system-backup-as = mkBackupJob "as" cfg.repositories.${cfg.hostname}.as;
         system-backup-au = mkBackupJob "au" cfg.repositories.${cfg.hostname}.au;
       })
@@ -247,7 +245,7 @@ in
       # Prune jobs (only on pruning machines)
       (mkIf cfg.prune.enable {
         prune-eu = mkPruneJob "eu" cfg.repositories.${cfg.hostname}.eu;
-        prune-na = mkPruneJob "na" cfg.repositories.${cfg.hostname}.na;
+        prune-na = mkPruneJob "us" cfg.repositories.${cfg.hostname}.us;
         prune-as = mkPruneJob "as" cfg.repositories.${cfg.hostname}.as;
         prune-au = mkPruneJob "au" cfg.repositories.${cfg.hostname}.au;
       })

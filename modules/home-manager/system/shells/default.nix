@@ -26,21 +26,4 @@
     };
 
   };
-
-  config = {
-
-    programs.nix-index.enable = true;
-
-    qnix.persist = {
-      home = {
-        cache.directories = [ ".cache/nix-index" ];
-      };
-    };
-
-    qnix.home.system.shell = with lib; {
-      fish.enable = mkDefault true;
-      lsd.enable = mkDefault true;
-      starship.enable = mkDefault true;
-    };
-  };
 }
