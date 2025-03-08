@@ -9,11 +9,13 @@
     ./backup.nix
     ./bluetooth.nix
     ./boot
+    ./networking.nix
     ./nvidia.nix
     ./gnupg.nix
     ./shells.nix
     ./environment.nix
     ./localization.nix
+    ./powersavings.nix
     ./ssh-server.nix
     ./packages.nix
     ./fonts.nix
