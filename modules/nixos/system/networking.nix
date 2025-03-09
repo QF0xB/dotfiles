@@ -1,11 +1,11 @@
 {
-  config, 
+  config,
   lib,
-  user, 
+  user,
   ...
-}: 
+}:
 
-let 
+let
   cfg = config.qnix.system.networking;
   inherit (lib) mkEnableOption;
 in
@@ -18,7 +18,7 @@ in
 
   config = {
     networking = {
-      networkmanager.enable = cfg.enable;
+      networkmanager.enable = cfg.networkManager.enable;
     };
 
     users.users.${user}.extraGroups = [ "networkmanager" ];

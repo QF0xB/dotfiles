@@ -51,11 +51,6 @@ in
         {
           ${hostKey} = secretSettings;
           ${hostPassphrase} = secretSettings;
-          "backup_${backup-cfg.hostname}_eu" = secretSettings;
-          "backup_${backup-cfg.hostname}_us" = secretSettings;
-          "backup_${backup-cfg.hostname}_as" = secretSettings;
-          "backup_${backup-cfg.hostname}_au" = secretSettings;
-
         }
         // (
           if cfg.backup-prune-keys.enable then
@@ -71,21 +66,6 @@ in
           else
             { }
         );
-
-      templates = {
-        templates."backup_${backup-cfg.hostname}_eu".content = ''
-          "${config.sops.placeholder."backup_${backup-cfg.hostname}_eu"}"
-        '';
-        templates."backup_${backup-cfg.hostname}_us".content = ''
-          "${config.sops.placeholder."backup_${backup-cfg.hostname}_us"}"
-        '';
-        templates."backup_${backup-cfg.hostname}_au".content = ''
-          "${config.sops.placeholder."backup_${backup-cfg.hostname}_au"}"
-        '';
-        templates."backup_${backup-cfg.hostname}_as".content = ''
-          "${config.sops.placeholder."backup_${backup-cfg.hostname}_as"}"
-        '';
-      };
     };
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
 
