@@ -3,9 +3,10 @@
   config,
   pkgs,
   ...
-}: 
+}:
 
 let
+  inherit (lib) optionalAttrs;
   cfg = config.qnix.system.nvidia;
 in
 {
@@ -22,16 +23,36 @@ in
     };
 
     hardware = {
-      nvidia ={
+      nvidia = {
         modesetting.enable = true;
         powerManagement.enable = true;
         open = false;
-        nvidiaSettings = false;
+        nvidiaSettings = true;
+
       };
 
       graphics.extraPackages = with pkgs; [
         vaapiVdpau
       ];
+    };
+
+    environment.variables = optionalAttrs config.programs.hyprland.enable {
+      NIXOS_OZONE_WL = "1";
+      LIBVA_DRIVER_NAME = "nvidia";
+      GBM_BACKEND = "nvidia-drm";
+      __GLX_VENDOR_LIBRARY_NAME = "nvidia";
+    };
+
+    hm.wayland.windowManager.hyprland.settings = {
+      cursor = {
+        # no_hardware_cursors = true;
+        use_cpu_buffer = 1;
+      };
+
+      render = {
+        explicit_sync = 1;
+        # allow_early_buffer_release = true;
+      };
     };
   };
 }

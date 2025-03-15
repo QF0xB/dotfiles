@@ -44,5 +44,10 @@
 
     qnix.applications = {
     };
+
+    qnix.persist.home.files = [
+      ".config/hypr/workspaces.conf"
+      ".config/hypr/monitors.conf"
+    ];
   };
 }

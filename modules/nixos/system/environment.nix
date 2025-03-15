@@ -35,6 +35,11 @@ in
           ))
           [ nvfetcher ]
         ];
+      variables = mkIf config.hm.qnix.applications.tui.neovim.default {
+        EDITOR = "nvim";
+        VISUAL = "nvim";
+      };
+
     };
 
     # create symlinks

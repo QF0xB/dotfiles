@@ -5,7 +5,7 @@
   ...
 }:
 
-let 
+let
   cfg = config.qnix.system.bluetooth;
 in
 {

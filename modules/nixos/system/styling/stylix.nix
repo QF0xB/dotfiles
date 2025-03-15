@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  isLaptop,
   ...
 }:
 
@@ -44,6 +45,13 @@ in
         emoji = {
           package = pkgs.noto-fonts-emoji;
           name = "Noto Color Emoji";
+        };
+
+        sizes = {
+          applications = if isLaptop then 12 else 16;
+          desktop = if isLaptop then 12 else 16;
+          popups = if isLaptop then 12 else 16;
+          terminal = if isLaptop then 12 else 16;
         };
       };
     };
