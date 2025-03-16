@@ -50,7 +50,7 @@
       pkgs.writeText "gpg-agent.conf" ''
         default-cache-ttl 60
         max-cache-ttl 120
-        pinentry-program ${pkgs.pinentry-curses}/bin/pinentry-curses
+        pinentry-program ${pkgs.pinentry-gnome3}/bin/pinentry
         ttyname $GPG_TTY
       ''
     );
@@ -62,7 +62,7 @@
         agent = {
           enable = true;
           enableSSHSupport = true;
-          pinentryPackage = pkgs.pinentry-curses;
+          pinentryPackage = pkgs.pinentry-gnome3;
         };
       };
 
