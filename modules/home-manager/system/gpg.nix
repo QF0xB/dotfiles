@@ -11,6 +11,10 @@
       debug-level guru
     '';
 
+    home.file.".gnupg/gpg-agent.conf".text = ''
+
+    '';
+
     home.activation.fixGpgHome = lib.mkAfter ''
       chmod 700 ${config.home.homeDirectory}/.gnupg
     '';

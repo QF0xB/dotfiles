@@ -46,13 +46,15 @@
 
     # Generate /etc/gnupg/gpg-agent.conf with agent settings.
     # (Note: gpg-agent will look in ~/.gnupg/gpg-agent.conf first, but if absent it will use /etc/gnupg/gpg-agent.conf.)
-    #    environment.etc."gnupg/gpg-agent.conf".source = lib.mkForce (pkgs.writeText "gpg-agent.conf" ''
-    #      default-cache-ttl 60
-    #      max-cache-ttl 120
-    #pinentry-program ${pkgs.pinentry-curses}/bin/pinentry-curses
-    #      ttyname $GPG_TTY
-    #    '');
-    #    environment.etc."gnupg/gpg-agent.conf".mode = "0600";
+    environment.etc."gnupg/gpg-agent.conf".source = lib.mkForce (
+      pkgs.writeText "gpg-agent.conf" ''
+        default-cache-ttl 60
+        max-cache-ttl 120
+        pinentry-program ${pkgs.pinentry-curses}/bin/pinentry-curses
+        ttyname $GPG_TTY
+      ''
+    );
+    environment.etc."gnupg/gpg-agent.conf".mode = "0600";
 
     programs = {
 
