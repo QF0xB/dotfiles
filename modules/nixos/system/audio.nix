@@ -3,7 +3,7 @@
   config,
   pkgs,
   ...
-}: 
+}:
 
 let
   cfg = config.qnix.system.audio;
@@ -26,7 +26,7 @@ in
 
       pulseaudio.enable = false;
     };
-    
+
     environment.systemPackages = with pkgs; [ pavucontrol ];
-  }; 
+  };
 }

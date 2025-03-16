@@ -19,6 +19,7 @@ in
     home.packages = with pkgs; [ webcord ];
 
     qnix.persist.home.directories = [
+      ".config/WebCord"
       "WebCord"
     ];
   };

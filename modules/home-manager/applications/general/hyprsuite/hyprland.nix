@@ -36,7 +36,10 @@ in
         systemd.enable = false;
 
         settings = {
-          source = "~/.config/hypr/monitors.conf";
+          source = [
+            "~/.config/hypr/monitors.conf"
+            "~/.config/hypr/workspaces.conf"
+          ];
           exec = [
             "hyprctl switchxkblayout all 1"
           ];

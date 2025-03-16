@@ -1,8 +1,8 @@
 {
-  options, 
+  options,
   lib,
   config,
-  ... 
+  ...
 }:
 
 let
@@ -22,9 +22,11 @@ in
       xkb.layout = "de,us";
       xkb.variant = "koy,";
       # xkbOptions = "grp:win_space_toggle";
-    };  
-  
+    };
+
     console.useXkbConfig = cfg.console-xkb-bridge;
+
+    time.timeZone = "Europe/Berlin";
 
     i18n = lib.mkIf cfg.english-german-locales {
       supportedLocales = [
@@ -44,7 +46,7 @@ in
         LC_ADDRESS = "de_DE.UTF-8";
         LC_TELEPHONE = "en_US.UTF-8";
         LC_MEASUREMENT = "de_DE.UTF-8";
-        LC_IDENTIFICATION="en_US.UTF-8";
+        LC_IDENTIFICATION = "en_US.UTF-8";
       };
     };
   };
