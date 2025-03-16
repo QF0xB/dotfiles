@@ -19,6 +19,7 @@
     ./gui/kitty/kitty.nix
     ./gui/nemo/nemo.nix
     ./gui/tidal-hifi/tidal-hifi.nix
+    ./gui/vscode/vscode.nix
     ./gui/webcord/webcord.nix
   ];
 

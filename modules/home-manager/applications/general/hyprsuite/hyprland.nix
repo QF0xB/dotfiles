@@ -206,6 +206,8 @@ in
               ", XF86AudioNext, exec, playerctl next"
               ", XF86AudioPrev, exec, playerctl previous"
               ", XF86audiostop, exec, playerctl stop"
+              ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+              ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
             ]
             ++ (
               let

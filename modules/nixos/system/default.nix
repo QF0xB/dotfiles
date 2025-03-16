@@ -19,6 +19,7 @@
     ./ssh-server.nix
     ./packages.nix
     ./fonts.nix
+    ./screen.nix
     ./security
     ./gnupg.nix
     ./styling/stylix.nix

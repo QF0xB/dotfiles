@@ -27,6 +27,11 @@ in
       pulseaudio.enable = false;
     };
 
-    environment.systemPackages = with pkgs; [ pavucontrol ];
+    environment.systemPackages = with pkgs; [
+      pavucontrol
+      pulseaudio
+      pamixer
+      playerctl
+    ];
   };
 }

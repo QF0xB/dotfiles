@@ -220,6 +220,7 @@
 #custom-yubikey,
 #tray {
 	background: @base03;
+  color: @base00;
 }
 
 #clock {
