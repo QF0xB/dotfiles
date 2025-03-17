@@ -11,6 +11,7 @@
     ./boot
     ./networking.nix
     ./nvidia.nix
+    ./goxlr.nix
     ./gnupg.nix
     ./shells.nix
     ./environment.nix

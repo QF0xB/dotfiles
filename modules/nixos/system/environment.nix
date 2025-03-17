@@ -38,6 +38,7 @@ in
       variables = mkIf config.hm.qnix.applications.tui.neovim.default {
         EDITOR = "nvim";
         VISUAL = "nvim";
+        PIPEWIRE_DEBUG = 5;
       };
 
     };
