@@ -60,6 +60,7 @@
     stylix = {
       url = "github:danth/stylix";
     };
+
   };
 
   outputs =

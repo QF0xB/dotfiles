@@ -20,7 +20,11 @@ in
     programs.vscode = {
       enable = cfg.enable;
       package = pkgs.vscodium;
-
     };
+
+    qnix.persist.home.directories = [
+      ".config/VSCodium"
+      ".vscode-oss"
+    ];
   };
 }

@@ -19,6 +19,10 @@ in
     };
   };
 
+  config.environment.variables = {
+    NIXPKGS_ALLOW_UNFREE = 1;
+  };
+
   # MOVED TO ./environment
   #  config = with lib; {
   #    environment.systemPackages = concatLists [

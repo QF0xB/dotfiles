@@ -2,6 +2,7 @@
   config,
   lib,
   user,
+  pkgs,
   ...
 }:
 
@@ -21,6 +22,13 @@ in
       networkmanager.enable = cfg.networkManager.enable;
     };
 
+    environment.systemPackages = with pkgs; [
+      networkmanagerapplet
+      openssl
+      iw
+    ];
     users.users.${user}.extraGroups = [ "networkmanager" ];
+
+    qnix.persist.root.directories = [ "/etc/easyroam-certs" ];
   };
 }

@@ -15,8 +15,11 @@
       };
     };
 
-    qnix.persist = {
-      home.directories = [
+    qnix.persist.home = {
+      cache.directories = [
+        "cache-projects"
+      ];
+      directories = [
         "Music"
         "Videos"
         "Templates"

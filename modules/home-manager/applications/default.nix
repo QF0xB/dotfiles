@@ -7,6 +7,7 @@
 {
   imports = [
     ./default-applications.nix
+    ./tui/direnv/direnv.nix
     ./tui/helix/helix.nix
     ./tui/neovim/neovim.nix
     ./tui/nix-index/nix-index.nix
@@ -14,10 +15,13 @@
     ./general/rofi/rofi.nix
     ./general/swaync/swaync.nix
     ./general/waybar/waybar.nix
+    ./gui/citrix/citrix.nix
     ./gui/chromium/chromium.nix
     ./gui/flameshot/flameshot.nix
+    ./gui/jetbrains/jetbrains.nix
     ./gui/kitty/kitty.nix
     ./gui/nemo/nemo.nix
+    ./gui/obsidian/obsidian.nix
     ./gui/tidal-hifi/tidal-hifi.nix
     ./gui/vscode/vscode.nix
     ./gui/webcord/webcord.nix

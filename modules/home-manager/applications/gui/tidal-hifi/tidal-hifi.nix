@@ -19,7 +19,7 @@ in
     home.packages = with pkgs; [ tidal-hifi ];
 
     qnix.persist.home = {
-      directories = [ "tidal-hifi" ];
+      directories = [ ".config/tidal-hifi" ];
     };
   };
 }
