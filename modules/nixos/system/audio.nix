@@ -22,6 +22,16 @@ in
         alsa.enable = true;
         alsa.support32Bit = true;
         pulse.enable = true;
+        package = pkgs.master.pipewire; # .overrideAttrs (_: rec {
+        # version = "1.4.1";
+        # src = pkgs.fetchFromGitLab {
+        # domain = "gitlab.freedesktop.org";
+        # owner = "pipewire";
+        # repo = "pipewire";
+        # rev = version;
+        # sha256 = "sha256-TnGn6EVjjpEybslLEvBb66uqOiLg5ngpNV9LYO6TfvA=";
+        # };
+        # });
       };
 
       pulseaudio.enable = false;
