@@ -16,8 +16,8 @@
         fi
   '';
 
-  #  qnix.persist.home.files = [
-  #  ".config/hypr/monitors.conf"
-  #  ".config/hypr/workspaces.conf"
-  #];
+  qnix.persist.home.files = [
+    ".config/hypr/monitors.conf"
+    ".config/hypr/workspaces.conf"
+  ];
 }

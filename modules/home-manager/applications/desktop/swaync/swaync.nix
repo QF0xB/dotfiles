@@ -6,12 +6,13 @@
 }:
 
 let
-  cfg = config.qnix.applications.general.swaync;
+  cfg = config.qnix.applications.desktop.swaync;
+  inherit (lib) mkEnableOption;
 in
 {
-  options.qnix.applications.general.swaync = with lib; {
+  options.qnix.applications.desktop.swaync = {
     enable = mkEnableOption "swaync notifications" // {
-      default = !config.qnix.headless;
+      default = config.qnix.applications.desktop.hyprsuite.hyprland;
     };
   };
 

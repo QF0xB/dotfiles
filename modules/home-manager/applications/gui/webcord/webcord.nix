@@ -16,11 +16,17 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    home.packages = with pkgs; [ webcord ];
+    home.packages = with pkgs; [
+      # https://github.com/NixOS/nixpkgs/issues/385588
+      (webcord.override { electron = electron_32; })
+    ];
 
     qnix.persist.home.directories = [
       ".config/WebCord"
       "WebCord"
+      ".config/goxlr-utility"
+      ".local/state/wireplumber"
+      ".local/share/goxlr-utility"
     ];
   };
 }

@@ -4,8 +4,12 @@
   ...
 }:
 
+let
+  cfg = config.hm.qnix.applications.gui.chromium;
+  inherit (lib) mkIf;
+in
 {
-  config = lib.mkIf config.hm.qnix.applications.gui.chromium.enable {
+  config = mkIf cfg.enable {
     programs.chromium = {
       enable = true;
 

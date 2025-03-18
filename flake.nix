@@ -91,7 +91,12 @@
 
       pkgs = import inputs.nixpkgs {
         inherit system;
-        config.allowUnfree = true;
+        config = {
+          allowUnfree = true;
+          permittedInsecurePackages = [
+            "electron-32.3.3"
+          ];
+        };
         overlays = [
           overlay-stable
           overlay-master

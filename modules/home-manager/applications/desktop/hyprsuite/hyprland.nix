@@ -7,10 +7,12 @@
 }:
 
 let
-  cfg = config.qnix.applications.general.hyprsuite;
+  cfg = config.qnix.applications.desktop.hyprsuite;
+  inherit (lib) mkIf mkEnableOption;
+
   uexec = program: "exec, uwsm app -- ${program} ";
   default-app-uexec = app-name: (uexec (lib.getExe default-apps.${app-name}));
-  rofi-cfg = config.qnix.applications.general.rofi;
+  rofi-cfg = config.qnix.applications.desktop.rofi;
   default-apps = config.qnix.applications.default;
 in
 {
@@ -19,18 +21,21 @@ in
     ./monitors.nix
   ];
 
-  options.qnix.applications.general.hyprsuite.hyprland = with lib; {
-    enable = mkEnableOption "hyprland home module";
+  options.qnix.applications.desktop.hyprsuite = {
+    hyprland = mkEnableOption "hyprland home module";
   };
 
-  config = {
+  config = mkIf cfg.hyprland {
+    # Tell the PC that it is using wayland:
+    qnix.wayland = true;
+
     home.packages = with pkgs; [
       wl-clipboard
     ];
 
     wayland.windowManager = {
       hyprland = {
-        enable = cfg.hyprland.enable;
+        enable = true;
         package = null;
         portalPackage = null;
         systemd.enable = false;
@@ -70,6 +75,10 @@ in
           # Animation settings: define custom animations using a bezier curve.
           animations = {
             enabled = "yes"; # Enable animations
+          };
+
+          cursor = {
+            no_hardware_cursors = 1;
           };
 
           # Input settings: keyboard layout, touchpad behavior, etc.

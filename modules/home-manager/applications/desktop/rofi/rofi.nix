@@ -6,12 +6,18 @@
 }:
 
 let
-  cfg = config.qnix.applications.general.rofi;
+  cfg = config.qnix.applications.desktop.rofi;
+  inherit (lib)
+    mkEnableOption
+    mkOption
+    mkIf
+    types
+    ;
 in
 {
-  options.qnix.applications.general.rofi = with lib; {
+  options.qnix.applications.desktop.rofi = {
     enable = mkEnableOption "rofi" // {
-      default = !config.qnix.headless;
+      default = config.qnix.applications.desktop.hyprsuite.hyprland;
     };
 
     launcher.theme = {
@@ -33,9 +39,9 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     programs.rofi = {
-      enable = cfg.enable;
+      enable = true;
       package = pkgs.rofi-wayland;
       #theme = "~/.config/rofi/launchers/type-${cfg.launcher.theme.type}/style-${cfg.launcher.theme.style}.rasi";
     };

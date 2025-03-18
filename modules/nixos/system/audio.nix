@@ -2,14 +2,16 @@
   lib,
   config,
   pkgs,
+  host,
   ...
 }:
 
 let
   cfg = config.qnix.system.audio;
+  inherit (lib) mkIf mkEnableOption;
 in
 {
-  options.qnix.system.audio = with lib; {
+  options.qnix.system.audio = {
     enable = mkEnableOption "Audiosetup" // {
       default = true;
     };
@@ -22,16 +24,7 @@ in
         alsa.enable = true;
         alsa.support32Bit = true;
         pulse.enable = true;
-        package = pkgs.master.pipewire; # .overrideAttrs (_: rec {
-        # version = "1.4.1";
-        # src = pkgs.fetchFromGitLab {
-        # domain = "gitlab.freedesktop.org";
-        # owner = "pipewire";
-        # repo = "pipewire";
-        # rev = version;
-        # sha256 = "sha256-TnGn6EVjjpEybslLEvBb66uqOiLg5ngpNV9LYO6TfvA=";
-        # };
-        # });
+        package = pkgs.master.pipewire;
       };
 
       pulseaudio.enable = false;
@@ -43,5 +36,17 @@ in
       pamixer
       playerctl
     ];
+
+    systemd = mkIf (host == "QPC") {
+      user.services.routeAudio = {
+        description = "Route audio from GoXLR to SMSL";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "pipewire.service" ];
+        serviceConfig.Type = "simple";
+        script = ''
+          ${pkgs.pipewire}/bin/pw-loopback --capture=alsa_input.usb-TC-Helicon_GoXLRMini-00.HiFi__Line4__source --playback=alsa_output.usb-SMSL_SMSL_USB_AUDIO-00.analog-stereo
+        '';
+      };
+    };
   };
 }

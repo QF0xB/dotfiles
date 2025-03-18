@@ -7,14 +7,11 @@
 {
   imports = [
     ./default-applications.nix
+    ./desktop
     ./tui/direnv/direnv.nix
     ./tui/helix/helix.nix
     ./tui/neovim/neovim.nix
     ./tui/nix-index/nix-index.nix
-    ./general/hyprsuite/hyprsuite.nix
-    ./general/rofi/rofi.nix
-    ./general/swaync/swaync.nix
-    ./general/waybar/waybar.nix
     ./gui/citrix/citrix.nix
     ./gui/chromium/chromium.nix
     ./gui/flameshot/flameshot.nix

@@ -1,12 +1,12 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 
 let
-  cfg = config.qnix.applications.general.waybar;
+  cfg = config.qnix.applications.desktop.waybar;
+  inherit (lib) mkEnableOption;
 in
 {
   imports = [
@@ -14,9 +14,9 @@ in
     ./assets/style.nix
   ];
 
-  options.qnix.applications.general.waybar = with lib; {
+  options.qnix.applications.desktop.waybar = {
     enable = mkEnableOption "waybar bar" // {
-      default = config.qnix.applications.general.hyprsuite.hyprland.enable && !config.qnix.headless;
+      default = config.qnix.applications.desktop.hyprsuite.hyprland;
     };
     persistentWorkspaces = mkEnableOption "Persistent workspaces";
     hidden = mkEnableOption "Hidden waybar by default";
@@ -29,8 +29,6 @@ in
       systemd.enable = true;
     };
 
-    #xdg.configFile."waybar/config".source = ./assets/config;
-    #    xdg.configFile."waybar/style.css".source = ./assets/style.css;
     xdg.configFile."waybar/waybar-yubikey" = {
       source = ./assets/waybar-yubikey;
       executable = true;

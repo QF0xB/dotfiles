@@ -60,7 +60,7 @@
       "custom/logo" = {
         format = "  ";
         tooltip = false;
-        on-click = "~/.config/rofi/launchers/type-${config.qnix.applications.general.rofi.launcher.theme.type}/style-${config.qnix.applications.general.rofi.launcher.theme.type}.rasi &";
+        on-click = "~/.config/rofi/launchers/type-${config.qnix.applications.desktop.rofi.launcher.theme.type}/style-${config.qnix.applications.desktop.rofi.launcher.theme.type}.rasi &";
       };
 
       "custom/side-spacer" = {
