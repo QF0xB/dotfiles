@@ -79,6 +79,7 @@ in
 
           cursor = {
             no_hardware_cursors = 1;
+            persistent_warps = "true";
           };
 
           # Input settings: keyboard layout, touchpad behavior, etc.
@@ -95,6 +96,11 @@ in
               natural_scroll = "false"; # Normal (non-inverted) scroll direction
               clickfinger_behavior = "true"; # Enable clickfinger mapping
             };
+          };
+
+          gestures = {
+            workspace_swipe = "true";
+            workspace_swipe_forever = "true";
           };
 
           # Miscellaneous settings: wallpaper, logos, and window swallowing.
