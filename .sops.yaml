@@ -14,4 +14,7 @@ creation_rules:
     key_groups:
     - age:
       - *admin_qbraendli
-  
+  - path_regex: secrets/[^/]+\.p12$
+    key_groups:
+      - age:
+        - *admin_qbraendli

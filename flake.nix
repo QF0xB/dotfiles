@@ -47,9 +47,6 @@
     #      inputs.nixpkgs.follows = "nixpkgs-stable";
     #    };
 
-    # Hyprland
-    hyprland.url = "github:hyprwm/Hyprland";
-
     # Secret manager SOPS
     sops-nix = {
       url = "github:Mic92/sops-nix";

@@ -8,7 +8,7 @@
 
 let
   cfg = config.qnix.applications.citrix;
-  inherit (lib) mkEnableOption;
+  inherit (lib) mkEnableOption mkIf;
 in
 {
   options.qnix.applications.citrix = {
@@ -17,7 +17,7 @@ in
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     home.packages = with pkgs; [ citrix_workspace ];
   };
 }

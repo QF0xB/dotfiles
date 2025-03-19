@@ -65,6 +65,17 @@ in
             }
           else
             { }
+        )
+        // (
+          if (host == "QFrame13") then
+            {
+              "eduroam" = {
+                format = "binary";
+                sopsFile = ../../../secrets/eduroam_QFrame13_17_03_2025.p12;
+              };
+            }
+          else
+            { }
         );
     };
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];

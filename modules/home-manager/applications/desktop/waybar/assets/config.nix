@@ -8,84 +8,87 @@
 
 {
   config = {
-    programs.waybar.settings = [
-      {
-        layer = "top";
-        position = "top";
+    programs.waybar.settings =
+      [
+        {
+          layer = "top";
+          position = "top";
 
-        output = lib.mkIf (host == "QPC") [
-          "DP-2"
-        ];
-
-        include = [
-          "~/.config/waybar/default-modules.json"
-        ];
-
-        modules-left = [
-          "custom/side-spacer"
-          #   "custom/logo";
-          "custom/arrow-l-clock"
-          #		"custom/logo";
-          "clock"
-          "custom/arrow-r-clock"
-          "custom/arrow-l-work"
-          "hyprland/workspaces"
-          "custom/arrow-r-work"
-          "custom/arrow-l-tray"
-          "custom/yubikey"
-          "tray"
-          "custom/arrow-r-tray"
-        ];
-
-        modules-right =
-          with lib;
-          [
-            "custom/arrow-l-interact"
-            "custom/clipboard"
-            "custom/sep-interact"
-            "hyprland/language"
-            "custom/arrow-r-interact"
-            "custom/arrow-l-system"
-            "network"
-            "custom/sep-system"
-            "pulseaudio"
-            "custom/arrow-r-system"
-            "custom/arrow-l-stats"
-            "cpu"
-            # "memory"
-            "custom/sep-stats"
-          ]
-          ++ (lists.optionals isLaptop [
-            "battery"
-            "custom/sep-stats"
-          ])
-          ++ [
-            "custom/notification"
-            "custom/arrow-r-stats"
-            "custom/side-spacer"
+          output = lib.mkIf (host == "QPC") [
+            "DP-2"
           ];
-      }
-      {
-        layer = "top";
-        position = "top";
 
-        output = lib.mkIf (host == "QPC") [
-          "!DP-2"
-          "HDMI-A-1"
-          "DP-3"
-        ];
+          include = [
+            "~/.config/waybar/default-modules.json"
+          ];
 
-        include = [
-          "~/.config/waybar/default-modules.json"
-        ];
+          modules-left = [
+            "custom/side-spacer"
+            #   "custom/logo";
+            "custom/arrow-l-clock"
+            #		"custom/logo";
+            "clock"
+            "custom/arrow-r-clock"
+            "custom/arrow-l-work"
+            "hyprland/workspaces"
+            "custom/arrow-r-work"
+            "custom/arrow-l-tray"
+            "custom/yubikey"
+            "tray"
+            "custom/arrow-r-tray"
+          ];
 
-        modules-center = [
-          "custom/arrow-l-work"
-          "hyprland/workspaces"
-          "custom/arrow-r-work"
-        ];
-      }
-    ];
+          modules-right =
+            with lib;
+            [
+              "custom/arrow-l-interact"
+              "custom/clipboard"
+              "custom/sep-interact"
+              "hyprland/language"
+              "custom/arrow-r-interact"
+              "custom/arrow-l-system"
+              "network"
+              "custom/sep-system"
+              "pulseaudio"
+              "custom/arrow-r-system"
+              "custom/arrow-l-stats"
+              "cpu"
+              # "memory"
+              "custom/sep-stats"
+            ]
+            ++ (lists.optionals isLaptop [
+              "battery"
+              "custom/sep-stats"
+            ])
+            ++ [
+              "custom/notification"
+              "custom/arrow-r-stats"
+              "custom/side-spacer"
+            ];
+        }
+      ]
+      ++ (lib.lists.optionals (host == "QPC") [
+        {
+          layer = "top";
+          position = "top";
+
+          output = lib.mkIf (host == "QPC") [
+            "!DP-2"
+            "HDMI-A-1"
+            "DP-3"
+          ];
+
+          include = [
+            "~/.config/waybar/default-modules.json"
+          ];
+
+          modules-center = [
+            "custom/arrow-l-work"
+            "hyprland/workspaces"
+            "custom/arrow-r-work"
+          ];
+        }
+      ]);
 
     home.file.".config/waybar/default-modules.json".text = ''
       {

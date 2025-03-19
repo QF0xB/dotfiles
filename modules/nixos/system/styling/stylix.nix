@@ -24,7 +24,7 @@ in
       cursor = {
         package = pkgs.simp1e-cursors;
         name = "Simp1e-Solarized-Dark";
-        size = 12;
+        size = 24;
       };
 
       fonts = {
