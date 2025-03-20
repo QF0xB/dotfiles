@@ -18,7 +18,7 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ teams-for-linux ];
+    home.packages = with pkgs; [ stable.teams-for-linux ];
 
     qnix.persist.home.directories = [ ".config/teams-for-linux" ];
   };

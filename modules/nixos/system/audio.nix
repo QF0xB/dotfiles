@@ -39,6 +39,8 @@ in
 
     systemd = mkIf (host == "QPC") {
       user.services.routeAudio = {
+        enable = true;
+
         description = "Route audio from GoXLR to SMSL";
         wantedBy = [ "multi-user.target" ];
         after = [ "pipewire.service" ];

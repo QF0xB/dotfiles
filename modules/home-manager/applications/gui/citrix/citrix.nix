@@ -18,6 +18,12 @@ in
   };
 
   config = mkIf cfg.enable {
-    home.packages = with pkgs; [ citrix_workspace ];
+    home.packages = with pkgs; [
+      (citrix_workspace.override {
+        extraCerts = [
+          ./kjr_network.cert
+        ];
+      })
+    ];
   };
 }

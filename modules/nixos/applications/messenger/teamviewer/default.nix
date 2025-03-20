@@ -4,6 +4,6 @@
 
 {
   imports = [
-    ./teamviewer
+    ./teamviewer.nix
   ];
 }

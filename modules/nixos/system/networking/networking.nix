@@ -21,6 +21,7 @@ in
   config = {
     networking = {
       networkmanager.enable = cfg.networkManager.enable;
+      firewall.enable = false;
     };
 
     environment.systemPackages = with pkgs; [
@@ -28,6 +29,7 @@ in
       openssl
       iw
       qnix-pkgs.easyroam-setup
+      openvpn
     ];
     users.users.${user}.extraGroups = [ "networkmanager" ];
 
@@ -56,6 +58,10 @@ in
       };
     };
 
-    qnix.persist.root.directories = [ "/etc/easyroam-certs" ];
+    qnix.persist.root.directories = [
+      "/etc/easyroam-certs"
+      "/etc/vpn-certs"
+    ];
+
   };
 }
