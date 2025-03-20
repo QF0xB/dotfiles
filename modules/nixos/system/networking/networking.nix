@@ -3,12 +3,13 @@
   lib,
   user,
   pkgs,
+  isLaptop,
   ...
 }:
 
 let
   cfg = config.qnix.system.networking;
-  inherit (lib) mkEnableOption;
+  inherit (lib) mkEnableOption mkIf;
 in
 {
   options.qnix.system.networking = {
@@ -30,27 +31,29 @@ in
     ];
     users.users.${user}.extraGroups = [ "networkmanager" ];
 
-    systemd.services.easyroam-setup = {
-      description = "EasyRoam Setup";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
+    systemd = mkIf isLaptop {
+      services.easyroam-setup = {
+        description = "EasyRoam Setup";
+        wantedBy = [ "multi-user.target" ];
+        after = [ "network.target" ];
 
-      serviceConfig = {
-        Type = "oneshot";
-        User = "root";
-        Restart = "no";
-        path = with pkgs; [
-          openssl
-          gawk
-          coreutils
-          networkmanager
-          iw
-        ];
+        serviceConfig = {
+          Type = "oneshot";
+          User = "root";
+          Restart = "no";
+          path = with pkgs; [
+            openssl
+            gawk
+            coreutils
+            networkmanager
+            iw
+          ];
+        };
+
+        script = ''
+          ${pkgs.qnix-pkgs.easyroam-setup}/bin/easyroam-setup
+        '';
       };
-
-      script = ''
-        ${pkgs.qnix-pkgs.easyroam-setup}/bin/easyroam-setup
-      '';
     };
 
     qnix.persist.root.directories = [ "/etc/easyroam-certs" ];
