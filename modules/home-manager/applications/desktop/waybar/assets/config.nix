@@ -134,7 +134,7 @@
             "warning": 30,
             "critical": 15
           },
-          "format-time": "{H} ={M =02}",
+          "format-time": "{H}:{M:02}",
           "format": "{icon} {capacity}%",
           "format-plugged": " ",
           "format-charging": " {capacity}%",

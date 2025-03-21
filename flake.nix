@@ -87,6 +87,7 @@
       overlay-master = create-overlay "master";
 
       pkgs = import inputs.nixpkgs {
+        hostplatform = system;
         inherit system;
         config = {
           allowUnfree = true;

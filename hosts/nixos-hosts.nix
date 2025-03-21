@@ -12,9 +12,6 @@ let
     {
       pkgs ? args.pkgs,
     }:
-    {
-      hm-pkgs ? inputs.home-manager,
-    }:
     lib.nixosSystem {
       inherit pkgs;
 
@@ -30,7 +27,7 @@ let
         ./${host} # host specific configuration
         ./${host}/hardware.nix # host specific hardware configuration
         ../modules/nixos # Default NixOS config
-        hm-pkgs.nixosModules.home-manager
+        inputs.home-manager.nixosModules.home-manager
         {
           home-manager = {
             useGlobalPkgs = true;
@@ -72,7 +69,7 @@ let
     };
 in
 {
-  QPC = mkNixosConfiguration "QPC" { } { };
-  QFrame13 = mkNixosConfiguration "QFrame13" { } { };
-  vm = mkNixosConfiguration "vm" { } { };
+  QPC = mkNixosConfiguration "QPC" { };
+  QFrame13 = mkNixosConfiguration "QFrame13" { };
+  vm = mkNixosConfiguration "vm" { };
 }

@@ -7,7 +7,12 @@
 
 let
   cfg = config.qnix.applications.gui.jetbrains;
-  inherit (lib) mkEnableOption lists concatLists;
+  inherit (lib)
+    mkEnableOption
+    lists
+    mkDefault
+    concatLists
+    ;
 in
 {
   options.qnix.applications.gui.jetbrains = {
@@ -56,6 +61,8 @@ in
     #    home.packages = with pkgs; [
     #      jetbrains-toolbox
     #    ];
+
+    qnix.applications.gui.jetbrains.clion.enable = mkDefault true;
 
     qnix.persist.home = {
       directories = [

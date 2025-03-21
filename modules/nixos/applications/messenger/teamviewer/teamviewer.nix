@@ -12,7 +12,7 @@ in
 {
   options.qnix.applications.gui.teamviewer = {
     enable = mkEnableOption "teamviewer" // {
-      default = !config.hm.qnix.headless;
+      default = false;
     };
   };
 
