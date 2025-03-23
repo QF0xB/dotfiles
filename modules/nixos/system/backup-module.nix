@@ -22,6 +22,12 @@ let
 
   # Define a function to create repository options
   mkRepositoryOptions = {
+    local = mkOption {
+      type = types.str;
+      description = "An local repository of borg. It backups the /cache directory as well.";
+      example = "user@nas01.localdomain/";
+      default = "none";
+    };
     eu = mkOption {
       type = types.str;
       description = "An EU repository of borg. Keep empty to ignore.";
@@ -52,7 +58,7 @@ let
   mkBackupJob =
     repoLocation: repoUrl:
     mkIf (repoUrl != "none" && !cfg.prune.enable) {
-      paths = [ "/tmp/zfs-backups" ]; # Directory where ZFS snapshot files are stored
+      paths = [ "/tmp/zfs-backups-${repoLocation}" ]; # Directory where ZFS snapshot files are stored
       exclude = [ "*.tmp" ];
       repo = repoUrl;
       encryption = {
@@ -74,45 +80,61 @@ let
       preHook = ''
         # Debug filesystem status
         # Create backup directory if it doesn't exist
-        mkdir -p /tmp/zfs-backups
+        mkdir -p /tmp/zfs-backups-${repoLocation}
 
         echo "Filesystem status:"
-        df -h /tmp/zfs-backups
+        df -h /tmp/zfs-backups-${repoLocation}
 
         # Create backup directory if it doesn't exist
-        mkdir -p /tmp/zfs-backups
+        mkdir -p /tmp/zfs-backups-${repoLocation}
 
         # Check if directory is writable
-        touch /tmp/zfs-backups/test_write
+        touch /tmp/zfs-backups-${repoLocation}/test_write
         if [ $? -ne 0 ]; then
-          echo "ERROR: Cannot write to /tmp/zfs-backups"
+          echo "ERROR: Cannot write to /tmp/zfs-backups-${repoLocation}"
           exit 1
         fi
-        rm /tmp/zfs-backups/test_write
+        rm /tmp/zfs-backups-${repoLocation}/test_write
 
         # Create backup directory if it doesn't exist
-        mkdir -p /tmp/zfs-backups
+        mkdir -p /tmp/zfs-backups-${repoLocation}
 
         # Create a snapshot with timestamp
         SNAPSHOT_NAME="${cfg.zfs.snapshotName}-${repoLocation}-$(date +%Y%m%d-%H%M%S)"
-        BACKUP_FILE="/tmp/zfs-backups/${cfg.hostname}-$SNAPSHOT_NAME.zfs"
+        BACKUP_FILE="/tmp/zfs-backups-${repoLocation}/${cfg.hostname}-$SNAPSHOT_NAME.zfs"
 
         # Create snapshots of datasets
-        ${lib.concatMapStringsSep "\n" (dataset: ''
-          echo "Creating snapshot ${dataset}@$SNAPSHOT_NAME"
-          ${pkgs.zfs}/bin/zfs snapshot ${dataset}@$SNAPSHOT_NAME
-        '') cfg.zfs.datasets}
+        ${lib.concatMapStringsSep "\n"
+          (dataset: ''
+            echo "Creating snapshot zroot/${dataset}@${dataset}_$SNAPSHOT_NAME"
+            ${pkgs.zfs}/bin/zfs snapshot zroot/${dataset}@${dataset}_$SNAPSHOT_NAME
+          '')
+          (
+            lib.concatLists [
+              cfg.zfs.datasets
+              (lib.lists.optionals (repoLocation == "local") [ "cache" ])
+            ]
+          )
+        }
 
         # Send the snapshots to a file
-        ${lib.concatMapStringsSep "\n" (dataset: ''
-          echo "Sending ${dataset}@$SNAPSHOT_NAME to file"
-          ${pkgs.zfs}/bin/zfs send --raw -R ${dataset}@$SNAPSHOT_NAME > $BACKUP_FILE
-        '') cfg.zfs.datasets}
+        ${lib.concatMapStringsSep "\n"
+          (dataset: ''
+            echo "Sending zroot/${dataset}@${dataset}_$SNAPSHOT_NAME to file"
+            ${pkgs.zfs}/bin/zfs send --raw -R zroot/${dataset}@${dataset}_$SNAPSHOT_NAME > $BACKUP_FILE
+          '')
+          (
+            lib.concatLists [
+              cfg.zfs.datasets
+              (lib.lists.optionals (repoLocation == "local") [ "cache" ])
+            ]
+          )
+        }
       '';
 
       # Clean up old backup files (but not ZFS snapshots)
       postHook = ''
-        find /tmp/zfs-backups -name "${cfg.hostname}-${cfg.zfs.snapshotName}-*.zfs" | sort | head -n -1 | xargs -r rm
+        find /tmp/zfs-backups-${repoLocation} -name "*.zfs" | sort | head -n -1 | xargs -r rm
       '';
     };
 
@@ -218,8 +240,8 @@ in
         description = "List of ZFS datasets to backup";
         default = [ ];
         example = [
-          "rpool/safe/home"
-          "rpool/safe/persist"
+          "safe/home"
+          "safe/persist"
         ];
       };
 
@@ -240,6 +262,7 @@ in
         system-backup-na = mkBackupJob "us" cfg.repositories.${cfg.hostname}.us;
         system-backup-as = mkBackupJob "as" cfg.repositories.${cfg.hostname}.as;
         system-backup-au = mkBackupJob "au" cfg.repositories.${cfg.hostname}.au;
+        system-backup-local = mkBackupJob "local" cfg.repositories.${cfg.hostname}.local;
       })
 
       # Prune jobs (only on pruning machines)
@@ -248,6 +271,7 @@ in
         prune-na = mkPruneJob "us" cfg.repositories.${cfg.hostname}.us;
         prune-as = mkPruneJob "as" cfg.repositories.${cfg.hostname}.as;
         prune-au = mkPruneJob "au" cfg.repositories.${cfg.hostname}.au;
+        prune-local = mkPruneJob "local" cfg.repositories.${cfg.hostname}.local;
       })
     ];
 

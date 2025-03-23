@@ -21,6 +21,7 @@ in
     home.packages = with pkgs; [
       nemo-with-extensions
       nemo-fileroller
+      file-roller
       webp-pixbuf-loader # for webp thumbnails
       xdg-terminal-exec
       p7zip-rar # encrypted archives

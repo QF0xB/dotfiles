@@ -20,12 +20,21 @@ in
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
 
+    boot.kernelParams = [ "intel_iommu=on" ];
+
     users.users.${user}.extraGroups = [ "libvirtd" ];
 
     qnix.persist = {
       root = {
+        directories = [ "/var/lib/libvirt" ];
         cache.directories = [ "/var/lib/libvirtd" ];
       };
+    };
+
+    hm.qnix.persist = {
+      home.cache.directories = [
+        "VMs"
+      ];
     };
   };
 }

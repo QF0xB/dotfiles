@@ -18,6 +18,7 @@
     ./gui/jetbrains/jetbrains.nix
     ./gui/kitty/kitty.nix
     ./gui/teams
+    ./gui/orcaslicer
     ./gui/nemo/nemo.nix
     ./gui/obsidian/obsidian.nix
     ./gui/tidal-hifi/tidal-hifi.nix
