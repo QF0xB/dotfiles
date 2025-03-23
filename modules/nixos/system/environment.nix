@@ -33,7 +33,11 @@ in
           (lists.optionals cfg.systemPackages.custom-shell.enable (
             lib.attrValues config.qnix.system.shell.packages
           ))
-          [ nvfetcher ]
+          [
+            nvfetcher
+            nfs-utils
+          ]
+
         ];
       variables = mkIf config.hm.qnix.applications.tui.neovim.default {
         EDITOR = "nvim";

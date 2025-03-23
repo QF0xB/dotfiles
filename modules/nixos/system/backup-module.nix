@@ -121,7 +121,7 @@ let
         ${lib.concatMapStringsSep "\n"
           (dataset: ''
             echo "Sending zroot/${dataset}@${dataset}_$SNAPSHOT_NAME to file"
-            ${pkgs.zfs}/bin/zfs send --raw -R zroot/${dataset}@${dataset}_$SNAPSHOT_NAME > $BACKUP_FILE
+            ${pkgs.zfs}/bin/zfs send --raw -R zroot/${dataset}@${dataset}_$SNAPSHOT_NAME > "/tmp/zfs-backups-${repoLocation}/${cfg.hostname}-${dataset}-$SNAPSHOT_NAME.zfs"
           '')
           (
             lib.concatLists [
@@ -134,7 +134,7 @@ let
 
       # Clean up old backup files (but not ZFS snapshots)
       postHook = ''
-        find /tmp/zfs-backups-${repoLocation} -name "*.zfs" | sort | head -n -1 | xargs -r rm
+        rm -r /tmp/zfs-backups-${repoLocation}
       '';
     };
 

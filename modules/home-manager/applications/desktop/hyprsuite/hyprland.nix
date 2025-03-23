@@ -31,6 +31,7 @@ in
 
     home.packages = with pkgs; [
       wl-clipboard
+      hyprpolkitagent
     ];
 
     wayland.windowManager = {
@@ -48,6 +49,10 @@ in
           exec = [
             "hyprctl switchxkblayout all 1"
           ];
+          exec-once = [
+            "systemctl --user start hyprpolkitagent"
+          ];
+
           # General window settings: gaps, border size, layout, and colors.
           general = {
             gaps_in = "5"; # Inner gaps between windows
