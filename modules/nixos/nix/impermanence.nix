@@ -89,7 +89,7 @@ in
             --exclude "/etc/{ssh,passwd,shadow}" \
             --exclude "*.timer" \
             --exclude "/var/lib/NetworkManager" \
-            --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,fish,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust}" \
+            --exclude "${config.hm.xdg.cacheHome}/{bat,fontconfig,fish,mpv,nvidia,nvim/catppuccin,pre-commit,swww,wallust,nix}" \
             --exec ls -lS | sort -rn -k5 | awk '{print $5, $9}'
         '';
       };
