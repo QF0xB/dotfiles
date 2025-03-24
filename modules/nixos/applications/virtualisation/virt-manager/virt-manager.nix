@@ -2,6 +2,7 @@
   config,
   lib,
   user,
+  host,
   ...
 }:
 
@@ -20,7 +21,7 @@ in
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
 
-    boot = {
+    boot = mkIf (host == "QPC") {
       initrd = {
         availableKernelModules = [
           "vfio_pci"
