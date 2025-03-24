@@ -20,7 +20,19 @@ in
     virtualisation.libvirtd.enable = true;
     programs.virt-manager.enable = true;
 
-    boot.kernelParams = [ "intel_iommu=on" ];
+    boot = {
+      initrd = {
+        availableKernelModules = [
+          "vfio_pci"
+          "vfio"
+          "vfio_iommu_type1"
+        ];
+      };
+
+      kernelParams = [
+        "intel_iommu=on"
+      ];
+    };
 
     users.users.${user}.extraGroups = [ "libvirtd" ];
 

@@ -4,6 +4,7 @@
   user,
   pkgs,
   isLaptop,
+  host,
   ...
 }:
 
@@ -22,6 +23,14 @@ in
     networking = {
       networkmanager.enable = cfg.networkManager.enable;
       firewall.enable = false;
+
+      interfaces = mkIf (host == "QPC") {
+        enp6s0 = {
+          useDHCP = false;
+          ipv4.addresses = [ ];
+          ipv6.addresses = [ ];
+        };
+      };
     };
 
     environment.systemPackages = with pkgs; [

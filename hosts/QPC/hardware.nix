@@ -14,16 +14,18 @@
     (modulesPath + "/installer/scan/not-detected.nix")
   ];
 
+  boot.extraModulePackages = with config.boot.kernelPackages; [ r8125 ];
+
   boot.initrd.availableKernelModules = [
     "xhci_pci"
     "ahci"
     "nvme"
     "usbhid"
     "sd_mod"
+    "r8125"
   ];
   boot.initrd.kernelModules = [ ];
   boot.kernelModules = [ "kvm-intel" ];
-  boot.extraModulePackages = [ ];
 
   # Enables DHCP on each ethernet and wireless interface. In case of scripted networking
   # (the default) this is the recommended approach. When using systemd-networkd it's
