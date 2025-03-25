@@ -39,7 +39,7 @@ in
         preLVM = true;
       };
     };
-    qnix.system.shell.packages = {
+    hm.qnix.applications.shells.packages = {
       reboot-to-windows = {
         runtimeInputs = [ pkgs.grub2 ];
         text = # sh

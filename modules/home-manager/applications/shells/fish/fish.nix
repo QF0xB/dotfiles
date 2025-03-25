@@ -18,6 +18,10 @@ in
     };
   };
 
+  imports = [
+    ./aliases.nix
+  ];
+
   config = lib.mkIf cfg.enable {
     programs = {
       fish = {

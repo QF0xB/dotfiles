@@ -5,24 +5,21 @@
 
 {
   imports = [
-    ./audio.nix
-    ./backup.nix
-    ./bluetooth.nix
+    ./backup
+    ./bluetooth
     ./boot
     ./networking/networking.nix
     ./nvidia.nix
     ./gnupg.nix
     ./shells.nix
-    ./environment.nix
+    ./environment
     ./localization.nix
     ./powersavings.nix
     ./ssh-server.nix
     ./packages.nix
-    ./fonts.nix
     ./screen.nix
     ./security
     ./gnupg.nix
-    ./styling/stylix.nix
     ./zfs.nix
   ];
 

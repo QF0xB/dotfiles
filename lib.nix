@@ -2,7 +2,7 @@
 lib.extend (
   _: libprev: {
     # namespace for custom functions
-    custom = rec {
+    qnix-lib = rec {
       # saner api for iterating through workspaces in a flat list
       # takes a function that accepts the following attrset {workspace, key, monitor}
       mapWorkspaces =

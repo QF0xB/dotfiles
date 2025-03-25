@@ -4,7 +4,5 @@
 
 {
   imports = [
-    ./goxlr-utility
-    ./pipewire
   ];
 }

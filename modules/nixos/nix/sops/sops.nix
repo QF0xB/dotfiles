@@ -33,7 +33,7 @@ in
 
   config = lib.mkIf cfg.enable {
     sops = {
-      defaultSopsFile = ../../../secrets/default.yaml;
+      defaultSopsFile = ../../../../secrets/default.yaml;
 
       age = {
         generateKey = false;
@@ -60,7 +60,7 @@ in
                 owner = config.users.users.${user}.name;
                 group = "users";
                 mode = "0400";
-                sopsFile = ../../../secrets/backup-prune-vm.yaml;
+                sopsFile = ../../../../secrets/backup-prune-vm.yaml;
               };
             }
           else
@@ -71,7 +71,7 @@ in
             {
               "eduroam" = {
                 format = "binary";
-                sopsFile = ../../../secrets/eduroam_QFrame13_17_03_2025.p12;
+                sopsFile = ../../../../secrets/eduroam_QFrame13_17_03_2025.p12;
               };
             }
           else
@@ -80,7 +80,7 @@ in
     };
     users.users.${user}.extraGroups = [ config.users.groups.keys.name ];
 
-    qnix.system.shell.packages = {
+    hm.qnix.applications.shells.packages = {
       install-remote-secrets = {
         runtimeInputs = [ pkgs.rsync ];
         text =

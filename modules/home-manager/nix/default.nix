@@ -4,6 +4,7 @@
 
 {
   imports = [
+    ./code-gens
     ./impermanence
   ];
 }

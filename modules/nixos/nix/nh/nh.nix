@@ -1,9 +1,7 @@
-{ 
-  config, 
-  pkgs, 
-  user, 
+{
+  config,
   lib,
-  ... 
+  ...
 }:
 
 let
@@ -11,8 +9,12 @@ let
 in
 {
   options.qnix.nix.nh = with lib; {
-    enable = mkEnableOption "nh cli-manager";
-    clean.enable = mkEnableOption "nh cli-manager clean";
+    enable = mkEnableOption "nh cli-manager" // {
+      default = true;
+    };
+    clean.enable = mkEnableOption "nh cli-manager clean" // {
+      default = true;
+    };
   };
 
   config = with lib; {

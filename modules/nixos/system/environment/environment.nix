@@ -31,7 +31,7 @@ in
           (lists.optionals pkgs-cfg.kitty.install [ kitty ])
           # add custom-shell packages
           (lists.optionals cfg.systemPackages.custom-shell.enable (
-            lib.attrValues config.qnix.system.shell.packages
+            lib.attrValues config.hm.qnix.applications.shells.packages
           ))
           [
             nvfetcher
@@ -48,7 +48,7 @@ in
       in
       mapAttrsToList (
         dest: src: "L+ ${normalizeHome dest} - - - - ${src}"
-      ) config.qnix.system.shell.symlinks;
+      ) config.hm.qnix.applications.shells.symlinks;
 
     environment.shellInit = ''
       # GPG 

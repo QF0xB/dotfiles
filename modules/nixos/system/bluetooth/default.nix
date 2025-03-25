@@ -4,7 +4,6 @@
 
 {
   imports = [
-    ./goxlr-utility
-    ./pipewire
+    ./bluetooth.nix
   ];
 }

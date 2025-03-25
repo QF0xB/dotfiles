@@ -80,7 +80,7 @@ in
     # shut sudo up
     security.sudo.extraConfig = "Defaults lecture=never";
 
-    qnix.system.shell.packages = {
+    hm.qnix.applications.shells.packages = {
       # show all files stored on tmpfs, useful for finding files to persist
       show-root-files = {
         runtimeInputs = [ pkgs.fd ];

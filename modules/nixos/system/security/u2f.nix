@@ -28,7 +28,7 @@ with lib;
 
     hardware.gpgSmartcards.enable = true;
 
-    qnix.system.shell.packages.gpg-reset-yubikey-id.text = ''
+    hm.qnix.applications.shells.packages.gpg-reset-yubikey-id.text = ''
       echo "reset gpg to make new key available"
       set -x
       set -e

@@ -1,47 +1,33 @@
 {
+  pkgs,
   lib,
   config,
-  pkgs,
-  host,
   ...
 }:
 
 let
-  cfg = config.qnix.system.audio;
-  inherit (lib) mkIf mkEnableOption;
+  cfg = config.hm.qnix.applications.audio;
+  inherit (lib) mkIf;
 in
 {
-  options.qnix.system.audio = {
-    enable = mkEnableOption "Audiosetup" // {
-      default = true;
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.pipewire.enable {
     services = {
       pipewire = {
         enable = true;
         alsa.enable = true;
         alsa.support32Bit = true;
         pulse.enable = true;
-        package = pkgs.master.pipewire;
+        package = pkgs.pipewire;
       };
 
       pulseaudio.enable = false;
     };
 
-    environment.systemPackages = with pkgs; [
-      pavucontrol
-      pulseaudio
-      pamixer
-      playerctl
-    ];
-
-    environment.variables = {
+    environment.variables = mkIf cfg.pipewire.debug {
       PIPEWIRE_DEBUG = 5;
     };
 
-    systemd = mkIf (host == "QPC") {
+    systemd = mkIf cfg.goxlr-utility.enable {
       user.services.routeAudio = {
         enable = true;
 
@@ -55,10 +41,5 @@ in
       };
     };
 
-    hm.qnix.persist.home = {
-      directories = [
-        ".local/state/wireplumber"
-      ];
-    };
   };
 }

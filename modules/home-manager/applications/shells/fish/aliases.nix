@@ -4,10 +4,6 @@
 }:
 
 {
-  imports = [
-    ./aliases.nix
-  ];
-
   config = {
     home = {
       shellAliases = {
@@ -34,6 +30,16 @@
         "...." = "cd ../../..";
         "....." = "cd ../../../..";
         "......" = "cd ../../../../..";
+
+        # Edit commands
+        "nvd" = "nvim default.nix";
+
+        # nix-gens
+        "ngo" = "nix-gen-options";
+        "ngeo" = "nix-gen-enable-options";
+        "ngc" = "nix-gen-config";
+        "ngco" = "nix-gen-config-options";
+        "ngi" = "nix-gen-imports";
       };
     };
   };
