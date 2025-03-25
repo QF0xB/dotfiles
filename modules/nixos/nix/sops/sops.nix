@@ -10,8 +10,7 @@
 let
   homeDir = config.hm.home.homeDirectory;
   cfg = config.qnix.nix.sops;
-  backup-cfg = config.qnix.system.backup;
-  inherit (lib) mkIf;
+  backup-cfg = config.hm.qnix.applications.security.backup;
   hostKey = "backup_${cfg.host}_key";
   hostPassphrase = "backup_${backup-cfg.hostname}_passphrase";
   hostKeyPrune = "backup_${backup-cfg.hostname}_key_prune";

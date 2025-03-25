@@ -11,7 +11,9 @@ let
 in
 {
   options.qnix.system.stylix = with lib; {
-    enable = mkEnableOption "global styling with stylix";
+    enable = mkEnableOption "global styling with stylix" // {
+      default = true;
+    };
   };
 
   config = {

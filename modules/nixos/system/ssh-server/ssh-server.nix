@@ -1,8 +1,8 @@
 {
-  options, 
+  options,
   lib,
   config,
-  ... 
+  ...
 }:
 
 let
@@ -10,14 +10,16 @@ let
 in
 {
   options.qnix = with lib; {
-    system.openssh.enable = mkEnableOption "ssh-server";
+    system.openssh.enable = mkEnableOption "ssh-server" // {
+      default = true;
+    };
     system.openssh.password-auth = mkEnableOption "passwordauth";
   };
 
   config = {
     services.openssh = {
       enable = cfg.enable;
-      
+
       settings.PasswordAuthentication = cfg.password-auth;
     };
 

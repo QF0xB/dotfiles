@@ -11,8 +11,12 @@ in
 with lib;
 {
   options.qnix.system.security = {
-    u2f.enable = mkEnableOption "u2f auth";
-    yubico.enable = mkEnableOption "yubico auth";
+    u2f.enable = mkEnableOption "u2f auth" // {
+      default = true;
+    };
+    yubico.enable = mkEnableOption "yubico auth" // {
+      default = true;
+    };
   };
 
   config = {

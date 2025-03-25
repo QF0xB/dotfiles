@@ -6,16 +6,10 @@
 }:
 
 let
-  inherit (lib) mkEnableOption mkIf concatLines;
-  cfg = config.qnix.system.boot.windows;
+  inherit (lib) mkIf;
+  cfg = config.hm.qnix.system.boot.windows;
 in
 {
-  options.qnix.system.boot.windows = {
-    enable = mkEnableOption "Windows dual boot" // {
-      default = host == "QPC";
-    };
-  };
-
   config = mkIf cfg.enable {
     boot.loader = {
       grub = mkIf config.qnix.system.boot.grub.enable {

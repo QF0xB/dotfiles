@@ -11,9 +11,15 @@ in
 {
   options.qnix = with lib; {
     system.localization = {
-      dual-qkeyboard = mkEnableOption "Dual-QKeyboard";
-      console-xkb-bridge = mkEnableOption "XKB to console keyboard config";
-      english-german-locales = mkEnableOption "English-German mixed locales";
+      dual-qkeyboard = mkEnableOption "Dual-QKeyboard" // {
+        default = true;
+      };
+      console-xkb-bridge = mkEnableOption "XKB to console keyboard config" // {
+        default = true;
+      };
+      english-german-locales = mkEnableOption "English-German mixed locales" // {
+        default = true;
+      };
     };
   };
 

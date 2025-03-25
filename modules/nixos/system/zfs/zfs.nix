@@ -10,7 +10,9 @@ let
 in
 {
   options.qnix.system.zfs = with lib; {
-    encrypted = mkEnableOption "encrypted";
+    encrypted = mkEnableOption "encrypted" // {
+      default = true;
+    };
   };
 
   config = with lib; {

@@ -7,52 +7,15 @@
 }:
 
 let
-  cfg = config.qnix.system.backup;
+  cfg = config.hm.qnix.applications.security.backup;
 
   inherit (lib)
     mkIf
-    mkOption
-    types
-    mkEnableOption
     flip
     mapAttrs'
     nameValuePair
     mkForce
     ;
-
-  # Define a function to create repository options
-  mkRepositoryOptions = {
-    local = mkOption {
-      type = types.str;
-      description = "An local repository of borg. It backups the /cache directory as well.";
-      example = "user@nas01.localdomain/";
-      default = "none";
-    };
-    eu = mkOption {
-      type = types.str;
-      description = "An EU repository of borg. Keep empty to ignore.";
-      example = "uXXXX@uXXXX.eu.repo.borgbase.com/";
-      default = "none";
-    };
-    us = mkOption {
-      type = types.str;
-      description = "An US repository of borg. Keep empty to ignore.";
-      example = "uXXXX@uXXXX.us.repo.borgbase.com/";
-      default = "none";
-    };
-    as = mkOption {
-      type = types.str;
-      description = "An Asian repository of borg. Keep empty to ignore.";
-      example = "uXXXX@uXXXX.as.repo.borgbase.com/";
-      default = "none";
-    };
-    au = mkOption {
-      type = types.str;
-      description = "An Australian repository of borg. Keep empty to ignore.";
-      example = "uXXXX@uXXXX.au.repo.borgbase.com/";
-      default = "none";
-    };
-  };
 
   # Function to create a backup job for a specific repository
   mkBackupJob =
@@ -176,83 +139,6 @@ let
     };
 in
 {
-  options.qnix.system.backup = with lib; {
-    enable = mkEnableOption "Borg backup service" // {
-      default = true;
-    };
-
-    hostname = mkOption {
-      type = types.str;
-      default = host;
-      description = "The hostname of this machine";
-    };
-
-    repositories = {
-      QFrame13 = mkRepositoryOptions;
-      QPC = mkRepositoryOptions;
-    };
-
-    # Pruning options
-    prune = {
-      enable = mkEnableOption "Allow this machine to prune backups";
-
-      keep = {
-        hourly = mkOption {
-          type = types.int;
-          description = "Number of hourly backups to keep";
-          default = 0;
-        };
-
-        daily = mkOption {
-          type = types.int;
-          description = "Number of daily backups to keep";
-          default = 7;
-        };
-
-        weekly = mkOption {
-          type = types.int;
-          description = "Number of weekly backups to keep";
-          default = 4;
-        };
-
-        monthly = mkOption {
-          type = types.int;
-          description = "Number of monthly backups to keep";
-          default = 6;
-        };
-
-        yearly = mkOption {
-          type = types.int;
-          description = "Number of yearly backups to keep";
-          default = 1;
-        };
-      };
-    };
-
-    # ZFS options
-    zfs = {
-      enable = mkEnableOption "ZFS backup features" // {
-        default = true;
-      };
-
-      datasets = mkOption {
-        type = types.listOf types.str;
-        description = "List of ZFS datasets to backup";
-        default = [ ];
-        example = [
-          "safe/home"
-          "safe/persist"
-        ];
-      };
-
-      snapshotName = mkOption {
-        type = types.str;
-        description = "Prefix for ZFS snapshots created for backup";
-        default = "backup-${cfg.hostname}";
-      };
-    };
-  };
-
   config = mkIf cfg.enable {
     # Create backup jobs for all non-empty repositories
     services.borgbackup.jobs = lib.mkMerge [

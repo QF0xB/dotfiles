@@ -7,7 +7,9 @@
 
 {
   options.qnix.system.gpg = {
-    enable = lib.mkEnableOption "Enable system-wide GPG configuration";
+    enable = lib.mkEnableOption "Enable system-wide GPG configuration" // {
+      default = true;
+    };
   };
 
   config = lib.mkIf config.qnix.system.gpg.enable {

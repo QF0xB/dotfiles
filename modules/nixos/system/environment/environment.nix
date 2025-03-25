@@ -11,7 +11,9 @@ let
 in
 {
   options.qnix.system.environment = with lib; {
-    systemPackages.custom-shell.enable = mkEnableOption "custom-shell packages";
+    systemPackages.custom-shell.enable = mkEnableOption "custom-shell packages" // {
+      default = true;
+    };
   };
 
   config = with lib; {
@@ -21,7 +23,7 @@ in
         concatLists [
           (lists.optionals pkgs-cfg.git.install [ git ])
           (lists.optionals pkgs-cfg.tree.install [ tree ])
-          (lists.optionals config.qnix.system.security.u2f.enable [ pam_u2f ])
+          [ pam_u2f ]
           (lists.optionals pkgs-cfg.yubico.install [
             pcsclite
             yubikey-personalization

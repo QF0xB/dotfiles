@@ -1,8 +1,6 @@
 {
-  options,
   lib,
   config,
-  user,
   pkgs,
   ...
 }:
@@ -13,13 +11,15 @@ in
 with lib;
 {
   options.qnix.system.security = {
-    polkit.enable = mkEnableOption "polkit";
+    polkit.enable = mkEnableOption "polkit" // {
+      default = true;
+    };
   };
 
   config = {
     security = {
       polkit = {
-        enable = cfg.polkit.enable;
+        enable = mkForce cfg.polkit.enable;
 
         package = pkgs.polkit;
 

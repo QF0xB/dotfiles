@@ -9,11 +9,21 @@ let
 in
 {
   options.qnix.system.packages = with lib; {
-    git.install = mkEnableOption "git install";
-    tree.install = mkEnableOption "tree install";
-    yubico.install = mkEnableOption "yubico software";
-    helix.install = mkEnableOption "helix";
-    kitty.install = mkEnableOption "kitty";
+    git.install = mkEnableOption "git install" // {
+      default = true;
+    };
+    tree.install = mkEnableOption "tree install" // {
+      default = true;
+    };
+    yubico.install = mkEnableOption "yubico software" // {
+      default = true;
+    };
+    helix.install = mkEnableOption "helix" // {
+      default = false;
+    };
+    kitty.install = mkEnableOption "kitty" // {
+      default = true;
+    };
     nemo.install = mkEnableOption "nemo" // {
       default = true;
     };

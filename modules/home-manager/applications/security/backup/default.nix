@@ -4,7 +4,6 @@
 
 {
   imports = [
-    ./boot
-    ./folders
+    ./backup-options.nix
   ];
 }

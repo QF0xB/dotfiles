@@ -1,19 +1,14 @@
 {
   lib,
   config,
-  pkgs,
   ...
 }:
 
 let
-  cfg = config.qnix.system.boot;
+  cfg = config.hm.qnix.system.boot.grub;
 in
 {
-  options.qnix = with lib; {
-    system.boot.grub.enable = mkEnableOption "grub";
-  };
-
-  config = lib.mkIf cfg.grub.enable {
+  config = lib.mkIf cfg.enable {
     boot = {
       supportedFilesystems = {
         zfs = true;
@@ -31,22 +26,13 @@ in
           zfsSupport = true;
           enableCryptodisk = true;
         };
+
         timeout = 3;
       };
 
       initrd.luks.devices.cryptroot = {
         device = "/dev/disk/by-label/QNixRoot";
         preLVM = true;
-      };
-    };
-    hm.qnix.applications.shells.packages = {
-      reboot-to-windows = {
-        runtimeInputs = [ pkgs.grub2 ];
-        text = # sh
-          ''
-            sudo grub-reboot "Windows 11"
-            sudo reboot
-          '';
       };
     };
   };

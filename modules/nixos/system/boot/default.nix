@@ -1,5 +1,4 @@
 {
-  lib,
   ...
 }:
 
@@ -9,6 +8,4 @@
     ./systemd-boot.nix
     ./windows.nix
   ];
-
-  # CONFIG IN ../default.nix
 }
