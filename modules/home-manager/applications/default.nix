@@ -6,24 +6,20 @@
 
 {
   imports = [
+    ./audio
+    ./browsers
+    ./communication
     ./default-applications.nix
+    ./design
     ./desktop
-    ./tui/direnv/direnv.nix
-    ./tui/helix/helix.nix
-    ./tui/neovim/neovim.nix
+    ./development
+    ./editors
+    ./security
+    ./shells
+    ./utils
+    ./virtualisation
+    ./work
     ./tui/nix-index/nix-index.nix
-    ./gui/citrix/citrix.nix
-    ./gui/chromium/chromium.nix
-    ./gui/flameshot/flameshot.nix
-    ./gui/jetbrains/jetbrains.nix
-    ./gui/kitty/kitty.nix
-    ./gui/teams
-    ./gui/orcaslicer
-    ./gui/nemo/nemo.nix
-    ./gui/obsidian/obsidian.nix
-    ./gui/tidal-hifi/tidal-hifi.nix
-    ./gui/vscode/vscode.nix
-    ./gui/webcord/webcord.nix
   ];
 
   options.qnix.applications = with lib; {

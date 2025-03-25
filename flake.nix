@@ -3,7 +3,7 @@
 
   inputs = {
     # Unstable NixOS Packages
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; # 7b73ac5f5a08743fb72c0f474fe13c7acdc4e632"; # 8ed2c5f96192addbf8e83dff1080df7ba2c15ca9"; # working: ab0c5b18dab5e4b5d06ed679f8fd7cdc9970c4be"; # broken: ab0c5b18dab5e4b5d06ed679f8fd7cdc9970c4be"; # Rolling Release
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     # Stable NixOS Packages.
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master"; # DEV

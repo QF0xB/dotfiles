@@ -6,8 +6,8 @@
 }:
 
 let
-  inherit (lib) mkEnableOption mkIf;
-  cfg = config.qnix.applications.general.sddm;
+  inherit (lib) mkIf;
+  cfg = config.hm.qnix.applications.desktop.sddm;
 
   Xsetup = pkgs.writeScript "Xsetup" ''
     xrandr --auto
@@ -15,12 +15,6 @@ let
   '';
 in
 {
-  options.qnix.applications.general.sddm = {
-    enable = mkEnableOption "sddm display manager" // {
-      default = !config.hm.qnix.headless;
-    };
-  };
-
   config = mkIf cfg.enable {
     environment = {
       systemPackages = with pkgs; [

@@ -1,0 +1,11 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./citrix
+    ./teams
+    ./teamviewer
+  ];
+}

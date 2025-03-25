@@ -1,5 +1,14 @@
 { ... }:
 
 {
-  qnix.applications.gui.jetbrains.enable = false;
+  qnix = {
+    applications = {
+      virtualisation = {
+        virt-manager = {
+          enable = true;
+          passthrough = true;
+        };
+      };
+    };
+  };
 }

@@ -45,6 +45,7 @@ let
               imports = [
                 inputs.nix-index-database.hmModules.nix-index
                 inputs.sops-nix.homeManagerModules.sops
+                inputs.nvf.homeManagerModules.default
                 ./${host}/home.nix # host specific home-manager configuration
                 ../modules/home-manager # default home-manager configuration
               ];
@@ -64,7 +65,7 @@ let
         inputs.sops-nix.nixosModules.sops # secret management
         inputs.stylix.nixosModules.stylix
         inputs.qnix-pkgs.nixosModules.default
-        #TURNED OFF REPLACED BY SCRIPT        inputs.disko.nixosModules.disko #disk management
+        inputs.nvf.nixosModules.default
       ];
     };
 in

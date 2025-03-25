@@ -4,9 +4,9 @@
 
 {
   imports = [
-    ./browser
+    ./browsers
     ./desktop
-    ./messenger
     ./virtualisation
+    ./work
   ];
 }

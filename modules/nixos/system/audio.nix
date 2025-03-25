@@ -37,6 +37,10 @@ in
       playerctl
     ];
 
+    environment.variables = {
+      PIPEWIRE_DEBUG = 5;
+    };
+
     systemd = mkIf (host == "QPC") {
       user.services.routeAudio = {
         enable = true;
@@ -49,6 +53,12 @@ in
           ${pkgs.pipewire}/bin/pw-loopback --capture=alsa_input.usb-TC-Helicon_GoXLRMini-00.HiFi__Line4__source --playback=alsa_output.usb-SMSL_SMSL_USB_AUDIO-00.analog-stereo
         '';
       };
+    };
+
+    hm.qnix.persist.home = {
+      directories = [
+        ".local/state/wireplumber"
+      ];
     };
   };
 }

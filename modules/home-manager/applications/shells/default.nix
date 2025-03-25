@@ -1,0 +1,11 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./fish
+    ./lsd
+    ./starship
+  ];
+}

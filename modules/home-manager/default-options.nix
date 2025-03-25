@@ -19,5 +19,23 @@ in
       default = false;
       type = types.bool;
     };
+
+    work = mkOption {
+      description = "Use for work?";
+      default = false;
+      type = types.bool;
+    };
+
+    design = mkOption {
+      description = "Use for design work?";
+      default = false;
+      type = types.bool;
+    };
+
+    development = mkOption {
+      description = "Use for development work?";
+      default = true;
+      type = types.bool;
+    };
   };
 }

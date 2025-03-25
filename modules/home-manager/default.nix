@@ -5,12 +5,12 @@
 
 {
   imports = [
-    ./default-options.nix
-    ./nix
-    ./devel
-    ./system
     ./applications
-    ./style
+    ./default-options.nix
+    ./hardware
+    ./nix
+    ./styling
+    ./system
   ];
 
   config = {
