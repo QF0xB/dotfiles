@@ -41,14 +41,14 @@
     @define-color stats	@cyan;
     @define-color layout	@blue;
 
-    @define-color workspace @base03;
-    @define-color workspace-button @base0;
+    @define-color workspace @violet;
+    @define-color workspace-button @base03;
     @define-color workspace-button-active @orange;
     @define-color workspace-button-inactive @green;
     @define-color workspace-button-urgent @red;
     @define-color workspace-button-hover @base01;
 
-    @define-color tray @base03;
+    @define-color tray @blue;
     @define-color interact @blue;
     @define-color text @base03;
 
@@ -156,7 +156,7 @@
     /* Active tab */ 
     #workspaces button.visible {
       background: @workspace-button-active;
-      color: @workspace;
+      color: @text;
     }
 
     /* Urgent tab */
@@ -184,8 +184,13 @@
       background-color: @tray;
     }
 
-    #custom-arrow-r-tray {
+    #custom-arrow-l-tray {
+      color: @tray;
+    }
+
+    #custom-arrow-r-tray{
       padding-right: ${if isLaptop then "5px" else "15px"};
+      color: @tray;
     }
 
     /* Interactive settings */ 
