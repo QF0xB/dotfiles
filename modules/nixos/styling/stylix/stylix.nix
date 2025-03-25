@@ -16,9 +16,10 @@ in
 
   config = {
     stylix = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
+
       base16Scheme = "${pkgs.base16-schemes}/share/themes/solarized-dark.yaml";
-      image = ./wallpapers/main-wallpaper.png;
+      image = ./wallpapers/nix-wallpaper-nineish-solarized-dark.png;
       polarity = "dark";
 
       cursor = {

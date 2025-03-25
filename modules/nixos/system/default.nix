@@ -8,19 +8,17 @@
     ./backup
     ./bluetooth
     ./boot
-    ./networking/networking.nix
-    ./nvidia.nix
-    ./gnupg.nix
-    ./shells.nix
     ./environment
-    ./localization.nix
-    ./powersavings.nix
-    ./ssh-server.nix
+    ./gnupg
+    ./localisation
+    ./networking/networking.nix
+    ./nvidia
     ./packages.nix
-    ./screen.nix
+    ./powersavings
+    ./screen
     ./security
-    ./gnupg.nix
-    ./zfs.nix
+    ./ssh-server
+    ./zfs
   ];
 
   config.qnix.system = with lib; {
