@@ -12,7 +12,7 @@ in
 {
   config = mkIf cfg.enable {
     boot.loader = {
-      grub = mkIf config.qnix.system.boot.grub.enable {
+      grub = mkIf config.hm.qnix.system.boot.grub.enable {
         extraEntries = ''
           menuentry "Windows 11" {
             insmod part_gpt

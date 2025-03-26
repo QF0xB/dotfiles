@@ -24,6 +24,16 @@
       audio = {
         goxlr-utility.enable = true;
       };
+
+      work = {
+        citrix.enable = true;
+      };
+    };
+
+    system = {
+      boot = {
+        windows.enable = true;
+      };
     };
   };
 

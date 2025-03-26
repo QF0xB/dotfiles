@@ -18,7 +18,7 @@ in
         BraveRewardsDisabled = true;
         BraveVPNDisabled = true;
         BraveAIChatEnabled = false;
-        RestoreOnStartup = true;
+        RestoreOnStartup = 1;
       };
     };
   };

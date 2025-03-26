@@ -6,11 +6,11 @@
 }:
 
 let
-  cfg = config.qnix.applications.citrix;
+  cfg = config.qnix.applications.work.citrix;
   inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.qnix.applications.citrix = {
+  options.qnix.applications.work.citrix = {
     enable = mkEnableOption "citrix workspace" // {
       default = config.qnix.work;
     };
