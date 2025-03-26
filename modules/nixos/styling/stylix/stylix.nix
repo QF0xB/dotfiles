@@ -30,6 +30,11 @@ in
         size = 24;
       };
 
+      opacity = {
+        applications = 0.5;
+        terminal = 0.5;
+      };
+
       fonts = {
         serif = {
           package = pkgs.fira-sans;
