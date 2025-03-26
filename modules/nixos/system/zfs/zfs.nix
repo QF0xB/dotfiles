@@ -2,6 +2,7 @@
   options,
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -76,10 +77,24 @@ in
     # 16GB swap
     swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
 
+    systemd.services.postResume = {
+      description = "Run commands after resume from suspend";
+      wantedBy = [ "initrd.target" ];
+      after = [ "systemd-suspend.service" ];
+      before = [ "sysroot.mount" ];
+      path = with pkgs; [ zfs ]; # Add any necessary packages here
+      unitConfig.DefaultDependencies = "no";
+      serviceConfig.Type = "oneshot";
+      script = ''
+        # Your commands here
+        echo "Rollback zroot"
+        zfs rollback -r zroot/root@blank
+      '';
+    };
     # Auto-Rollback on boot
-    boot.initrd.postResumeCommands = lib.mkAfter ''
-      zfs rollback -r zroot/root@blank
-    '';
+    # boot.initrd.postResumeCommands = lib.mkAfter ''
+    # zfs rollback -r zroot/root@blank
+    # '';
 
     services.sanoid = {
       enable = true;

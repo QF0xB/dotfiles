@@ -5,21 +5,14 @@
 }:
 
 let
-  cfg = config.qnix.nix.nh;
+  cfg = config.hm.qnix.nix.nh;
+  inherit (lib) mkIf;
 in
 {
-  options.qnix.nix.nh = with lib; {
-    enable = mkEnableOption "nh cli-manager" // {
-      default = true;
-    };
-    clean.enable = mkEnableOption "nh cli-manager clean" // {
-      default = true;
-    };
-  };
-
-  config = with lib; {
+  config = {
     programs.nh = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
+
       clean = mkIf cfg.clean.enable {
         enable = true;
         extraArgs = "--keep-since 4d --keep 3";

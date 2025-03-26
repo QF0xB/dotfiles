@@ -37,5 +37,11 @@ in
       default = true;
       type = types.bool;
     };
+
+    externally-accessible = mkOption {
+      description = "Open to outside world?";
+      default = false;
+      type = types.bool;
+    };
   };
 }

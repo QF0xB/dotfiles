@@ -6,9 +6,11 @@
 
 let
   cfg = config.hm.qnix.system.boot.grub;
+  filesystem-config = config.hm.qnix.system.filesystem;
+  inherit (lib) mkIf;
 in
 {
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     boot = {
       supportedFilesystems = {
         zfs = true;
@@ -30,9 +32,13 @@ in
         timeout = 3;
       };
 
-      initrd.luks.devices.cryptroot = {
-        device = "/dev/disk/by-label/QNixRoot";
-        preLVM = true;
+      initrd = mkIf filesystem-config.luks-encrypted {
+        luks.devices.cryptroot = {
+          device = "/dev/disk/by-label/QNixRoot";
+          preLVM = true;
+          crypttabExtraOpts = [ "fido-device=auto" ];
+        };
+        systemd.enable = true;
       };
     };
   };

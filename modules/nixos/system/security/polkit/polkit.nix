@@ -6,20 +6,14 @@
 }:
 
 let
-  cfg = config.qnix.system.security;
+  cfg = config.hm.qnix.system.security.polkit;
+  inherit (lib) mkForce;
 in
-with lib;
 {
-  options.qnix.system.security = {
-    polkit.enable = mkEnableOption "polkit" // {
-      default = true;
-    };
-  };
-
   config = {
     security = {
       polkit = {
-        enable = mkForce cfg.polkit.enable;
+        enable = mkForce cfg.enable;
 
         package = pkgs.polkit;
 

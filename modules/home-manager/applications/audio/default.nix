@@ -8,5 +8,6 @@
     ./gui-utils
     ./pipewire
     ./tidal-hifi
+    ./utils
   ];
 }

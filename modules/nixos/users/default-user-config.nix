@@ -8,7 +8,7 @@
 
 let
   cfg = config.qnix.users.default-user;
-  sopsConfig = lib.mkIf config.qnix.nix.sops.enable (
+  sopsConfig = lib.mkIf config.hm.qnix.nix.sops.enable (
     let
       inherit (config.sops) secrets;
     in

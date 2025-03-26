@@ -1,21 +1,14 @@
 {
   config,
   lib,
-  isLaptop,
   ...
 }:
 
 let
-  cfg = config.qnix.system.powersavings;
-  inherit (lib) mkIf mkEnableOption;
+  cfg = config.hm.qnix.hardware.powersavings;
+  inherit (lib) mkIf;
 in
 {
-  options.qnix.system.powersavings = {
-    enable = mkEnableOption "Laptop Powersavings" // {
-      default = isLaptop;
-    };
-  };
-
   config = mkIf cfg.enable {
     networking.networkmanager.wifi.powersave = true;
     powerManagement.enable = true;

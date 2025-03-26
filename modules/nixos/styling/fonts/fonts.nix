@@ -1,12 +1,12 @@
 {
   options,
-  config, 
+  config,
   pkgs,
   lib,
   ...
 }:
 
-{ 
+{
   options.qnix.system = with lib; {
     fonts = {
       regular = mkOption {

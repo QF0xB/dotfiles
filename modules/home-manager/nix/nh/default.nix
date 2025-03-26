@@ -1,0 +1,9 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./nh-options.nix
+  ];
+}

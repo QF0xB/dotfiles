@@ -1,5 +1,4 @@
 {
-  lib,
   ...
 }:
 
@@ -10,7 +9,7 @@
     ./localisation
     ./networking/networking.nix
     ./packages.nix
-    ./ssh-server
+    ./security
     ./zfs
   ];
 }

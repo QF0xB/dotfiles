@@ -1,24 +1,25 @@
 {
-  lib,
   config,
   pkgs,
+  lib,
   isLaptop,
   ...
 }:
 
 let
-  cfg = config.qnix.system.stylix;
+  cfg = config.qnix.styling.stylix;
+  inherit (lib) mkEnableOption mkIf;
 in
 {
-  options.qnix.system.stylix = with lib; {
-    enable = mkEnableOption "global styling with stylix" // {
+  options.qnix.styling.stylix = {
+    enable = mkEnableOption "stylix style manager" // {
       default = true;
     };
   };
 
-  config = {
+  config = mkIf cfg.enable {
     stylix = {
-      inherit (cfg) enable;
+      enable = true;
 
       base16Scheme = "${pkgs.base16-schemes}/share/themes/solarized-dark.yaml";
       image = ./wallpapers/nix-wallpaper-nineish-solarized-dark.png;

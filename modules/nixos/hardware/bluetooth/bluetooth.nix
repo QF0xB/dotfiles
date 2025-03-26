@@ -1,21 +1,15 @@
 {
   config,
   lib,
-  isLaptop,
   ...
 }:
 
 let
-  cfg = config.qnix.system.bluetooth;
+  cfg = config.hm.qnix.hardware.bluetooth;
+  inherit (lib) mkIf;
 in
 {
-  options.qnix.system.bluetooth = with lib; {
-    enable = mkEnableOption "Bluetooth" // {
-      default = isLaptop;
-    };
-  };
-
-  config = lib.mkIf cfg.enable {
+  config = mkIf cfg.enable {
     hardware.bluetooth = {
       enable = true;
       powerOnBoot = true;

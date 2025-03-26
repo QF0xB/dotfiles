@@ -8,5 +8,6 @@
     ./nvidia
     ./powersavings
     ./screen
+    ./yubikey
   ];
 }

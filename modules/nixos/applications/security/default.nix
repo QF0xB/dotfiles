@@ -5,7 +5,6 @@
 {
   imports = [
     ./backup
-    ./gnupg
-    ./security
+    ./gpg
   ];
 }

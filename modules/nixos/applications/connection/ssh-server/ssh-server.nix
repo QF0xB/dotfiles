@@ -6,19 +6,12 @@
 }:
 
 let
-  cfg = config.qnix.system.openssh;
+  cfg = config.hm.qnix.applications.connection.openssh;
 in
 {
-  options.qnix = with lib; {
-    system.openssh.enable = mkEnableOption "ssh-server" // {
-      default = true;
-    };
-    system.openssh.password-auth = mkEnableOption "passwordauth";
-  };
-
   config = {
     services.openssh = {
-      enable = cfg.enable;
+      inherit (cfg) enable;
 
       settings.PasswordAuthentication = cfg.password-auth;
     };

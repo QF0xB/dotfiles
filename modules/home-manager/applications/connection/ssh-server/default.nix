@@ -4,6 +4,6 @@
 
 {
   imports = [
-    ./gnupg.nix
+    ./openssh-options.nix
   ];
 }

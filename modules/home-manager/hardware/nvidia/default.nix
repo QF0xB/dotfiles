@@ -1,0 +1,9 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./nvidia-options.nix
+  ];
+}

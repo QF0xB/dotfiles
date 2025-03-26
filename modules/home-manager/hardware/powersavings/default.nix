@@ -1,0 +1,9 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./powersavings-options.nix
+  ];
+}

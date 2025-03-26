@@ -9,6 +9,7 @@
     ./audio
     ./browsers
     ./communication
+    ./connection
     ./default-applications.nix
     ./design
     ./desktop

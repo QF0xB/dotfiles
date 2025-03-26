@@ -1,0 +1,9 @@
+{
+  ...
+}:
+
+{
+  imports = [
+    ./sops-options.nix
+  ];
+}

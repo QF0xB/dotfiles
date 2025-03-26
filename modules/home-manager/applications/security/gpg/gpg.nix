@@ -5,8 +5,18 @@
   ...
 }:
 
+let
+  cfg = config.qnix.applications.security.gpg;
+  inherit (lib) mkEnableOption mkIf;
+in
 {
-  config = {
+  options.qnix.applications.security.gpg = {
+    enable = mkEnableOption "gpg" // {
+      default = true;
+    };
+  };
+
+  config = mkIf cfg.enable {
     home = {
       file.".gnupg/scdaemon.conf".text = ''
         disable-ccid
