@@ -1,7 +1,7 @@
 {
   lib,
   config,
-  pkgs,
+  user,
   ...
 }:
 
@@ -11,8 +11,21 @@ let
 in
 {
   config = mkIf cfg.enable {
-    environment.systemPackages = with pkgs; [
-      brightnessctl
+    programs.light = {
+      enable = true;
+      brightnessKeys = {
+        enable = true;
+        step = 10;
+      };
+    };
+
+    users.users.${user}.extraGroups = [
+      "video"
     ];
+
+    qnix.persist = {
+      root.directories = [ "/etc/light" ];
+      home.directories = [ ".config/light" ];
+    };
   };
 }

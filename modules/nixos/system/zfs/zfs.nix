@@ -77,16 +77,20 @@ in
     # 16GB swap
     swapDevices = [ { device = "/dev/disk/by-label/SWAP"; } ];
 
-    systemd.services.postResume = {
-      description = "Run commands after resume from suspend";
+    boot.initrd.systemd.services.postResume = {
+      description = "Run commands after decrypt";
       wantedBy = [ "initrd.target" ];
-      after = [ "systemd-suspend.service" ];
+      after = [
+        "systemd-cryptsetup@cryptroot.service"
+        "zfs-import.target"
+      ];
       before = [ "sysroot.mount" ];
       path = with pkgs; [ zfs ]; # Add any necessary packages here
       unitConfig.DefaultDependencies = "no";
       serviceConfig.Type = "oneshot";
       script = ''
         # Your commands here
+        zfs list -t snapshot
         echo "Rollback zroot"
         zfs rollback -r zroot/root@blank
       '';
