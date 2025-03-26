@@ -12,10 +12,18 @@
   fileSystems."/persist".neededForBoot = true;
   fileSystems."/cache".neededForBoot = true;
 
-  qnix.hm = {
+  hm.qnix = {
+    work = true;
+
     hardware = {
       bluetooth.enable = true;
       nvidia.enable = true;
+    };
+
+    applications = {
+      audio = {
+        goxlr-utility.enable = true;
+      };
     };
   };
 
