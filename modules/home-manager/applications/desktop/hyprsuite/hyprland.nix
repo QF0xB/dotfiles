@@ -355,23 +355,6 @@ in
               in
               map (window: "float, ${window}") floatingWindows
             );
-          windowrule = (
-            let
-              floatingWindows = [
-                "file_progress"
-                "confirm"
-                "dialog"
-                "download"
-                "notification"
-                "error"
-                "splash"
-                "confirmreset"
-                "pavucontrol-qt"
-                "*.exe"
-              ];
-            in
-            map (window: "float, ${window}") floatingWindows
-          );
         };
       };
     };

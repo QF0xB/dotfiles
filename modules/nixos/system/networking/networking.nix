@@ -21,7 +21,11 @@ in
 
   config = {
     networking = {
-      networkmanager.enable = cfg.networkManager.enable;
+      networkmanager = {
+        enable = cfg.networkManager.enable;
+        unmanaged = if (host == "QPC") then [ "enp6s0" ] else [ ];
+      };
+
       firewall.enable = false;
 
       interfaces = mkIf (host == "QPC") {
