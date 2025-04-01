@@ -2,10 +2,15 @@
   config,
   lib,
   isLaptop,
-  host,
   ...
 }:
 
+let
+  cfg = config.qnix.applications.desktop.waybar;
+  iconSize = if isLaptop then "20" else "25";
+
+  inherit (lib) mkIf;
+in
 {
   config = {
     programs.waybar.settings =
@@ -14,9 +19,7 @@
           layer = "top";
           position = "top";
 
-          output = lib.mkIf (host == "QPC") [
-            "DP-2"
-          ];
+          output = mkIf (cfg.displays.large != [ ]) cfg.displays.large;
 
           include = [
             "~/.config/waybar/default-modules.json"
@@ -67,16 +70,12 @@
             ];
         }
       ]
-      ++ (lib.lists.optionals (host == "QPC") [
+      ++ (lib.lists.optionals (cfg.displays.small != [ ]) [
         {
           layer = "top";
           position = "top";
 
-          output = lib.mkIf (host == "QPC") [
-            "!DP-2"
-            "HDMI-A-1"
-            "DP-3"
-          ];
+          output = cfg.displays.small;
 
           include = [
             "~/.config/waybar/default-modules.json"
@@ -136,7 +135,7 @@
           },
           "format-time": "{H}:{M:02}",
           "format": "{icon} {capacity}%",
-          "format-plugged": " ",
+          "format-plugged": "",
           "format-charging": " {capacity}%",
           "format-alt": "{icon} {power}W",
           "format-icons": [
@@ -210,7 +209,7 @@
         },
 
         "tray": {
-          "icon-size": ${if isLaptop then "20" else "25"},
+          "icon-size": ${iconSize},
           "spacing": 10
         },
 
@@ -227,8 +226,8 @@
         "hyprland/language": {
           "format-de": " KOY",
           "format-en": " EN",
-          "on-click": "hyprctl switchxkblayout wooting-wooting-60he+ next",
-          "keyboard-name": "wooting-wooting-60he+"
+          "on-click": "hyprctl switchxkblayout all next",
+          "keyboard-name": "${config.qnix.hardware.keyboard.default}"
         },
 
         "custom/arrow-l-clock": {

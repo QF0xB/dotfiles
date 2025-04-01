@@ -18,6 +18,7 @@
     hardware = {
       bluetooth.enable = true;
       nvidia.enable = true;
+      keyboard.default = "wooting-wooting-60he+";
     };
 
     applications = {

@@ -66,6 +66,7 @@ in
       directories = [
         ".config/JetBrains"
         ".local/share/JetBrains"
+        ".java/.userPrefs"
       ];
       cache.directories = [
         ".cache/JetBrains"
