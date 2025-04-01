@@ -182,7 +182,7 @@ repo="${repo:-github:stormfox2/dotfiles}"
 
 # qol for iynaix os
 if [[ $repo == "github:stormfox2/dotfiles" ]]; then
-    hosts=("QPC" "QFrame13" "backup-QPC" "backup-QFrame13")
+    hosts=("QPC-install" "QFrame13-install" "backup-QPC" "backup-QFrame13")
 
     echo "Available hosts:"
     for i in "${!hosts[@]}"; do

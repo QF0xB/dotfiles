@@ -11,15 +11,24 @@ let
     host:
     {
       pkgs ? args.pkgs,
+      isVm ? false,
+      isInstall ? false,
+      isLaptop ? false,
+      isNixOS ? true,
+      extraConfig ? { },
     }:
     lib.nixosSystem {
       inherit pkgs;
 
       specialArgs = specialArgs // {
-        inherit host user;
-        isNixOS = true;
-        isLaptop = host == "QFrame13";
-        isVm = lib.strings.hasPrefix "vm" host || lib.strings.hasPrefix "backup" host;
+        inherit
+          host
+          isVm
+          isInstall
+          isLaptop
+          isNixOS
+          user
+          ;
         dots = "/persist/home/${user}/projects/dotfiles";
       };
 
@@ -30,14 +39,19 @@ let
         inputs.home-manager.nixosModules.home-manager
         {
           home-manager = {
+            # inherit (args) pkgs;
             useGlobalPkgs = true;
             useUserPackages = true;
 
             extraSpecialArgs = specialArgs // {
-              inherit host user;
-              isNixOS = true;
-              isLaptop = host == "QFrame13";
-              isVm = lib.strings.hasPrefix "vm" host;
+              inherit
+                host
+                isVm
+                isInstall
+                isLaptop
+                isNixOS
+                user
+                ;
               dots = "/persist/home/${user}/projects/dotfiles";
             };
 
@@ -66,11 +80,17 @@ let
         inputs.stylix.nixosModules.stylix
         inputs.qnix-pkgs.nixosModules.default
         inputs.nvf.nixosModules.default
+        extraConfig
       ];
     };
 in
 {
   QPC = mkNixosConfiguration "QPC" { };
-  QFrame13 = mkNixosConfiguration "QFrame13" { };
-  vm = mkNixosConfiguration "vm" { };
+  QPC-install = mkNixosConfiguration "QPC" { isInstall = true; };
+  QFrame13 = mkNixosConfiguration "QFrame13" { isLaptop = true; };
+  QFrame13-install = mkNixosConfiguration "QFrame13" {
+    isInstall = true;
+    isLaptop = true;
+  };
+  vm = mkNixosConfiguration "vm" { isVm = true; };
 }

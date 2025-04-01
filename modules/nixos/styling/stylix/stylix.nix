@@ -20,10 +20,14 @@ in
   config = mkIf cfg.enable {
     stylix = {
       enable = true;
+      overlays.enable = false;
 
       base16Scheme = "${pkgs.base16-schemes}/share/themes/solarized-dark.yaml";
       image = ./wallpapers/nix-wallpaper-nineish-solarized-dark.png;
       polarity = "dark";
+
+      # Fix issues with overlays: https://github.com/danth/stylix/issues/865
+      targets.gnome-text-editor.enable = lib.mkForce false;
 
       cursor = {
         package = pkgs.simp1e-cursors;

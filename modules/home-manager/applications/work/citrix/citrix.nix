@@ -2,6 +2,7 @@
   lib,
   config,
   pkgs,
+  isInstall,
   ...
 }:
 
@@ -12,7 +13,7 @@ in
 {
   options.qnix.applications.work.citrix = {
     enable = mkEnableOption "citrix workspace" // {
-      default = config.qnix.work;
+      default = config.qnix.work && !isInstall;
     };
   };
 
