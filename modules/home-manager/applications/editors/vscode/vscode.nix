@@ -21,6 +21,9 @@ in
       inherit (cfg) enable;
 
       package = pkgs.vscodium;
+
+      profiles.default.extensions = with pkgs.vscode-extensions; [
+      ];
     };
 
     qnix.persist.home.directories = [

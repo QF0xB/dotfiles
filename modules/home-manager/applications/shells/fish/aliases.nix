@@ -9,8 +9,9 @@
       shellAliases = {
         c = "clear";
         dots = "cd ${dots}";
-        ls = "clear && lsd -la";
+        ls = "clear && lsd -l";
         lss = "lsd -la";
+        lsa = "clear && lsd -la";
         mime = "xdg-mime query filetype";
         mkdir = "mkdir -p";
         mount = "mount --mkdir";

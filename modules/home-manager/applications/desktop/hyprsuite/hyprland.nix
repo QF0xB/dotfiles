@@ -112,7 +112,7 @@ in
           # Miscellaneous settings: wallpaper, logos, and window swallowing.
           misc = {
             force_default_wallpaper = "0"; # Use default wallpaper (-1=random, 0=off)
-            disable_hyprland_logo = "true"; # Disable Hyprland logo animation
+            # disable_hyprland_logo = "true"; # Disable Hyprland logo animation NEWLY DEFAULT
             disable_splash_rendering = "true"; # Disable splash screen
             vfr = "true";
             vrr = "1";

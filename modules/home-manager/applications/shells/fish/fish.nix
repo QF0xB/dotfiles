@@ -27,7 +27,7 @@ in
       fish = {
         enable = true;
         preferAbbrs = true;
-        shellAbbrs = config.home.shellAliases;
+        shellAbbrs = mkForce config.home.shellAliases;
         shellInit = ''
           # shut up welcome message
           set fish_greeting
