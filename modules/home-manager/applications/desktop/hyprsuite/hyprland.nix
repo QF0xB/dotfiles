@@ -184,7 +184,7 @@ in
               # bind = $mainMod, d, pseudo, # dwindle
               "$mod, code:61, togglesplit, #?" # dwindle
               "$mod, Tab, cyclenext" # Focus next window
-              "ALT, Tab, swapnext" # Switch focused with next window
+              "super, Tab, swapnext" # Switch focused with next window
               "CTRL, Tab, workspace, e+" # go to next workspace
 
               # Move focus with mainMod + arrow keys
