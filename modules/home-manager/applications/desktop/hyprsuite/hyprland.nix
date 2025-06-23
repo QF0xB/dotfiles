@@ -150,7 +150,7 @@ in
           #
 
           # Set main mod to windows key.
-          "$mod" = if isVm then "super" else "ALT";
+          "$mod" = if !isVm then "super" else "ALT";
 
           bindl = [
             ",switch:Lid Switch, ${uexec ''hyprlock''}" # Lock when lid closed.

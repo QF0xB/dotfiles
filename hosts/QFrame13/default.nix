@@ -16,6 +16,11 @@
     hardware = {
       keyboard.default = "frmw0001:00-32ac:0006";
     };
+    applications = {
+      work = {
+        citrix.enable = true;
+      };
+    };
   };
 
   # This option defines the first version of NixOS you have installed on this particular machine,

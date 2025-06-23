@@ -5,6 +5,7 @@
 {
   imports = [
     ./backup
+    ./bitwarden
     ./gpg
   ];
 }

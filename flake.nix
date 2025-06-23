@@ -7,6 +7,7 @@
     # Stable NixOS Packages.
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master"; # DEV
+    nixpkgs-proto.url = "github:QF0xB/nixpkgs/prototyping"; # Testing own packages
 
     qnix-pkgs.url = "github:stormfox2/qnix-pkgs";
 
@@ -85,6 +86,7 @@
 
       overlay-stable = create-overlay "stable";
       overlay-master = create-overlay "master";
+      overlay-proto = create-overlay "proto";
 
       pkgs = import inputs.nixpkgs {
         hostplatform = system;
@@ -98,6 +100,7 @@
         overlays = [
           overlay-stable
           overlay-master
+          overlay-proto
           inputs.qnix-pkgs.overlays.default
         ];
       };

@@ -22,8 +22,16 @@ in
 
       package = pkgs.vscodium;
 
-      profiles.default.extensions = with pkgs.vscode-extensions; [
-      ];
+      profiles.default = {
+        userSettings = {
+          "keyboard.dispatch" = "keyCode";
+        };
+        extensions = with pkgs; [
+          vscode-extensions.zhwu95.riscv
+          proto.vscode-extensions.hm.riscv-venus
+          proto.vscode-extensions.sunshaoce.risc-v
+        ];
+      };
     };
 
     qnix.persist.home.directories = [
