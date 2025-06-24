@@ -68,6 +68,7 @@ with lib;
             extraGroups = [
               "wheel"
               "networkmanager"
+              "wireshark"
             ];
             #            shell = cfg.shell;
             ignoreShellProgramCheck = true;

@@ -10,6 +10,7 @@
     ./desktop
     ./editors
     ./security
+    ./utils
     ./virtualisation
     ./work
   ];

@@ -8,7 +8,7 @@
 let
   cfg = config.qnix.applications.browsers.chromium;
   inherit (lib) getExe;
-  package = pkgs.${cfg.version};
+  package = pkgs.stable.${cfg.version};
 in
 {
   options.qnix.applications.browsers.chromium = with lib; {

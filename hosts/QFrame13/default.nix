@@ -18,7 +18,7 @@
     };
     applications = {
       work = {
-        citrix.enable = true;
+        # citrix.enable = true;
       };
     };
   };

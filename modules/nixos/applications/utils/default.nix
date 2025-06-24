@@ -4,8 +4,6 @@
 
 {
   imports = [
-    ./flameshot
-    ./nemo
     ./wireshark
   ];
 }

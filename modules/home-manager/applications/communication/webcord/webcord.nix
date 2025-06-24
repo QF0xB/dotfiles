@@ -18,7 +18,8 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       # https://github.com/NixOS/nixpkgs/issues/385588
-      (webcord.override { electron = electron_32; })
+      # (webcord.override { electron = electron_32; })
+      webcord
     ];
 
     qnix.persist.home.directories = [
