@@ -74,6 +74,7 @@ in
     qnix.persist.root.directories = [
       "/etc/easyroam-certs"
       "/etc/vpn-certs"
+      "/etc/NetworkManager/system-connections"
     ];
 
   };
