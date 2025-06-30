@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -31,6 +32,9 @@ in
     };
   };
   config = lib.mkIf cfg.enable {
+    home.packages = with pkgs; [
+      gitflow
+    ];
     programs.git = {
       inherit (cfg) enable userName userEmail;
 

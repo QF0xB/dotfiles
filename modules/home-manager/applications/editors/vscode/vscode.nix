@@ -26,6 +26,7 @@ in
         userSettings = {
           "files.autoSave" = "onFocusChange";
           "keyboard.dispatch" = "keyCode";
+          "redhat.telemetry.enabled" = "false";
         };
         extensions = with pkgs; [
           # RiscV
@@ -45,6 +46,10 @@ in
 
           # VIM
           vscode-extensions.vscodevim.vim
+
+          # Java
+          vscode-extensions.vscjava.vscode-java-pack
+          vscode-extensions.vscjava.vscode-spring-initializr
         ];
       };
     };

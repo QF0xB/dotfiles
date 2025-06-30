@@ -35,6 +35,7 @@ let
       modules = [
         ./${host} # host specific configuration
         ./${host}/hardware.nix # host specific hardware configuration
+        ../overlays
         ../modules/nixos # Default NixOS config
         inputs.home-manager.nixosModules.home-manager
         {

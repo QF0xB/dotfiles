@@ -10,8 +10,10 @@ let
 in
 {
   config = mkIf config.qnix.applications.editors.jetbrains.idea.enable {
-    home.packages = with pkgs; [
-      jetbrains.idea-ultimate
+    home.packages = [
+      (pkgs.jetbrains.plugins.addPlugins pkgs.jetbrains.idea-ultimate [
+        pkgs.jetbrains.plugins.github-copilot-fixed
+      ])
     ];
   };
 }
