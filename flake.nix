@@ -3,7 +3,7 @@
 
   inputs = {
     # Unstable NixOS Packages
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable"; # nixos-unstable";
     # Stable NixOS Packages.
     nixpkgs-stable.url = "github:NixOS/nixpkgs/nixos-24.11";
     nixpkgs-master.url = "github:NixOS/nixpkgs/master"; # DEV
@@ -29,7 +29,7 @@
 
     # NeoVim
     nvf = {
-      url = "github:notashelf/nvf";
+      url = "github:notashelf/nvf/v0.6";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Disko disk utility

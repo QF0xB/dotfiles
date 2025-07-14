@@ -11,7 +11,7 @@ in
 {
   config = mkIf config.qnix.applications.editors.jetbrains.pycharm.enable {
     home.packages = with pkgs; [
-      master.jetbrains.pycharm-professional
+      jetbrains.pycharm-professional
     ];
   };
 }
