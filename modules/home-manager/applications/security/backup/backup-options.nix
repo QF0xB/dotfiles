@@ -128,7 +128,7 @@ in
       repos = {
         QPC = {
           local = "ssh://q.braendliBACKUP@10.0.1.15/share/QBackup/QPC";
-          eu = "ssh://lh4w8o74@lh4w8o74.repo.borgbase.com/./repo";
+          eu = "ssh://s7e53oh0@s7e53oh0.repo.borgbase.com/./repo";
           us = "ssh://r07bi749@r07bi749.repo.borgbase.com/./repo";
           as = "none";
           au = "none";

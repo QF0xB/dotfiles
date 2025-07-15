@@ -16,11 +16,100 @@ let
     mkForce
     ;
 
+  prefixFile = repoLocation: "/run/borgbackup-${repoLocation}.prefix";
+
+  # Shared logic outside mkBackupJob
+  generateSnapshotPrefix =
+    repoLocation:
+    "${cfg.zfs.snapshotName}-${repoLocation}-\$(${pkgs.coreutils}/bin/date +%Y%m%d-%H%M%S)";
+
+  genDatasetCommands =
+    repoLocation: snapshotPrefix:
+    lib.concatMapStringsSep "\n"
+      (dataset: ''
+        SNAPNAME="${dataset}_${snapshotPrefix}"
+        CLONE_NAME="backup-${dataset}-${snapshotPrefix}"
+        MOUNTPOINT="/run/backup-mounts/${repoLocation}/${dataset}"
+
+        echo "Creating snapshot zroot/${dataset}@$SNAPNAME"
+        ${pkgs.zfs}/bin/zfs snapshot "zroot/${dataset}@$SNAPNAME"
+
+        echo "Cloning snapshot to zroot/$CLONE_NAME"
+        ${pkgs.zfs}/bin/zfs clone -o mountpoint="$MOUNTPOINT" "zroot/${dataset}@$SNAPNAME" "zroot/$CLONE_NAME"
+        ${pkgs.zfs}/bin/zfs list -t all | grep "$CLONE_NAME" || echo "DEBUG: clone not found"
+
+        # Wait until dataset exists
+        for i in {1..10}; do
+          if zfs list -H -o name "zroot/$CLONE_NAME" >/dev/null 2>&1; then
+            echo "Cloning finished!"
+            break
+          fi
+          sleep 0.1
+        done
+
+        # Wait a moment for lazy mount to trigger
+        sleep 0.2
+
+        # Remount if directory is empty
+        if [ -d "$MOUNTPOINT" ] && [ -z "$(ls -A "$MOUNTPOINT")" ]; then
+          echo "Forcing remount of $DATASET as mountpoint is empty..."
+          ${pkgs.zfs}/bin/zfs unmount "zroot/$CLONE_NAME" || true
+          ${pkgs.zfs}/bin/zfs mount "zroot/$CLONE_NAME"
+        fi
+
+        if ! ${pkgs.zfs}/bin/zfs get -H -o value mounted "zroot/$CLONE_NAME" | grep -q "yes"; then
+          echo "Mounting clone zroot/$CLONE_NAME to $MOUNTPOINT"
+          ${pkgs.zfs}/bin/zfs mount "zroot/$CLONE_NAME"
+        else
+          echo "Clone zroot/$CLONE_NAME is already mounted"
+        fi
+
+      '')
+      (
+        lib.concatLists [
+          cfg.zfs.datasets
+          (lib.optionals (repoLocation == "local") [ "cache" ])
+        ]
+      );
+
+  genCleanupCommands =
+    repoLocation: snapshotPrefix:
+    lib.concatMapStringsSep "\n"
+      (dataset: ''
+        SNAPNAME="${dataset}_${snapshotPrefix}"
+        CLONE_NAME="backup-${dataset}-${snapshotPrefix}"
+        MOUNTPOINT="/run/backup-mounts/${repoLocation}/${dataset}"
+
+        echo "Unmounting $MOUNTPOINT"
+        tries=5
+        while ! ${pkgs.util-linux}/bin/umount "$MOUNTPOINT"; do
+          if [ "$tries" -le 0 ]; then
+            echo "Failed to unmount $MOUNTPOINT after retries, skipping."
+            break
+          fi
+          echo "Unmounting $MOUNTPOINT failed, retrying..."
+          sleep 1
+          tries=$((tries - 1))
+        done
+
+        echo "Destroying clone zroot/$CLONE_NAME"
+        ${pkgs.zfs}/bin/zfs destroy "zroot/$CLONE_NAME" || true
+
+        echo "Destroying snapshot zroot/${dataset}@$SNAPNAME"
+        ${pkgs.zfs}/bin/zfs destroy "zroot/${dataset}@$SNAPNAME" || true
+      '')
+      (
+        lib.concatLists [
+          cfg.zfs.datasets
+          (lib.optionals (repoLocation == "local") [ "cache" ])
+        ]
+      );
+
   # Function to create a backup job for a specific repository
   mkBackupJob =
     repoLocation: repoUrl:
     mkIf (repoUrl != "none" && !cfg.prune.enable) {
-      paths = [ "/tmp/zfs-backups-${repoLocation}" ]; # Directory where ZFS snapshot files are stored
+      paths = [ "/run/backup-mounts/${repoLocation}" ];
       exclude = [ "*.tmp" ];
       repo = repoUrl;
       encryption = {
@@ -38,66 +127,45 @@ let
       compression = "auto,lzma";
       startAt = "daily";
 
-      # Create ZFS snapshot file before backup
       preHook = ''
-        # Debug filesystem status
-        # Create backup directory if it doesn't exist
-        mkdir -p /tmp/zfs-backups-${repoLocation}
+        set -euxo pipefail
 
-        echo "Filesystem status:"
-        df -h /tmp/zfs-backups-${repoLocation}
+        LOCKFILE="/run/borgbackup-${repoLocation}.lock"
+        exec 9>"$LOCKFILE"
+        ${pkgs.util-linux}/bin/flock -n 9 || {
+          echo "Another Borg job is running for ${repoLocation}, skipping."
+          exit 0
+        }
 
-        # Create backup directory if it doesn't exist
-        mkdir -p /tmp/zfs-backups-${repoLocation}
+        SNAPSHOT_PREFIX="${generateSnapshotPrefix repoLocation}"
+        printf "%s" "$SNAPSHOT_PREFIX" > "${prefixFile repoLocation}"
 
-        # Check if directory is writable
-        touch /tmp/zfs-backups-${repoLocation}/test_write
-        if [ $? -ne 0 ]; then
-          echo "ERROR: Cannot write to /tmp/zfs-backups-${repoLocation}"
+        mkdir -p "/run/backup-mounts/${repoLocation}"
+
+        ${genDatasetCommands repoLocation "$SNAPSHOT_PREFIX"}
+      '';
+
+      postHook = ''
+        set -euxo pipefail
+
+        if [ ! -f "${prefixFile repoLocation}" ]; then
+          echo "Missing prefix file, cannot clean up."
           exit 1
         fi
-        rm /tmp/zfs-backups-${repoLocation}/test_write
 
-        # Create backup directory if it doesn't exist
-        mkdir -p /tmp/zfs-backups-${repoLocation}
+        SNAPSHOT_PREFIX="$(tr -d '\n\r' < /run/borgbackup-${repoLocation}.prefix)"
+        rm -f "${prefixFile repoLocation}"
 
-        # Create a snapshot with timestamp
-        SNAPSHOT_NAME="${cfg.zfs.snapshotName}-${repoLocation}-$(date +%Y%m%d-%H%M%S)"
-        BACKUP_FILE="/tmp/zfs-backups-${repoLocation}/${cfg.hostname}-$SNAPSHOT_NAME.zfs"
+        ${genCleanupCommands repoLocation "$SNAPSHOT_PREFIX"}
 
-        # Create snapshots of datasets
-        ${lib.concatMapStringsSep "\n"
-          (dataset: ''
-            echo "Creating snapshot zroot/${dataset}@${dataset}_$SNAPSHOT_NAME"
-            ${pkgs.zfs}/bin/zfs snapshot zroot/${dataset}@${dataset}_$SNAPSHOT_NAME
-          '')
-          (
-            lib.concatLists [
-              cfg.zfs.datasets
-              (lib.lists.optionals (repoLocation == "local") [ "cache" ])
-            ]
-          )
-        }
-
-        # Send the snapshots to a file
-        ${lib.concatMapStringsSep "\n"
-          (dataset: ''
-            echo "Sending zroot/${dataset}@${dataset}_$SNAPSHOT_NAME to file"
-            ${pkgs.zfs}/bin/zfs send --raw -R zroot/${dataset}@${dataset}_$SNAPSHOT_NAME > "/tmp/zfs-backups-${repoLocation}/${cfg.hostname}-${dataset}-$SNAPSHOT_NAME.zfs"
-          '')
-          (
-            lib.concatLists [
-              cfg.zfs.datasets
-              (lib.lists.optionals (repoLocation == "local") [ "cache" ])
-            ]
-          )
-        }
+        echo "Cleaning up mount base: /run/backup-mounts/${repoLocation}"
+        if ! ${pkgs.util-linux}/bin/mount | grep -q "/run/backup-mounts/${repoLocation}"; then
+          rm -rf "/run/backup-mounts/${repoLocation}"
+        else
+          echo "Still mounted, not removing /run/backup-mounts/${repoLocation}"
+        fi
       '';
 
-      # Clean up old backup files (but not ZFS snapshots)
-      postHook = ''
-        rm -r /tmp/zfs-backups-${repoLocation}
-      '';
     };
 
   # Function to create a prune job for a specific repository
@@ -165,35 +233,44 @@ in
       nameValuePair "borgbackup-job-${name}" {
         unitConfig.OnFailure = "notify-problems@%i.service";
         timerConfig.Persistent = mkForce true;
+        wantedBy = [ "timers.target" ];
       }
     );
 
-    # Create directory for ZFS backup files
-    system.activationScripts.createZfsBackupDir = ''
-      mkdir -p /var/lib/zfs-backups
-    '';
+    systemd.services = lib.mkMerge [
+      {
+        init-borg-repos = {
+          description = "Initialize Borg Repositories";
+          wantedBy = [ "multi-user.target" ];
+          after = [ "network.target" ];
+          serviceConfig = {
+            Type = "oneshot";
+            RemainAfterExit = true;
+          };
+          environment = {
+            BORG_PASSPHRASE_COMMAND = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
+            BORG_RSH = "ssh -o StrictHostKeyChecking=accept-new -i ${
+              config.sops.secrets."backup_${cfg.hostname}_key".path
+            }";
+            BORG_APPEND_ONLY = mkIf (!cfg.prune.enable) "1";
+          };
+        };
+      }
 
-    # Add this to your module
-    systemd.services.init-borg-repos = {
-      description = "Initialize Borg Repositories";
-      wantedBy = [ "multi-user.target" ];
-      after = [ "network.target" ];
-
-      # Run only once when the service is first enabled
-      serviceConfig = {
-        Type = "oneshot";
-        RemainAfterExit = true;
-      };
-
-      # Environment setup for Borg
-      environment = {
-        BORG_PASSPHRASE_COMMAND = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
-        BORG_RSH = "ssh -o StrictHostKeyChecking=accept-new -i ${
-          config.sops.secrets."backup_${cfg.hostname}_key".path
-        }";
-        BORG_APPEND_ONLY = mkIf (!cfg.prune.enable) "1";
-      };
-
-    };
+      # Add per-job overrides here:
+      (flip mapAttrs' config.services.borgbackup.jobs (
+        name: _:
+        nameValuePair "borgbackup-job-${name}" {
+          serviceConfig = {
+            RuntimeDirectory = "backup-mounts";
+            RuntimeDirectoryMode = "0755";
+            ReadWritePaths = [
+              "/run/backup-mounts"
+              "/run"
+            ];
+          };
+        }
+      ))
+    ];
   };
 }

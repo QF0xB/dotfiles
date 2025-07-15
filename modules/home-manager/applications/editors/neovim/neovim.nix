@@ -20,6 +20,11 @@ in
   };
 
   config = {
+    qnix.persist.home = {
+      directories = [
+        ".local/share/nvf/site/spell"
+      ];
+    };
 
     programs = {
       nvf = {
@@ -30,7 +35,7 @@ in
 
             spellcheck = {
               enable = true;
-              programmingWordlist.enable = true;
+              programmingWordlist.enable = true; # :DirtytalkUpdate
             };
 
             options = {
@@ -38,6 +43,7 @@ in
               shiftwidth = 2;
               tabstop = 2;
             };
+
             lsp = {
               enable = true;
               formatOnSave = true;
@@ -53,7 +59,6 @@ in
             };
 
             languages = {
-              enableLSP = true;
               enableFormat = true;
               enableTreesitter = true;
               enableExtraDiagnostics = true;

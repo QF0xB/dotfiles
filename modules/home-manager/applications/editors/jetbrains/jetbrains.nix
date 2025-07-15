@@ -67,10 +67,14 @@ in
         ".config/JetBrains"
         ".local/share/JetBrains"
         ".java/.userPrefs"
+        ".gradle"
+        ".local/share/direnv/allow"
+        ".config/github-copilot"
       ];
       cache.directories = [
         ".cache/JetBrains"
         ".cargo"
+        ".cache/github-copilot"
       ];
     };
   };

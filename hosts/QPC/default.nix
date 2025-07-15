@@ -28,6 +28,7 @@
 
       work = {
         citrix.enable = true;
+        teamviewer.enable = false;
       };
     };
 

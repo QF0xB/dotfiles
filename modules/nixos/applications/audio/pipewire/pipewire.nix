@@ -32,7 +32,7 @@ in
         enable = true;
 
         description = "Route audio from GoXLR to SMSL";
-        wantedBy = [ "multi-user.target" ];
+        wantedBy = [ "default.target" ];
         after = [ "pipewire.service" ];
         serviceConfig.Type = "simple";
         script = ''

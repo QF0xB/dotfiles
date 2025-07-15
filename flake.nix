@@ -29,7 +29,7 @@
 
     # NeoVim
     nvf = {
-      url = "github:notashelf/nvf/v0.6";
+      url = "github:notashelf/nvf";
       inputs.nixpkgs.follows = "nixpkgs";
     };
     # Disko disk utility
