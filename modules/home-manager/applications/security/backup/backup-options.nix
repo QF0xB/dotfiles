@@ -128,15 +128,15 @@ in
       repos = {
         QPC = {
           local = "ssh://q.braendliBACKUP@10.0.1.15/share/QBackup/QPC";
-          eu = "ssh://s7e53oh0@s7e53oh0.repo.borgbase.com/./repo";
-          us = "ssh://r07bi749@r07bi749.repo.borgbase.com/./repo";
+          eu = "ssh://s27z80zr@s27z80zr.repo.borgbase.com/./repo";
+          us = "ssh://uklyub0y@uklyub0y.repo.borgbase.com/./repo";
           as = "none";
           au = "none";
         };
         QFrame13 = {
           local = "ssh://q.braendlBACKUP@10.0.1.15/share/QBackup/QFrame13";
-          eu = "ssh://zv823m7n@zv823m7n.repo.borgbase.com/./repo";
-          us = "ssh://zh0702n6@zh0702n6.repo.borgbase.com/./repo";
+          eu = "ssh://s4qu6ba9@s4qu6ba9.repo.borgbase.com/./repo";
+          us = "ssh://be2me8oe@be2me8oe.repo.borgbase.com/./repo";
           as = "none";
           au = "none";
         };

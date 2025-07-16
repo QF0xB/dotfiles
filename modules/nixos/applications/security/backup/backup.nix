@@ -109,14 +109,22 @@ let
   mkBackupJob =
     repoLocation: repoUrl:
     mkIf (repoUrl != "none" && !cfg.prune.enable) {
-      paths = [ "/run/backup-mounts/${repoLocation}" ];
-      exclude = [ "*.tmp" ];
+      paths = [
+        "/run/backup-mounts/${repoLocation}"
+      ];
+      exclude = [
+        "*.tmp"
+      ];
       repo = repoUrl;
       encryption = {
         mode = "repokey-blake2";
         passCommand = "cat ${config.sops.secrets."backup_${cfg.hostname}_passphrase".path}";
       };
       extraInitArgs = [ "--append-only" ];
+      extraCreateArgs = [
+        "--progress"
+        "--stats"
+      ];
       environment = {
         BORG_RSH = "ssh -o StrictHostKeyChecking=accept-new -i ${
           config.sops.secrets."backup_${cfg.hostname}_key".path
@@ -208,32 +216,33 @@ in
 {
   config = mkIf cfg.enable {
     # Create backup jobs for all non-empty repositories
-    services.borgbackup.jobs = lib.mkMerge [
-      # Backup jobs (only on non-pruning machines)
-      (mkIf (!cfg.prune.enable) {
-        system-backup-eu = mkBackupJob "eu" cfg.repositories.${cfg.hostname}.eu;
-        system-backup-na = mkBackupJob "us" cfg.repositories.${cfg.hostname}.us;
-        system-backup-as = mkBackupJob "as" cfg.repositories.${cfg.hostname}.as;
-        system-backup-au = mkBackupJob "au" cfg.repositories.${cfg.hostname}.au;
-        system-backup-local = mkBackupJob "local" cfg.repositories.${cfg.hostname}.local;
-      })
+    services.borgbackup = {
+      jobs = lib.mkMerge [
+        # Backup jobs (only on non-pruning machines)
+        (mkIf (!cfg.prune.enable) {
+          system-backup-eu = mkBackupJob "eu" cfg.repositories.${cfg.hostname}.eu;
+          system-backup-na = mkBackupJob "us" cfg.repositories.${cfg.hostname}.us;
+          system-backup-as = mkBackupJob "as" cfg.repositories.${cfg.hostname}.as;
+          system-backup-au = mkBackupJob "au" cfg.repositories.${cfg.hostname}.au;
+          system-backup-local = mkBackupJob "local" cfg.repositories.${cfg.hostname}.local;
+        })
 
-      # Prune jobs (only on pruning machines)
-      (mkIf cfg.prune.enable {
-        prune-eu = mkPruneJob "eu" cfg.repositories.${cfg.hostname}.eu;
-        prune-na = mkPruneJob "us" cfg.repositories.${cfg.hostname}.us;
-        prune-as = mkPruneJob "as" cfg.repositories.${cfg.hostname}.as;
-        prune-au = mkPruneJob "au" cfg.repositories.${cfg.hostname}.au;
-        prune-local = mkPruneJob "local" cfg.repositories.${cfg.hostname}.local;
-      })
-    ];
+        # Prune jobs (only on pruning machines)
+        (mkIf cfg.prune.enable {
+          prune-eu = mkPruneJob "eu" cfg.repositories.${cfg.hostname}.eu;
+          prune-na = mkPruneJob "us" cfg.repositories.${cfg.hostname}.us;
+          prune-as = mkPruneJob "as" cfg.repositories.${cfg.hostname}.as;
+          prune-au = mkPruneJob "au" cfg.repositories.${cfg.hostname}.au;
+          prune-local = mkPruneJob "local" cfg.repositories.${cfg.hostname}.local;
+        })
+      ];
+    };
 
     systemd.timers = flip mapAttrs' config.services.borgbackup.jobs (
       name: value:
       nameValuePair "borgbackup-job-${name}" {
         unitConfig.OnFailure = "notify-problems@%i.service";
         timerConfig.Persistent = mkForce true;
-        wantedBy = [ "timers.target" ];
       }
     );
 
@@ -268,6 +277,9 @@ in
               "/run/backup-mounts"
               "/run"
             ];
+            StandardOutput = "journal+console";
+            StandardError = "journal+console";
+            TTYPath = "/dev/tty1";
           };
         }
       ))
