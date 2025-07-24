@@ -20,7 +20,10 @@ in
     services.flameshot = {
       inherit (cfg) enable;
 
-      package = pkgs.flameshot.override { enableWlrSupport = true; };
+      package = pkgs.flameshot.override {
+        enableWlrSupport = true;
+        enableMonochromeIcon = true;
+      };
       #      settings.General =
       #  let
       #    path = "${config.xdg.userDirs.pictures}/Screenhots/";

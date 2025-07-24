@@ -18,9 +18,7 @@ in
 
     pycharm.enable = mkEnableOption "jetbrains python ide";
 
-    writerside.enable = mkEnableOption "jetbrains documentation ide" // {
-      default = !config.qnix.headless;
-    };
+    writerside.enable = mkEnableOption "jetbrains documentation ide";
 
     webstorm.enable = mkEnableOption "jetbrains web ide";
 
@@ -58,7 +56,6 @@ in
 
     qnix.applications.editors.jetbrains = {
       clion.enable = mkDefault true;
-      rust-rover.enable = mkDefault true;
       pycharm.enable = mkDefault true;
     };
 
