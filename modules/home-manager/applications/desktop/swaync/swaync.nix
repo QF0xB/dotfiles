@@ -34,6 +34,9 @@ in
         "$schema" = "/etc/xdg/swaync/configSchema.json";
         "positionX" = "right";
         "positionY" = "top";
+        "actions" = {
+          "run_command" = true;
+        };
         "control-center-margin-top" = 20;
         "control-center-margin-bottom" = 20;
         "control-center-margin-right" = 20;

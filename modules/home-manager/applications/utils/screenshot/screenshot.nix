@@ -20,7 +20,6 @@ in
     home.packages = with pkgs; [
       grim
       slurp
-      imgur-uploader
       wl-clipboard
       libnotify
     ];

@@ -1,19 +1,99 @@
 {
   lib,
+  isLaptop,
+  pkgs,
+  config,
   ...
 }:
 
 let
   inherit (lib) mkEnableOption;
+  cfg = config.qnix.hardware.yubikey;
+
+  yubikeyNotifyHandler = pkgs.writeShellScriptBin "yubikey-autolock-handler" ''
+    #!/bin/sh
+    COUNTDOWN=${toString cfg.delaySeconds}
+    FLAG_FILE="$XDG_RUNTIME_DIR/yubikey-reboot-cancelled"
+
+    # If laptop + not charging → immediate reboot
+    ${lib.optionalString isLaptop ''
+      ON_AC=$(grep 1 /sys/class/power_supply/AC*/online 2>/dev/null | wc -l)
+      if [ "$ON_AC" -eq 0 ]; then
+        logger -t yubikey "Laptop on battery — immediate reboot."
+        exec systemctl reboot
+      fi
+    ''}
+
+    notify-send --app-name="YubiLock" \
+      --action="${cancelNextReboot}/bin/cancel-next-yubikey-reboot=Cancel Reboot" \
+      -u critical -t $((COUNTDOWN * 1000)) \
+      "YubiKey removed" \
+      "Your YubiKey was removed.\nSystem will reboot in $COUNTDOWN seconds unless you cancel."
+    echo $FLAG_FILE
+
+    sleep "$COUNTDOWN"
+
+    ls -l /run/user/$(id -u) | logger -t yubikey
+
+    if [ -f "$FLAG_FILE" ]; then
+      logger -t yubikey "Reboot cancelled by user action."
+      notify-send -u normal "YubiKey reboot cancelled."
+      rm -f "$FLAG_FILE"
+      exit 0
+    fi
+
+    logger -t yubikey "Countdown expired — rebooting now."
+    systemctl reboot
+
+  '';
+
+  cancelNextReboot = pkgs.writeShellScriptBin "cancel-next-yubikey-reboot" ''
+    #!/bin/sh
+    RUNTIME="/run/user/$(id -u)"
+    FLAG="$RUNTIME/yubikey-reboot-cancelled"
+    echo "$(date) cancel-next-yubikey-reboot called, writing to $FLAG" | systemd-cat -t cancel-next
+    touch "$FLAG"
+    notify-send -u normal "Next YubiKey reboot cancelled"
+  '';
+
 in
 {
   options.qnix.hardware.yubikey = {
     enable = mkEnableOption "yubikey support" // {
       default = true;
     };
-    autolock = mkEnableOption "autolock on removal" // {
+
+    autolock = lib.mkOption {
+      type = lib.types.bool;
       default = true;
+      description = "Enable automatic reboot when YubiKey is removed.";
     };
+
+    delaySeconds = lib.mkOption {
+      type = lib.types.int;
+      default = 15;
+      description = "Delay before rebooting (in seconds) after YubiKey removal.";
+    };
+  };
+
+  config = {
+    systemd.user.services."yubikey-autolock" = {
+      Unit = {
+        Description = "YubiKey autolock reboot handler";
+      };
+      Service = {
+        Type = "oneshot";
+        ExecStart = "${yubikeyNotifyHandler}/bin/yubikey-autolock-handler";
+        PrivateTmp = false;
+        ProtectSystem = false;
+        ProtectHome = false;
+      };
+    };
+
+    home.packages = [
+      yubikeyNotifyHandler
+      cancelNextReboot
+    ];
   };
 
   # config = {

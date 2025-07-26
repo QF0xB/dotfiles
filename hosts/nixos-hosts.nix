@@ -81,6 +81,7 @@ let
         inputs.stylix.nixosModules.stylix
         inputs.qnix-pkgs.nixosModules.default
         inputs.nvf.nixosModules.default
+        inputs.lanzaboote.nixosModules.lanzaboote
         extraConfig
       ];
     };

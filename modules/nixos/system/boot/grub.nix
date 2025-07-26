@@ -1,6 +1,7 @@
 {
   lib,
   config,
+  pkgs,
   ...
 }:
 
@@ -11,6 +12,10 @@ let
 in
 {
   config = mkIf cfg.enable {
+    environment.systemPackages = [
+      pkgs.sbctl
+    ];
+
     boot = {
       supportedFilesystems = {
         zfs = true;

@@ -13,7 +13,7 @@ in
   config = mkIf cfg.enable {
     services.teamviewer = {
       enable = true;
-      package = pkgs.teamviewer;
+      package = pkgs.stable.teamviewer;
     };
   };
 }

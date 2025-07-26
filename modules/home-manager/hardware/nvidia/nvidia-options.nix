@@ -21,11 +21,6 @@ in
         # no_hardware_cursors = true;
         use_cpu_buffer = 1;
       };
-
-      render = {
-        explicit_sync = 1;
-        # allow_early_buffer_release = true;
-      };
     };
   };
 }

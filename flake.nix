@@ -11,6 +11,8 @@
 
     qnix-pkgs.url = "github:stormfox2/qnix-pkgs";
 
+    lanzaboote.url = "github:nix-community/lanzaboote/v0.4.2";
+
     # Nix-index for unstable
     nix-index-database = {
       url = "github:nix-community/nix-index-database";
