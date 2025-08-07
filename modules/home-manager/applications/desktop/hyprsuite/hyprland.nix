@@ -52,7 +52,8 @@ in
           ];
           exec-once = [
             "systemctl --user start hyprpolkitagent"
-          ] ++ lib.lists.optionals isLaptop [ "light -I" ];
+          ]
+          ++ lib.lists.optionals isLaptop [ "light -I" ];
 
           # General window settings: gaps, border size, layout, and colors.
           general = {
@@ -165,201 +166,199 @@ in
             "$mod, mouse:272, movewindow"
             "$mod, mouse:273, resizewindow"
           ];
-          bind =
-            [
-              # Hyprland behavior
-              "$mod SHIFT, code:26, exec, ~/.config/hypr/scripts/reload.sh #e" # Added  ./scripts/reload.nix
-              "$mod SHIFT, code:53, exec, uwsm stop #x" # Stop hyprland
-              "$mod, code:42, exec, hyprctl switchxkblayout all next #g" # Cycle keyboard layout
+          bind = [
+            # Hyprland behavior
+            "$mod SHIFT, code:26, exec, ~/.config/hypr/scripts/reload.sh #e" # Added  ./scripts/reload.nix
+            "$mod SHIFT, code:53, exec, uwsm stop #x" # Stop hyprland
+            "$mod, code:42, exec, hyprctl switchxkblayout all next #g" # Cycle keyboard layout
 
-              # Scroll through existing workspaces with mainMod + scroll
-              "$mod, mouse_down, workspace, e+1"
-              "$mod, mouse_up, workspace, e-1"
+            # Scroll through existing workspaces with mainMod + scroll
+            "$mod, mouse_down, workspace, e+1"
+            "$mod, mouse_up, workspace, e-1"
 
-              #
-              # Windows
-              #
+            #
+            # Windows
+            #
 
-              # Behavior
-              "$mod, code:48, fullscreen #;" # Fullscreen window
-              "$mod, code:38, killactive #A" # Kill focused window
-              "$mod SHIFT, code:48, togglefloating #;" # Float focused window
+            # Behavior
+            "$mod, code:48, fullscreen #;" # Fullscreen window
+            "$mod, code:38, killactive #A" # Kill focused window
+            "$mod SHIFT, code:48, togglefloating #;" # Float focused window
 
-              # Layout
-              # bind = $mainMod, d, pseudo, # dwindle
-              "$mod, code:61, togglesplit, #?" # dwindle
-              "$mod, Tab, cyclenext" # Focus next window
-              "super, Tab, swapnext" # Switch focused with next window
-              "CTRL, Tab, workspace, e+" # go to next workspace
+            # Layout
+            # bind = $mainMod, d, pseudo, # dwindle
+            "$mod, code:61, togglesplit, #?" # dwindle
+            "$mod, Tab, cyclenext" # Focus next window
+            "super, Tab, swapnext" # Switch focused with next window
+            "CTRL, Tab, workspace, e+" # go to next workspace
 
-              # Move focus with mainMod + arrow keys
-              "$mod, left, movefocus, l"
-              "$mod, right, movefocus, r"
-              "$mod, up, movefocus, u"
-              "$mod, down, movefocus, d"
+            # Move focus with mainMod + arrow keys
+            "$mod, left, movefocus, l"
+            "$mod, right, movefocus, r"
+            "$mod, up, movefocus, u"
+            "$mod, down, movefocus, d"
 
-              #
-              # Programs
-              #
+            #
+            # Programs
+            #
 
-              #Shell
-              "$mod, return, ${default-app-uexec ''terminal''}" # Start kitty normally
-              "$mod CTRL, return, ${default-app-uexec ''terminal'' + " --class floating"}" # Start kitty floating
+            #Shell
+            "$mod, return, ${default-app-uexec ''terminal''}" # Start kitty normally
+            "$mod CTRL, return, ${default-app-uexec ''terminal'' + " --class floating"}" # Start kitty floating
 
-              #Browser
-              "$mod, code:47, ${default-app-uexec ''browser''} #;" # Start brave normally
-              "$mod CTRL, code:47, ${default-app-uexec ''browser'' + ''--private-window''} #;" # Start brave in private mode
+            #Browser
+            "$mod, code:47, ${default-app-uexec ''browser''} #;" # Start brave normally
+            "$mod CTRL, code:47, ${default-app-uexec ''browser'' + ''--private-window''} #;" # Start brave in private mode
 
-              # WOFI (ROFI)
-              "$mod, code:25, ${uexec ''rofi -show drun -config ~/.config/rofi/launchers/type-${rofi-cfg.launcher.theme.type}/style-${rofi-cfg.launcher.theme.style}.rasi -run-command "uwsm app -- {cmd}"''} #w" # Program starter
+            # WOFI (ROFI)
+            "$mod, code:25, ${uexec ''rofi -show drun -config ~/.config/rofi/launchers/type-${rofi-cfg.launcher.theme.type}/style-${rofi-cfg.launcher.theme.style}.rasi -run-command "uwsm app -- {cmd}"''} #w" # Program starter
 
-              # Recording
-              "$mod, code:29, ${uexec ''obs''} #y" # Start obs
+            # Recording
+            "$mod, code:29, ${uexec ''obs''} #y" # Start obs
 
-              # General use
-              "$mod, code:40, ${default-app-uexec ''file-manager''} #d" # Filemanager
-              "$mod, code:57, ${uexec ''bitwarden-desktop''} #m" # Passwordmanager
-              "$mod, code:26, ${uexec ''obsidian''} #e" # Notes
+            # General use
+            "$mod, code:40, ${default-app-uexec ''file-manager''} #d" # Filemanager
+            "$mod, code:57, ${uexec ''bitwarden-desktop''} #m" # Passwordmanager
+            "$mod, code:26, ${uexec ''obsidian''} #e" # Notes
 
-              # Screenshot
-              ", Print, ${uexec ''rofi -show drun -config ~/.config/rofi/applets/bin/screenshot.sh''}"
+            # Screenshot
+            ", Print, ${uexec ''rofi -show drun -config ~/.config/rofi/applets/bin/screenshot.sh''}"
 
-              # audio/sound control
-              ", xf86audioraisevolume, exec, pamixer -i 5 && dunstify -h int:value:'$(pamixer --get-volume)' -i ~/.config/dunst/assets/volume.svg -t 500 -r 2593 'Volume: $(pamixer --get-volume) %'"
-              ", xf86audiolowervolume, exec, pamixer -d 5 && dunstify -h int:value:'$(pamixer --get-volume)' -i ~/.config/dunst/assets/volume.svg -t 500 -r 2593 'Volume: $(pamixer --get-volume) %'"
-              ", xf86AudioMute, exec, pamixer -t && dunstify -i ~/.config/dunst/assets/$(pamixer --get-mute | grep -q 'true' && echo 'volume-mute.svg' || echo 'volume.svg') -t 500 -r 2593 'Toggle Mute'"
-              ", XF86AudioPlay, exec, playerctl play-pause"
-              ", XF86AudioNext, exec, playerctl next"
-              ", XF86AudioPrev, exec, playerctl previous"
-              ", XF86audiostop, exec, playerctl stop"
-              # ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
-              # ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
-            ]
-            ++ (
-              let
-                # Define workspaces as a list of records.
-                workspaces = [
-                  {
-                    num = "1";
-                    code = "58";
-                    comment = "m";
-                  }
-                  {
-                    num = "2";
-                    code = "59";
-                    comment = ",";
-                  }
-                  {
-                    num = "3";
-                    code = "60";
-                    comment = ".";
-                  }
-                  {
-                    num = "4";
-                    code = "44";
-                    comment = "j";
-                  }
-                  {
-                    num = "5";
-                    code = "45";
-                    comment = "k";
-                  }
-                  {
-                    num = "6";
-                    code = "46";
-                    comment = "l";
-                  }
-                  {
-                    num = "7";
-                    code = "30";
-                    comment = "u";
-                  }
-                  {
-                    num = "8";
-                    code = "31";
-                    comment = "i";
-                  }
-                  {
-                    num = "9";
-                    code = "32";
-                    comment = "o";
-                  }
-                  {
-                    num = "10";
-                    code = "65";
-                    comment = "space";
-                  }
+            # audio/sound control
+            ", xf86audioraisevolume, exec, pamixer -i 5 && dunstify -h int:value:'$(pamixer --get-volume)' -i ~/.config/dunst/assets/volume.svg -t 500 -r 2593 'Volume: $(pamixer --get-volume) %'"
+            ", xf86audiolowervolume, exec, pamixer -d 5 && dunstify -h int:value:'$(pamixer --get-volume)' -i ~/.config/dunst/assets/volume.svg -t 500 -r 2593 'Volume: $(pamixer --get-volume) %'"
+            ", xf86AudioMute, exec, pamixer -t && dunstify -i ~/.config/dunst/assets/$(pamixer --get-mute | grep -q 'true' && echo 'volume-mute.svg' || echo 'volume.svg') -t 500 -r 2593 'Toggle Mute'"
+            ", XF86AudioPlay, exec, playerctl play-pause"
+            ", XF86AudioNext, exec, playerctl next"
+            ", XF86AudioPrev, exec, playerctl previous"
+            ", XF86audiostop, exec, playerctl stop"
+            # ",XF86MonBrightnessDown, exec, brightnessctl set 5%-"
+            # ",XF86MonBrightnessUp, exec, brightnessctl set +5%"
+          ]
+          ++ (
+            let
+              # Define workspaces as a list of records.
+              workspaces = [
+                {
+                  num = "1";
+                  code = "58";
+                  comment = "m";
+                }
+                {
+                  num = "2";
+                  code = "59";
+                  comment = ",";
+                }
+                {
+                  num = "3";
+                  code = "60";
+                  comment = ".";
+                }
+                {
+                  num = "4";
+                  code = "44";
+                  comment = "j";
+                }
+                {
+                  num = "5";
+                  code = "45";
+                  comment = "k";
+                }
+                {
+                  num = "6";
+                  code = "46";
+                  comment = "l";
+                }
+                {
+                  num = "7";
+                  code = "30";
+                  comment = "u";
+                }
+                {
+                  num = "8";
+                  code = "31";
+                  comment = "i";
+                }
+                {
+                  num = "9";
+                  code = "32";
+                  comment = "o";
+                }
+                {
+                  num = "10";
+                  code = "65";
+                  comment = "space";
+                }
+              ];
+
+              # When displaying a workspace key we want "10" to be shown as "0".
+              conv = ws: if ws == "10" then "0" else ws;
+
+              # generateBindings takes one workspace record and returns a list of six binding lines.
+              generateBindings =
+                wRec:
+                let
+                  n = wRec.num;
+                  c = wRec.code;
+                  comm = wRec.comment;
+                  cn = conv n;
+                in
+                [
+                  ("$mod, " + cn + ", workspace, " + cn)
+                  ("$mod, code:" + builtins.toString c + ", workspace, " + n + " #" + comm)
+                  ("$mod+SHIFT+CTRL, " + cn + ", movetoworkspace, " + cn)
+                  ("$mod+SHIFT+CTRL, code:" + builtins.toString c + ", movetoworkspace, " + n + " #" + comm)
+                  ("$mod CTRL, " + cn + ", movetoworkspacesilent, " + cn)
+                  ("$mod CTRL, code:" + builtins.toString c + ", movetoworkspacesilent, " + n + " #" + comm)
                 ];
 
-                # When displaying a workspace key we want "10" to be shown as "0".
-                conv = ws: if ws == "10" then "0" else ws;
-
-                # generateBindings takes one workspace record and returns a list of six binding lines.
-                generateBindings =
-                  wRec:
-                  let
-                    n = wRec.num;
-                    c = wRec.code;
-                    comm = wRec.comment;
-                    cn = conv n;
-                  in
-                  [
-                    ("$mod, " + cn + ", workspace, " + cn)
-                    ("$mod, code:" + builtins.toString c + ", workspace, " + n + " #" + comm)
-                    ("$mod+SHIFT+CTRL, " + cn + ", movetoworkspace, " + cn)
-                    ("$mod+SHIFT+CTRL, code:" + builtins.toString c + ", movetoworkspace, " + n + " #" + comm)
-                    ("$mod CTRL, " + cn + ", movetoworkspacesilent, " + cn)
-                    ("$mod CTRL, code:" + builtins.toString c + ", movetoworkspacesilent, " + n + " #" + comm)
-                  ];
-
-                # bindingLines is the concatenation of all binding lists.
-                bindingLines = builtins.concatLists (map generateBindings workspaces);
-              in
-              bindingLines
-            );
+              # bindingLines is the concatenation of all binding lists.
+              bindingLines = builtins.concatLists (map generateBindings workspaces);
+            in
+            bindingLines
+          );
 
           #
           # Windowrules
           #
-          windowrulev2 =
-            [
-              # Workspaces
-              "workspace 1, class:obsidian"
-              "workspace 1, class:jetbrains-idea"
-              "workspace 1, class:code-oss"
+          windowrulev2 = [
+            # Workspaces
+            "workspace 1, class:obsidian"
+            "workspace 1, class:jetbrains-idea"
+            "workspace 1, class:code-oss"
 
-              "workspace 2, class:kitty"
+            "workspace 2, class:kitty"
 
-              "workspace 3, class:brave-browser"
-              "workspace 3, class:chromium"
+            "workspace 3, class:brave-browser"
+            "workspace 3, class:chromium"
 
-              # 456 for personal use
+            # 456 for personal use
 
-              "workspace 7, class:WebCord"
+            "workspace 7, class:WebCord"
 
-              "workspace 8, class:Bitwarden"
+            "workspace 8, class:Bitwarden"
 
-              "workspace 9, class:thunar"
-              "workspace 9, class:nemo"
+            "workspace 9, class:thunar"
+            "workspace 9, class:nemo"
 
-              "workspace 10, class:thunderbird"
-            ]
-            ++ (
-              let
-                floatingWindows = [
-                  "class:floating"
-                  "title:Open File"
-                  "title:branchdialog"
-                  "title:^(Media viewer)$"
-                  "title:^(Transmission)$"
-                  "title:^(Volume Control)$"
-                  "title:^(Picture-in-Picture)$"
-                  "title:^(Firefox — Sharing Indicator)$"
-                  "class:flameshot"
-                ];
-              in
-              map (window: "float, ${window}") floatingWindows
-            );
+            "workspace 10, class:thunderbird"
+          ]
+          ++ (
+            let
+              floatingWindows = [
+                "class:floating"
+                "title:Open File"
+                "title:branchdialog"
+                "title:^(Media viewer)$"
+                "title:^(Transmission)$"
+                "title:^(Volume Control)$"
+                "title:^(Picture-in-Picture)$"
+                "title:^(Firefox — Sharing Indicator)$"
+                "class:flameshot"
+              ];
+            in
+            map (window: "float, ${window}") floatingWindows
+          );
         };
       };
     };

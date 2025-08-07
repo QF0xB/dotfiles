@@ -22,6 +22,10 @@
     };
 
     applications = {
+      ai = {
+        ollama.enable = false;
+      };
+
       audio = {
         goxlr-utility.enable = true;
       };

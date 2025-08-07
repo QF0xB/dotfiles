@@ -7,23 +7,20 @@
 
 let
   cfg = config.hm.qnix.applications.desktop.xdg-portal;
-  inherit (lib) concatLists mkIf;
+  inherit (lib) mkIf;
 in
 {
   config = mkIf cfg.enable {
     xdg = {
       portal = {
         enable = true;
-        config.common.default = "*";
+
         extraPortals =
-          with pkgs;
-          with lists;
-          concatLists (
-            (optionals cfg.wlr [ xdg-desktop-portal-wlr ]) (optionals cfg.gtk [ xdg-desktop-portal-gtk ])
-              (optionals cfg.gnome [ xdg-desktop-portal-gnome ])
-              (optionals cfg.hyprland [ xdg-desktop-portal-hyprland ])
-              (optionals cfg.xapp [ xdg-desktop-portal-xapp ])
-          );
+          (lib.optionals cfg.wlr [ pkgs.xdg-desktop-portal-wlr ])
+          ++ (lib.optionals cfg.gtk [ pkgs.xdg-desktop-portal-gtk ])
+          ++ (lib.optionals cfg.gnome [ pkgs.xdg-desktop-portal-gnome ])
+          ++ (lib.optionals cfg.hyprland [ pkgs.xdg-desktop-portal-hyprland ])
+          ++ (lib.optionals cfg.xapp [ pkgs.xdg-desktop-portal-xapp ]);
       };
     };
 

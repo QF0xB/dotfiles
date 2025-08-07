@@ -19,8 +19,17 @@ in
         portalPackage = pkgs.xdg-desktop-portal-hyprland;
       };
     };
-    environment.sessionVariables = {
-      NIXOS_OZONE_WL = "1";
+    programs.uwsm.enable = true;
+    environment = {
+      etc."xdg/wayland-sessions/hyprland-uwsm.desktop".text = ''
+        [Desktop Entry]
+        Name=Hyprland (uwsm)
+        Exec=uwsm start hyprland
+        Type=Application
+      '';
+      sessionVariables = {
+        NIXOS_OZONE_WL = "1";
+      };
     };
   };
 }

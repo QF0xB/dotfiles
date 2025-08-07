@@ -6,6 +6,7 @@
 
 {
   imports = [
+    ./ai
     ./audio
     ./browsers
     ./communication

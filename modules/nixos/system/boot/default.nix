@@ -5,7 +5,7 @@
 {
   imports = [
     ./grub.nix
-    ./secure-boot.nix
+    # ./secure-boot.nix
     ./systemd-boot.nix
     ./windows.nix
   ];

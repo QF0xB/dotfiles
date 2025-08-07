@@ -4,6 +4,7 @@
 
 {
   imports = [
+    ./ai
     ./audio
     ./browsers
     ./connection

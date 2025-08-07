@@ -4,7 +4,6 @@
 
 {
   imports = [
-    ./upower
-    ./wireshark
+    ./ollama-options.nix
   ];
 }

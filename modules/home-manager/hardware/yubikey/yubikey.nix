@@ -26,19 +26,10 @@ let
 
     export FLAG_FILE
 
-    ${pkgs.swaynotificationcenter}/bin/swaync-client -m |
-      while read -r line; do
-        if echo "$line" | grep -q "cancel-reboot"; then
-          echo "Button received, touching $FLAG_FILE" | systemd-cat -t yubikey
-          /usr/bin/touch "$FLAG_FILE"
-        fi
-      done &
-
     ${pkgs.libnotify}/bin/notify-send --app-name="YubiLock" \
-      --action=cancel-reboot=Cancel Reboot \
       -u critical -t $((COUNTDOWN * 1000 * 1)) \
       "YubiKey removed" \
-      "System will reboot in $COUNTDOWN seconds unless you click Cancel Reboot."
+      "System will reboot in $COUNTDOWN seconds unless you click cancel it with 'cancelNextReboot'"
 
     sleep "$COUNTDOWN"
 

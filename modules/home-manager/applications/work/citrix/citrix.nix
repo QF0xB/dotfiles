@@ -21,7 +21,7 @@ in
     home.packages = with pkgs.stable; [
       (citrix_workspace.override {
         extraCerts = [
-          ./kjr_network.cert
+          ./kjr_network2025.cert
         ];
       })
     ];

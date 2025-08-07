@@ -7,6 +7,7 @@
     ./flameshot
     ./nemo
     ./screenshot
+    ./upower
     ./wireshark
   ];
 }
