@@ -4,6 +4,7 @@
 
 {
   imports = [
+    ./docker
     ./flameshot
     ./nemo
     ./screenshot

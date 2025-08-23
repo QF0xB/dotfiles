@@ -32,7 +32,7 @@ in
 
     console.useXkbConfig = cfg.console-xkb-bridge;
 
-    time.timeZone = "Europe/Berlin";
+    time.timeZone = "Europe/London"; # "Europe/Berlin";
 
     i18n = lib.mkIf cfg.english-german-locales {
       supportedLocales = [

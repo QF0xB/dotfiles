@@ -17,6 +17,10 @@
       keyboard.default = "frmw0001:00-32ac:0006";
     };
     applications = {
+      utils = {
+        docker.enable = true;
+      };
+
       work = {
         # citrix.enable = true;
       };
