@@ -42,7 +42,7 @@ in
   config = mkIf cfg.enable {
     programs.rofi = {
       enable = true;
-      package = pkgs.rofi-wayland;
+      package = pkgs.rofi;
       #theme = "~/.config/rofi/launchers/type-${cfg.launcher.theme.type}/style-${cfg.launcher.theme.style}.rasi";
     };
 

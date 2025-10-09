@@ -41,40 +41,44 @@ in
       networkmanagerapplet
       openssl
       iw
-      qnix-pkgs.easyroam-setup
       openvpn
+      geteduroam
     ];
     users.users.${user}.extraGroups = [ "networkmanager" ];
 
-    systemd = mkIf isLaptop {
-      services.easyroam-setup = {
-        description = "EasyRoam Setup";
-        wantedBy = [ "multi-user.target" ];
-        after = [ "network.target" ];
+    # systemd = mkIf isLaptop {
+    # services.easyroam-setup = {
+    # description = "EasyRoam Setup";
+    # wantedBy = [ "multi-user.target" ];
+    # after = [ "network.target" ];
 
-        serviceConfig = {
-          Type = "oneshot";
-          User = "root";
-          Restart = "no";
-          path = with pkgs; [
-            openssl
-            gawk
-            coreutils
-            networkmanager
-            iw
-          ];
-        };
+    # serviceConfig = {
+    # Type = "oneshot";
+    # User = "root";
+    # Restart = "no";
+    # path = with pkgs; [
+    # openssl
+    # gawk
+    # coreutils
+    # networkmanager
+    # iw
+    # ];
+    # };
 
-        script = ''
-          ${pkgs.qnix-pkgs.easyroam-setup}/bin/easyroam-setup
-        '';
-      };
-    };
+    # script = ''
+    # ${pkgs.qnix-pkgs.easyroam-setup}/bin/easyroam-setup
+    # '';
+    # };
+    # };
 
     qnix.persist.root.directories = [
       "/etc/easyroam-certs"
       "/etc/vpn-certs"
       "/etc/NetworkManager/system-connections"
+    ];
+
+    qnix.persist.home.directories = [
+      ".local/share/geteduroam"
     ];
 
   };

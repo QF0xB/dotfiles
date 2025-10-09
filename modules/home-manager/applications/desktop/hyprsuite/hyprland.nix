@@ -106,7 +106,6 @@ in
           };
 
           gestures = {
-            workspace_swipe = "true";
             workspace_swipe_forever = "true";
           };
 

@@ -21,6 +21,10 @@
         docker.enable = true;
       };
 
+      virtualisation = {
+        virtual-box.enable = true;
+      };
+
       work = {
         # citrix.enable = true;
       };

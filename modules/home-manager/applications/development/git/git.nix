@@ -13,6 +13,11 @@ let
     mkIf
     types
     ;
+  askpass = pkgs.writeShellScript "git-askpass" ''
+    #!${pkgs.bash}/bin/bash
+    PROMPT="${"1:-Password:"}"
+    exec ${pkgs.zenity}/bin/zenity --entry --hide-text --title="Git Credential" --text="$PROMPT"
+  '';
 in
 {
   options.qnix.home.devel.git = {
@@ -34,6 +39,7 @@ in
   config = lib.mkIf cfg.enable {
     home.packages = with pkgs; [
       gitflow
+      zenity
     ];
     programs.git = {
       inherit (cfg) enable userName userEmail;
@@ -42,6 +48,11 @@ in
 
       signing = mkIf cfg.signing {
         key = "90360B7DB6B78B75E9013D113FF8C23C46F2CC90";
+      };
+
+      extraConfig = {
+        core.askpass = "${askpass}";
+        credential.helper = ""; # disable all helpers
       };
 
       extraConfig.commit.gpgsign = cfg.signing;

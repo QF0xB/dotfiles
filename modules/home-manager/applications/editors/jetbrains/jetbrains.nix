@@ -55,7 +55,7 @@ in
     #    ];
 
     qnix.applications.editors.jetbrains = {
-      clion.enable = mkDefault true;
+      clion.enable = mkDefault false;
       pycharm.enable = mkDefault true;
     };
 
