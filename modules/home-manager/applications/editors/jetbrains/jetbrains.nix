@@ -57,6 +57,10 @@ in
     # pycharm.enable = mkDefault true;
     # };
 
+    qnix.applications.editors.jetbrains = {
+      clion.enable = true;
+    };
+
     qnix.persist.home = {
       directories = [
         ".config/JetBrains"
