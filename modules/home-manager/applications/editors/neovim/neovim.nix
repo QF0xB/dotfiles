@@ -97,6 +97,13 @@ in
                 path = "[Path]";
               };
             };
+
+            luaConfigRC = {
+
+              "00-disable-deprecations" = ''
+                vim.deprecate = function() end
+              '';
+            };
           };
         };
 

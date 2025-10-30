@@ -32,6 +32,18 @@ in
   };
 
   config = mkIf cfg.enable {
+    sops = {
+      age = {
+        generateKey = false;
+        keyFile = "/persist${homeDir}/.config/sops/age/keys.txt";
+      };
+
+      secrets.github_token = {
+        sopsFile = ../../../../secrets/default.yaml;
+        key = "github_token";
+      };
+    };
+
     qnix.applications.shells.packages = {
       install-remote-secrets = {
         runtimeInputs = [ pkgs.rsync ];

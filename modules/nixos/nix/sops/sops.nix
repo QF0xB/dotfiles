@@ -2,7 +2,6 @@
   config,
   lib,
   user,
-  host,
   ...
 }:
 
@@ -17,6 +16,11 @@ let
 in
 {
   config = mkIf cfg.enable {
+    # nix.settings.access-tokens = [
+    # "github.com=!include ${config.sops.secrets.github_token.path}"
+    # "api.github.com=!include ${config.sops.secrets.github_token.path}"
+    # ];
+
     sops = {
       defaultSopsFile = ../../../../secrets/default.yaml;
 
@@ -36,6 +40,12 @@ in
         {
           ${hostKey} = secretSettings;
           ${hostPassphrase} = secretSettings;
+          github_token = {
+            key = "github_token";
+            owner = "root";
+            group = "nixbld";
+            mode = "0777";
+          };
         }
         // (
           if cfg.backup-prune-keys.enable then
@@ -46,17 +56,6 @@ in
                 group = "users";
                 mode = "0400";
                 sopsFile = ../../../../secrets/backup-prune-vm.yaml;
-              };
-            }
-          else
-            { }
-        )
-        // (
-          if (host == "QFrame13") then
-            {
-              "eduroam" = {
-                format = "binary";
-                sopsFile = ../../../../secrets/eduroam_QFrame13_17_03_2025.p12;
               };
             }
           else

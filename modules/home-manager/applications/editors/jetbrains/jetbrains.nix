@@ -32,9 +32,7 @@ in
 
     dataspell.enable = mkEnableOption "jetbrains data visualizer";
 
-    idea.enable = mkEnableOption "jetbrains java ide" // {
-      default = !config.qnix.headless;
-    };
+    idea.enable = mkEnableOption "jetbrains java ide";
   };
 
   imports = [
@@ -54,10 +52,10 @@ in
     #      jetbrains-toolbox
     #    ];
 
-    qnix.applications.editors.jetbrains = {
-      clion.enable = mkDefault false;
-      pycharm.enable = mkDefault true;
-    };
+    # qnix.applications.editors.jetbrains = {
+    # clion.enable = mkDefault false;
+    # pycharm.enable = mkDefault true;
+    # };
 
     qnix.persist.home = {
       directories = [

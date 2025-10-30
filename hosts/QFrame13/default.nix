@@ -22,7 +22,7 @@
       };
 
       virtualisation = {
-        virtual-box.enable = true;
+        virtual-box.enable = false;
       };
 
       work = {

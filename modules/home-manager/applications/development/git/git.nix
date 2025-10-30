@@ -42,7 +42,7 @@ in
       zenity
     ];
     programs.git = {
-      inherit (cfg) enable userName userEmail;
+      inherit (cfg) enable;
 
       lfs.enable = true;
 
@@ -50,12 +50,16 @@ in
         key = "90360B7DB6B78B75E9013D113FF8C23C46F2CC90";
       };
 
-      extraConfig = {
+      settings = {
+        user = {
+          name = cfg.userName;
+          email = cfg.userEmail;
+        };
         core.askpass = "${askpass}";
-        credential.helper = ""; # disable all helpers
+        credential.helper = "";
+        commit.gpgsign = cfg.signing;
       };
 
-      extraConfig.commit.gpgsign = cfg.signing;
     };
   };
 }
